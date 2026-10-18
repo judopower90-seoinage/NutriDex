@@ -590,18 +590,71 @@
       }
     ];
 
-    // 文科省八訂リアルタイム照会エンジン（AQ.新形式キー & AIzaSy旧形式キー 両対応）
+    // 現行Google AI Studioの安定・現役モデルリスト（優先順にフォールバック試行）
+    const ACTIVE_GEMINI_MODELS = [
+      "gemini-2.5-flash",
+      "gemini-2.0-flash",
+      "gemini-2.5-flash-lite",
+      "gemini-1.5-flash-latest"
+    ];
+
+    // APIキーの接続疎通テスト関数（最新モデルを順次自動試行）
+    async function testGeminiApiKey(apiKeyToTest) {
+      const key = (apiKeyToTest || "").trim();
+      if (!key) throw new Error("APIキーが入力されていません");
+
+      let lastError = null;
+
+      for (const model of ACTIVE_GEMINI_MODELS) {
+        const payload = {
+          contents: [{ parts: [{ text: "ping" }] }],
+          generationConfig: { maxOutputTokens: 2 }
+        };
+
+        // 試行1: URLクエリ方式
+        try {
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+          const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) return { success: true, model };
+
+          // 試行2: x-goog-api-key ヘッダー方式
+          const resHeader = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-goog-api-key": key
+            },
+            body: JSON.stringify(payload)
+          });
+          if (resHeader.ok) return { success: true, model };
+
+          // エラー詳細の抽出
+          let errDetail = `HTTP ${res.status}`;
+          try {
+            const errJson = await res.json();
+            if (errJson?.error?.message) errDetail = errJson.error.message;
+          } catch (_) {}
+          lastError = errDetail;
+        } catch (e) {
+          lastError = e.message || "通信エラー";
+        }
+      }
+
+      throw new Error(lastError || "全モデルへの接続に失敗しました");
+    }
+
+    // 文科省八訂リアルタイム照会エンジン（現行Geminiモデル自動フォールバック版）
     async function fetchMextFoodFromApi(foodQuery, customApiKey) {
       const apiKey = (customApiKey || localStorage.getItem('nutridex_gemini_api_key') || "").trim();
       if (!apiKey) {
         throw new Error("NO_API_KEY");
       }
 
-      // 無料枠で最も安定し、全世界の全アカウントで利用可能な標準モデル
-      const modelName = "gemini-1.5-flash";
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
-
-      const systemInstruction = `あなたは日本食品標準成分表（八訂増補2023年）に精通した栄養管理専門家です。「${foodQuery}」について、文部科学省公式成分表に準拠し、可食部100gあたりの全栄養素（エネルギー, 水分, PFC, 糖質, 食物繊維総量/水溶性/不溶性, ミネラル13種, ビタミン13種, 脂肪酸詳細, アミノ酸組成）をカロリーSlism準拠で推計し、マークダウンを用いずJSON形式のみで出力してください。測定不能値はnullとしてください。`;
+      const systemInstruction = `あなたは日本食品標準成分表（八訂増補2023年）に精通した栄養管理専門家です。「${foodQuery}」について、文部科学省公式成分表に準拠し、可食部100gあたりの全栄養素（エネルギー, 水分, PFC, 糖質, 食物繊維総量/水溶性/不溶性, ミネラル13種, ビタミン13種, 脂肪酸詳細, アミノ酸組成）を推計し、マークダウンを用いずJSON形式のみで出力してください。測定不能値はnullとしてください。`;
       const userPrompt = `食品名「${foodQuery}」の文科省八訂可食部100gあたり全栄養素データと生活単位をJSON出力してください。`;
 
       const payload = {
@@ -613,43 +666,55 @@
         }
       };
 
-      let response;
-      try {
-        response = await fetch(apiUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-goog-api-key": apiKey // 新形式AQ.キーで401エラーを防ぐ必須ヘッダー
-          },
-          body: JSON.stringify(payload)
-        });
-      } catch (networkErr) {
-        throw new Error("インターネット接続を確認してください（通信失敗）");
-      }
+      let successResponse = null;
+      let lastErrMsg = "";
 
-      if (!response.ok) {
-        let errMessage = `HTTP ${response.status}`;
+      for (const model of ACTIVE_GEMINI_MODELS) {
+        // 第一経路: URLクエリ方式
         try {
-          const errData = await response.json();
-          if (errData.error?.message) {
-            errMessage = errData.error.message;
+          const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+          const res = await fetch(apiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            successResponse = res;
+            break;
           }
-        } catch (_) {}
 
-        if (response.status === 400 || response.status === 401) {
-          throw new Error(`APIキーが無効または認証エラーです (${errMessage})`);
-        } else if (response.status === 429) {
-          throw new Error("APIの利用制限（リクエスト上限）に達しました。数十秒後に再試行してください");
-        } else {
-          throw new Error(`Google APIエラー (${response.status}): ${errMessage}`);
+          // 第二経路: ヘッダー認証方式
+          const apiHeaderUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+          const fallbackRes = await fetch(apiHeaderUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-goog-api-key": apiKey
+            },
+            body: JSON.stringify(payload)
+          });
+          if (fallbackRes.ok) {
+            successResponse = fallbackRes;
+            break;
+          }
+
+          try {
+            const errJson = await res.json();
+            if (errJson?.error?.message) lastErrMsg = errJson.error.message;
+          } catch (_) {}
+        } catch (netErr) {
+          lastErrMsg = netErr.message;
         }
       }
 
-      const data = await response.json();
+      if (!successResponse) {
+        throw new Error(lastErrMsg || "Google APIとの通信に失敗しました。キーをご確認ください");
+      }
+
+      const data = await successResponse.json();
       const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
       if (!rawText) throw new Error("Google APIからの返答が空でした");
 
-      // マークダウンコードブロックが混入している場合は除去
       let cleaned = rawText.trim();
       if (cleaned.startsWith("```json")) {
         cleaned = cleaned.replace(/^```json\s*/, "").replace(/\s*```$/, "");
@@ -781,7 +846,7 @@
         toastTimeoutRef.current = setTimeout(() => {
           setToastMessage(null);
           toastTimeoutRef.current = null;
-        }, 3500);
+        }, 4500);
       };
 
       const handleSelectFood = (foodId, directFood = null) => {
@@ -960,7 +1025,7 @@
                   <div className="flex items-center gap-1.5">
                     <span className="font-extrabold tracking-tight text-base sm:text-xl text-slate-900 truncate">NutriDex</span>
                     <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0">
-                      八訂2541品目対応
+                      八訂2541品目
                     </span>
                   </div>
                   <p className="text-[10px] text-emerald-700/90 font-medium hidden sm:block truncate">文部科学省食品成分表 準拠辞書</p>
@@ -1102,6 +1167,11 @@
                 }}
               />
             )}
+
+            {/* バージョン表記（v2.2） */}
+            <div className="text-center text-[10px] text-slate-400 pt-8 pb-4">
+              NutriDex v2.2 • 文部科学省八訂準拠 2,541品目照会エンジン (Gemini 2.5 Flash 対応)
+            </div>
           </main>
 
           {/* トースト表示 */}
@@ -1233,7 +1303,7 @@
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="もやし, キャベツ, 豚バラ, うなぎ, 鶏レバー など2,541品目を検索"
+                  placeholder="菊芋, うなぎ, 豚バラ, 白米 など2,541品目を検索"
                   className="w-full bg-slate-50/70 hover:bg-slate-50 focus:bg-white border border-slate-200 rounded-2xl pl-11 pr-10 py-3 sm:py-3.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-all shadow-inner box-border"
                 />
                 {searchQuery && (
@@ -1319,23 +1389,6 @@
                 ))}
               </div>
             </div>
-          </div>
-
-          {/* もやし比較レコメンドバナー */}
-          <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 p-4 sm:p-5 rounded-3xl border border-emerald-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs w-full box-border">
-            <div className="space-y-1 min-w-0">
-              <div className="flex items-center gap-2 text-xs sm:text-sm font-extrabold text-emerald-900">
-                <Sparkles size={16} className="text-amber-500 shrink-0" />
-                <span>定番もやしを徹底比較！</span>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-600 truncate">緑豆もやし (15kcal) vs 大豆もやし (高タンパク・29kcal)</p>
-            </div>
-            <button
-              onClick={() => onQuickCompare('food_06297', 'food_06299')}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-extrabold shrink-0 shadow-xs transition-all text-center"
-            >
-              VS比較で確認
-            </button>
           </div>
 
           {/* 食品グリッド */}
@@ -1510,7 +1563,6 @@
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-start w-full">
-            {/* 左カラム：情報 & 操作 */}
             <div className="lg:col-span-5 space-y-4 w-full">
               <div className="bg-gradient-to-br from-emerald-50 via-teal-50/40 to-white p-4 sm:p-5 rounded-3xl border border-emerald-100 shadow-xs space-y-3 w-full box-border">
                 <div className="flex items-start gap-3.5 sm:gap-4 w-full">
@@ -1621,7 +1673,7 @@
               </button>
             </div>
 
-            {/* 右カラム：PFC & 全栄養素ダッシュボード */}
+            {/* PFC & ダッシュボード */}
             <div className="lg:col-span-7 space-y-4 w-full">
               <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 space-y-4 shadow-xs w-full box-border">
                 <div className="flex items-baseline justify-between border-b border-slate-100 pb-3 flex-wrap gap-2">
@@ -2150,6 +2202,21 @@
 
     function SettingsModal({ userGender, onChangeGender, userAgeGroup, onChangeAgeGroup, userApiKey, onChangeApiKey, onClose }) {
       const [keyInput, setKeyInput] = useState(userApiKey);
+      const [isTesting, setIsTesting] = useState(false);
+      const [testStatus, setTestStatus] = useState(null); // { success: boolean, msg: string }
+
+      const handleTest = async () => {
+        setIsTesting(true);
+        setTestStatus(null);
+        try {
+          const res = await testGeminiApiKey(keyInput.trim());
+          setTestStatus({ success: true, msg: `接続成功！（${res.model}）` });
+        } catch (err) {
+          setTestStatus({ success: false, msg: `接続失敗: ${err.message}` });
+        } finally {
+          setIsTesting(false);
+        }
+      };
 
       return (
         <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
@@ -2205,6 +2272,7 @@
               </div>
             </div>
 
+            {/* APIキー設定 & 即時テストエリア */}
             <div className="space-y-2 pt-2 border-t border-slate-100">
               <div className="flex items-center justify-between">
                 <label className="text-xs sm:text-sm font-semibold text-slate-800 flex items-center gap-1.5">
@@ -2213,15 +2281,37 @@
                 </label>
               </div>
               <p className="text-[11px] text-slate-500 leading-relaxed">
-                Google AI Studioで無料発行できるAPIキー（<code>AQ.</code> または <code>AIzaSy</code> で始まるキー）を入力すると、未登録の全2,541食品をワンタップで自動照会できます。
+                Google AI Studioで取得したキー（<code>AQ.</code> または <code>AIzaSy</code> で始まるキー）を貼り付けてください。
               </p>
-              <input
-                type="password"
-                value={keyInput}
-                onChange={(e) => setKeyInput(e.target.value)}
-                placeholder="AQ... または AIzaSy..."
-                className="w-full text-xs font-mono bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-              />
+              
+              <div className="flex gap-2">
+                <input
+                  type="password"
+                  value={keyInput}
+                  onChange={(e) => {
+                    setKeyInput(e.target.value);
+                    setTestStatus(null);
+                  }}
+                  placeholder="AQ... または AIzaSy..."
+                  className="flex-1 text-xs font-mono bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
+                <button
+                  onClick={handleTest}
+                  disabled={isTesting || !keyInput.trim()}
+                  className="px-3 py-2 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 shrink-0 transition-all flex items-center gap-1"
+                >
+                  {isTesting ? <Loader2 size={13} className="animate-spin" /> : "テスト"}
+                </button>
+              </div>
+
+              {testStatus && (
+                <div className={`p-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 ${
+                  testStatus.success ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200'
+                }`}>
+                  {testStatus.success ? <Check size={14} className="text-emerald-600 shrink-0" /> : <span className="text-rose-600 shrink-0">✕</span>}
+                  <span className="truncate">{testStatus.msg}</span>
+                </div>
+              )}
             </div>
 
             <button
