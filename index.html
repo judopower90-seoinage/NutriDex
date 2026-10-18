@@ -93,7 +93,7 @@
     const { useState, useMemo, useEffect, useRef } = React;
 
     // バージョン管理定数（メジャー: 1.0刻み / マイナー: 0.1刻み）
-    const APP_VERSION = "v2.2";
+    const APP_VERSION = "v2.3";
 
     // --- 完全自立型 SVG アイコンコンポーネント群 ---
     const IconBase = ({ children, size = 18, className = "" }) => (
@@ -593,69 +593,85 @@
       }
     ];
 
-    // 現行Google AI Studioの安定・現役モデルリスト（優先順にフォールバック試行）
-    const ACTIVE_GEMINI_MODELS = [
-      "gemini-2.5-flash",
-      "gemini-2.0-flash",
-      "gemini-2.5-flash-lite",
-      "gemini-1.5-flash-latest"
-    ];
-
-    // APIキーの接続疎通テスト関数（最新モデルを順次自動試行）
-    async function testGeminiApiKey(apiKeyToTest) {
-      const key = (apiKeyToTest || "").trim();
+    // 動的モデル自動検出エンジン（Google API公式エンドポイントから利用可能な現役モデルを取得）
+    async function getAvailableModel(cleanKey) {
+      const key = (cleanKey || "").trim();
       if (!key) throw new Error("APIキーが入力されていません");
 
-      let lastError = null;
+      let res = null;
+      let lastErr = "";
 
-      for (const model of ACTIVE_GEMINI_MODELS) {
-        const payload = {
-          contents: [{ parts: [{ text: "ping" }] }],
-          generationConfig: { maxOutputTokens: 2 }
-        };
+      // 試行1: クエリパラメータ方式でモデル一覧を取得
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(key)}`;
+        res = await fetch(url);
+      } catch (e) {
+        lastErr = e.message;
+      }
 
-        // 試行1: URLクエリ方式
+      // 試行2: x-goog-api-key ヘッダー方式で再試行
+      if (!res || !res.ok) {
         try {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
-          const res = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+          const url = `https://generativelanguage.googleapis.com/v1beta/models`;
+          res = await fetch(url, {
+            headers: { "x-goog-api-key": key }
           });
-          if (res.ok) return { success: true, model };
-
-          // 試行2: x-goog-api-key ヘッダー方式
-          const resHeader = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-goog-api-key": key
-            },
-            body: JSON.stringify(payload)
-          });
-          if (resHeader.ok) return { success: true, model };
-
-          // エラー詳細の抽出
-          let errDetail = `HTTP ${res.status}`;
-          try {
-            const errJson = await res.json();
-            if (errJson?.error?.message) errDetail = errJson.error.message;
-          } catch (_) {}
-          lastError = errDetail;
         } catch (e) {
-          lastError = e.message || "通信エラー";
+          lastErr = e.message;
         }
       }
 
-      throw new Error(lastError || "全モデルへの接続に失敗しました");
+      if (!res || !res.ok) {
+        let msg = `HTTP ${res?.status || "接続不可"}`;
+        try {
+          const errJson = await res.json();
+          if (errJson?.error?.message) msg = errJson.error.message;
+        } catch (_) {}
+        throw new Error(msg || lastErr || "APIキーの認証に失敗しました");
+      }
+
+      const data = await res.json();
+      const models = data?.models || [];
+      if (models.length === 0) {
+        throw new Error("このキーで利用可能なモデル一覧が取得できませんでした");
+      }
+
+      // generateContent をサポートしているモデルのみを抽出
+      const candidateModels = models.filter(m => 
+        m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent")
+      );
+
+      if (candidateModels.length === 0) {
+        throw new Error("コンテンツ生成(generateContent)をサポートするモデルがありません");
+      }
+
+      // 優先度: flash系（高速・安定） > pro系 > 先頭候補
+      const preferred = 
+        candidateModels.find(m => m.name.includes("2.5-flash")) ||
+        candidateModels.find(m => m.name.includes("2.0-flash")) ||
+        candidateModels.find(m => m.name.includes("flash")) ||
+        candidateModels.find(m => m.name.includes("pro")) ||
+        candidateModels[0];
+
+      // "models/gemini-..." の接頭辞を正規化
+      return preferred.name.replace(/^models\//, "");
     }
 
-    // 文科省八訂リアルタイム照会エンジン（現行Geminiモデル自動フォールバック版）
+    // APIキーの接続疎通テスト関数（動的自動検出型）
+    async function testGeminiApiKey(apiKeyToTest) {
+      const activeModel = await getAvailableModel(apiKeyToTest);
+      return { success: true, model: activeModel };
+    }
+
+    // 文科省八訂リアルタイム照会エンジン（動的モデル自動検出版）
     async function fetchMextFoodFromApi(foodQuery, customApiKey) {
       const apiKey = (customApiKey || localStorage.getItem('nutridex_gemini_api_key') || "").trim();
       if (!apiKey) {
         throw new Error("NO_API_KEY");
       }
+
+      // あなたのキーで今すぐ使えるモデルを動的に取得
+      const activeModel = await getAvailableModel(apiKey);
 
       const systemInstruction = `あなたは日本食品標準成分表（八訂増補2023年）に精通した栄養管理専門家です。「${foodQuery}」について、文部科学省公式成分表に準拠し、可食部100gあたりの全栄養素（エネルギー, 水分, PFC, 糖質, 食物繊維総量/水溶性/不溶性, ミネラル13種, ビタミン13種, 脂肪酸詳細, アミノ酸組成）を推計し、マークダウンを用いずJSON形式のみで出力してください。測定不能値はnullとしてください。`;
       const userPrompt = `食品名「${foodQuery}」の文科省八訂可食部100gあたり全栄養素データと生活単位をJSON出力してください。`;
@@ -672,22 +688,29 @@
       let successResponse = null;
       let lastErrMsg = "";
 
-      for (const model of ACTIVE_GEMINI_MODELS) {
-        // 第一経路: URLクエリ方式
-        try {
-          const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
-          const res = await fetch(apiUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          });
-          if (res.ok) {
-            successResponse = res;
-            break;
-          }
+      // 第一経路: クエリパラメータ方式
+      try {
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${activeModel}:generateContent?key=${encodeURIComponent(apiKey)}`;
+        const res = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) successResponse = res;
+        else {
+          try {
+            const errJson = await res.json();
+            if (errJson?.error?.message) lastErrMsg = errJson.error.message;
+          } catch (_) {}
+        }
+      } catch (e) {
+        lastErrMsg = e.message;
+      }
 
-          // 第二経路: ヘッダー認証方式
-          const apiHeaderUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+      // 第二経路: ヘッダー認証方式
+      if (!successResponse) {
+        try {
+          const apiHeaderUrl = `https://generativelanguage.googleapis.com/v1beta/models/${activeModel}:generateContent`;
           const fallbackRes = await fetch(apiHeaderUrl, {
             method: "POST",
             headers: {
@@ -696,22 +719,20 @@
             },
             body: JSON.stringify(payload)
           });
-          if (fallbackRes.ok) {
-            successResponse = fallbackRes;
-            break;
+          if (fallbackRes.ok) successResponse = fallbackRes;
+          else {
+            try {
+              const errJson = await fallbackRes.json();
+              if (errJson?.error?.message) lastErrMsg = errJson.error.message;
+            } catch (_) {}
           }
-
-          try {
-            const errJson = await res.json();
-            if (errJson?.error?.message) lastErrMsg = errJson.error.message;
-          } catch (_) {}
         } catch (netErr) {
           lastErrMsg = netErr.message;
         }
       }
 
       if (!successResponse) {
-        throw new Error(lastErrMsg || "Google APIとの通信に失敗しました。キーをご確認ください");
+        throw new Error(lastErrMsg || "Google APIとの通信に失敗しました");
       }
 
       const data = await successResponse.json();
@@ -1162,7 +1183,6 @@
               />
             )}
 
-            {}
             {activeTab === 'favorites' && (
               <FavoritesScreen
                 foodMaster={foodMaster}
@@ -1178,7 +1198,7 @@
 
             {/* バージョン表記 */}
             <div className="text-center text-[10px] text-slate-400 pt-8 pb-4">
-              NutriDex {APP_VERSION} • 文部科学省八訂準拠 2,541品目照会エンジン (Gemini 2.5 Flash 対応)
+              NutriDex {APP_VERSION} • 文部科学省八訂準拠 2,541品目照会エンジン (動的モデル自動検出版)
             </div>
           </main>
 
@@ -2218,14 +2238,14 @@
     function SettingsModal({ userGender, onChangeGender, userAgeGroup, onChangeAgeGroup, userApiKey, onChangeApiKey, onClose }) {
       const [keyInput, setKeyInput] = useState(userApiKey);
       const [isTesting, setIsTesting] = useState(false);
-      const [testStatus, setTestStatus] = useState(null); // { success: boolean, msg: string }
+      const [testStatus, setTestStatus] = useState(null);
 
       const handleTest = async () => {
         setIsTesting(true);
         setTestStatus(null);
         try {
           const res = await testGeminiApiKey(keyInput.trim());
-          setTestStatus({ success: true, msg: `接続成功！（${res.model}）` });
+          setTestStatus({ success: true, msg: `接続成功！（利用モデル: ${res.model}）` });
         } catch (err) {
           setTestStatus({ success: false, msg: `接続失敗: ${err.message}` });
         } finally {
@@ -2246,6 +2266,28 @@
                   {APP_VERSION}
                 </span>
                 <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs sm:text-sm font-semibold text-slate-700">性別</label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => onChangeGender('male')}
+                  className={`py-2 rounded-xl text-xs sm:text-sm font-bold border transition-all ${
+                    userGender === 'male' ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-slate-50 border-slate-200 text-slate-600'
+                  }`}
+                >
+                  男性
+                </button>
+                <button
+                  onClick={() => onChangeGender('female')}
+                  className={`py-2 rounded-xl text-xs sm:text-sm font-bold border transition-all ${
+                    userGender === 'female' ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-slate-50 border-slate-200 text-slate-600'
+                  }`}
+                >
+                  女性
+                </button>
               </div>
             </div>
 
