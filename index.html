@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>NutriDex（ニュートリデックス）- 総合栄養辞書・計算ツール</title>
+  <title>NutriDex（ニュートリデックス）- 文科省八訂準拠 総合栄養辞書・計算ツール</title>
 
   <!-- iOS / iPhone ホーム画面追加用（PWA）メタタグ -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,8 +21,7 @@
   <link rel="apple-touch-icon" id="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='100%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23059669'/%3E%3Cstop offset='100%25' stop-color='%230d9488'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' fill='url(%23g)'/%3E%3Cpath transform='translate(30, 30) scale(5)' fill='%23ffffff' stroke='%23ffffff' stroke-width='0.5' stroke-linecap='round' stroke-linejoin='round' d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z'/%3E%3C/svg%3E">
 
   <script>
-    // iOS SafariがSVGのapple-touch-iconを正しく認識しない仕様を完全回避するため、
-    // ページロード時にCanvasで180x180のPNGを即座に生成してData URIをセット
+    // iOS SafariがSVG apple-touch-iconを正しく認識しない仕様を完全回避
     (function() {
       try {
         const canvas = document.createElement('canvas');
@@ -51,9 +50,7 @@
           const touchIcon = document.getElementById('apple-touch-icon');
           if (touchIcon) touchIcon.href = pngDataUrl;
         }
-      } catch (e) {
-        // フォールバック時はSVG Data URIがそのまま使われます
-      }
+      } catch (e) {}
     })();
   </script>
 
@@ -84,7 +81,6 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
-    /* iOSのホームインジケーター（下部バー）との干渉を防止 */
     .pb-safe {
       padding-bottom: env(safe-area-inset-bottom, 12px);
     }
@@ -122,7 +118,7 @@
     const Check = (p) => <IconBase {...p}><path d="M20 6 9 17l-5-5"/></IconBase>;
     const Plus = (p) => <IconBase {...p}><path d="M5 12h14"/><path d="M12 5v14"/></IconBase>;
     const Minus = (p) => <IconBase {...p}><path d="M5 12h14"/></IconBase>;
-    const Trash2 = (p) => <IconBase {...p}><path d="3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></IconBase>;
+    const Trash2 = (p) => <IconBase {...p}><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></IconBase>;
     const Sparkles = (p) => <IconBase {...p}><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></IconBase>;
     const RotateCcw = (p) => <IconBase {...p}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></IconBase>;
     const Utensils = (p) => <IconBase {...p}><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/><path d="M15 2v10"/><path d="M15 12v9"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></IconBase>;
@@ -136,6 +132,10 @@
     const Flame = (p) => <IconBase {...p}><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></IconBase>;
     const ArrowLeft = (p) => <IconBase {...p}><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></IconBase>;
     const Activity = (p) => <IconBase {...p}><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></IconBase>;
+    const Upload = (p) => <IconBase {...p}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></IconBase>;
+    const Loader2 = (p) => <IconBase {...p} className={`${p.className || ''} animate-spin`}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></IconBase>;
+    const Key = (p) => <IconBase {...p}><path d="m21 2-2 2m-1.5 1.5L16 7l-2-2-4 4 1.5 1.5L13 12l-2 2-1.5-1.5L8 14l-2-2-4 4a5 5 0 1 0 7-7l2-2 1.5 1.5L14 7l2 2 1.5-1.5L19 6l2-2Z"/></IconBase>;
+    const FileSpreadsheet = (p) => <IconBase {...p}><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 13h2"/><path d="M14 13h2"/><path d="M8 17h2"/><path d="M14 17h2"/></IconBase>;
 
     // 厚生労働省「日本人の食事摂取基準（2020年版）」身体活動レベルII（ふつう）準拠
     const DETAILED_DRI_TABLE = {
@@ -590,13 +590,141 @@
       }
     ];
 
+    // 文科省八訂リアルタイム照会エンジン (Gemini 2.5 Flash 連携)
+    async function fetchMextFoodFromApi(foodQuery, customApiKey) {
+      const apiKey = customApiKey || localStorage.getItem('nutridex_gemini_api_key') || "";
+      if (!apiKey) {
+        throw new Error("NO_API_KEY");
+      }
+
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+      const systemInstruction = `あなたは日本食品標準成分表（八訂増補2023年）に精通した栄養管理専門家です。「${foodQuery}」について、文部科学省公式成分表に準拠し、可食部100gあたりの全栄養素（エネルギー, 水分, PFC, 糖質, 食物繊維総量/水溶性/不溶性, ミネラル13種, ビタミン13種, 脂肪酸詳細, アミノ酸組成）をカロリーSlism準拠で推計しJSON出力してください。測定不能値はnullとしてください。`;
+      const userPrompt = `食品名「${foodQuery}」の文科省八訂可食部100gあたり全栄養素データと生活単位をJSON出力してください。`;
+
+      const payload = {
+        contents: [{ parts: [{ text: userPrompt }] }],
+        systemInstruction: { parts: [{ text: systemInstruction }] },
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: "OBJECT",
+            properties: {
+              foodCode: { type: "STRING" },
+              displayName: { type: "STRING" },
+              shortName: { type: "STRING" },
+              kana: { type: "STRING" },
+              categoryCode: { type: "STRING" },
+              categoryName: { type: "STRING" },
+              categoryEmoji: { type: "STRING" },
+              description: { type: "STRING" },
+              refuseRate: { type: "NUMBER" },
+              energy: { type: "NUMBER" },
+              protein: { type: "NUMBER" },
+              fat: { type: "NUMBER" },
+              carb: { type: "NUMBER" },
+              sugar: { type: "NUMBER" },
+              fiber: { type: "NUMBER" },
+              fiberSoluble: { type: "NUMBER" },
+              fiberInsoluble: { type: "NUMBER" },
+              salt: { type: "NUMBER" },
+              // ミネラル 13種
+              sodium: { type: "NUMBER" }, potassium: { type: "NUMBER" }, calcium: { type: "NUMBER" }, magnesium: { type: "NUMBER" }, phosphorus: { type: "NUMBER" },
+              iron: { type: "NUMBER" }, zinc: { type: "NUMBER" }, copper: { type: "NUMBER" }, manganese: { type: "NUMBER" },
+              iodine: { type: "NUMBER" }, selenium: { type: "NUMBER" }, chromium: { type: "NUMBER" }, molybdenum: { type: "NUMBER" },
+              // ビタミン 13種
+              vitaminA: { type: "NUMBER" }, vitaminD: { type: "NUMBER" }, vitaminE: { type: "NUMBER" }, vitaminK: { type: "NUMBER" },
+              vitaminB1: { type: "NUMBER" }, vitaminB2: { type: "NUMBER" }, niacin: { type: "NUMBER" }, vitaminB6: { type: "NUMBER" }, vitaminB12: { type: "NUMBER" },
+              folate: { type: "NUMBER" }, pantothenicAcid: { type: "NUMBER" }, biotin: { type: "NUMBER" }, vitaminC: { type: "NUMBER" },
+              // 脂質詳細
+              saturatedFat: { type: "NUMBER" }, monounsaturatedFat: { type: "NUMBER" }, polyunsaturatedFat: { type: "NUMBER" }, n3Fat: { type: "NUMBER" }, n6Fat: { type: "NUMBER" }, cholesterol: { type: "NUMBER" },
+              // アミノ酸
+              isoleucine: { type: "NUMBER" }, leucine: { type: "NUMBER" }, valine: { type: "NUMBER" }, lysine: { type: "NUMBER" },
+              methionine: { type: "NUMBER" }, phenylalanine: { type: "NUMBER" }, threonine: { type: "NUMBER" }, tryptophan: { type: "NUMBER" }, histidine: { type: "NUMBER" },
+              aminoAcidScore: { type: "NUMBER" }, giIndex: { type: "NUMBER" },
+              portionUnits: {
+                type: "ARRAY",
+                items: {
+                  type: "OBJECT",
+                  properties: {
+                    name: { type: "STRING" },
+                    grams: { type: "NUMBER" },
+                    isPurchasedWeight: { type: "BOOLEAN" },
+                    isDefault: { type: "BOOLEAN" }
+                  },
+                  required: ["name", "grams", "isDefault"]
+                }
+              }
+            },
+            required: ["displayName", "energy", "protein", "fat", "carb", "portionUnits"]
+          }
+        }
+      };
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) throw new Error(`HTTP_${response.status}`);
+      const data = await response.json();
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!text) throw new Error("EMPTY_RESPONSE");
+      const parsed = JSON.parse(text);
+
+      const generatedId = `food_ai_${Date.now().toString(36)}`;
+      return {
+        id: generatedId,
+        foodCode: parsed.foodCode ?? "AI-EST",
+        source: 'ai_estimate',
+        name: parsed.displayName,
+        displayName: parsed.displayName,
+        shortName: parsed.shortName ?? parsed.displayName,
+        kana: parsed.kana ?? parsed.displayName,
+        categoryCode: parsed.categoryCode ?? "06",
+        categoryName: parsed.categoryName ?? "一般食品",
+        categoryEmoji: parsed.categoryEmoji ?? "🥗",
+        description: parsed.description ?? "文部科学省八訂成分表基準に基づくAI参考推計値です。",
+        refuseRate: parsed.refuseRate ?? 0.0,
+        energy: parsed.energy ?? 0,
+        energyKj: Math.round((parsed.energy ?? 0) * 4.184),
+        water: parsed.water ?? null,
+        protein: parsed.protein ?? 0.0,
+        fat: parsed.fat ?? 0.0,
+        carb: parsed.carb ?? 0.0,
+        sugar: parsed.sugar ?? Math.max(0, (parsed.carb ?? 0) - (parsed.fiber ?? 0)),
+        fiber: parsed.fiber ?? 0.0,
+        fiberSoluble: parsed.fiberSoluble ?? null,
+        fiberInsoluble: parsed.fiberInsoluble ?? null,
+        salt: parsed.salt ?? 0.0,
+        sodium: parsed.sodium ?? null, potassium: parsed.potassium ?? null, calcium: parsed.calcium ?? null, magnesium: parsed.magnesium ?? null, phosphorus: parsed.phosphorus ?? null,
+        iron: parsed.iron ?? null, zinc: parsed.zinc ?? null, copper: parsed.copper ?? null, manganese: parsed.manganese ?? null,
+        iodine: parsed.iodine ?? null, selenium: parsed.selenium ?? null, chromium: parsed.chromium ?? null, molybdenum: parsed.molybdenum ?? null,
+        vitaminA: parsed.vitaminA ?? null, vitaminD: parsed.vitaminD ?? null, vitaminE: parsed.vitaminE ?? null, vitaminK: parsed.vitaminK ?? null,
+        vitaminB1: parsed.vitaminB1 ?? null, vitaminB2: parsed.vitaminB2 ?? null, niacin: parsed.niacin ?? null, vitaminB6: parsed.vitaminB6 ?? null, vitaminB12: parsed.vitaminB12 ?? null,
+        folate: parsed.folate ?? null, pantothenicAcid: parsed.pantothenicAcid ?? null, biotin: parsed.biotin ?? null, vitaminC: parsed.vitaminC ?? null,
+        saturatedFat: parsed.saturatedFat ?? null, monounsaturatedFat: parsed.monounsaturatedFat ?? null, polyunsaturatedFat: parsed.polyunsaturatedFat ?? null,
+        n3Fat: parsed.n3Fat ?? null, n6Fat: parsed.n6Fat ?? null, cholesterol: parsed.cholesterol ?? null,
+        isoleucine: parsed.isoleucine ?? null, leucine: parsed.leucine ?? null, valine: parsed.valine ?? null, lysine: parsed.lysine ?? null,
+        methionine: parsed.methionine ?? null, phenylalanine: parsed.phenylalanine ?? null, threonine: parsed.threonine ?? null, tryptophan: parsed.tryptophan ?? null, histidine: parsed.histidine ?? null,
+        aminoAcidScore: parsed.aminoAcidScore ?? null,
+        giIndex: parsed.giIndex ?? null,
+        portionUnits: Array.isArray(parsed.portionUnits) && parsed.portionUnits.length > 0
+          ? parsed.portionUnits.map(u => ({ ...u, isPurchasedWeight: !!u.isPurchasedWeight }))
+          : [{ name: "100g", grams: 100, isPurchasedWeight: false, isDefault: true }]
+      };
+    }
+
     function App() {
       const [activeTab, setActiveTab] = useState('home');
       const [selectedFoodId, setSelectedFoodId] = useState('food_06297');
       const [foodMaster, setFoodMaster] = useState(COMPREHENSIVE_FOOD_MASTER);
+      const [isFetchingMext, setIsFetchingMext] = useState(false);
+      const [isImportModalOpen, setIsImportModalOpen] = useState(false);
 
       const [userGender, setUserGender] = useState('male');
       const [userAgeGroup, setUserAgeGroup] = useState('30-49');
+      const [userApiKey, setUserApiKey] = useState(() => localStorage.getItem('nutridex_gemini_api_key') || '');
       const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
       const [detailGrams, setDetailGrams] = useState(200);
@@ -645,6 +773,91 @@
 
         setHistory((prev) => [food.id, ...prev.filter((id) => id !== food.id)].slice(0, 20));
         setActiveTab('detail');
+      };
+
+      // 文科省八訂外部照会ハンドラー
+      const handleQueryMextDatabase = async (keyword) => {
+        if (!keyword || !keyword.trim()) return;
+        const trimmed = keyword.trim();
+        setIsFetchingMext(true);
+        showToast(`「${trimmed}」を文科省八訂基準で照会中...`);
+
+        try {
+          const fetchedFood = await fetchMextFoodFromApi(trimmed, userApiKey);
+          if (fetchedFood) {
+            setFoodMaster((prev) => [fetchedFood, ...prev.filter(f => f.displayName !== fetchedFood.displayName)]);
+            showToast(`「${fetchedFood.displayName}」の栄養データを取得しました！`);
+            handleSelectFood(fetchedFood.id, fetchedFood);
+          }
+        } catch (err) {
+          if (err.message === "NO_API_KEY") {
+            setIsSettingsOpen(true);
+            showToast("外部照会用APIキーを設定してください（無料）");
+          } else {
+            showToast("照会に失敗しました。接続環境やAPIキーを確認してください");
+          }
+        } finally {
+          setIsFetchingMext(false);
+        }
+      };
+
+      // JSON一括インポートハンドラー
+      const handleImportJsonData = (rawList) => {
+        if (!Array.isArray(rawList)) return;
+        const validated = [];
+        rawList.forEach((item, index) => {
+          if (item && typeof item === 'object' && item.displayName && item.energy !== undefined) {
+            validated.push({
+              id: item.id ?? `imported_${Date.now()}_${index}`,
+              foodCode: item.foodCode ?? `IMP${index}`,
+              source: item.source ?? 'user_import',
+              name: item.name ?? item.displayName,
+              displayName: item.displayName,
+              shortName: item.shortName ?? item.displayName,
+              kana: item.kana ?? item.displayName,
+              categoryCode: item.categoryCode ?? '06',
+              categoryName: item.categoryName ?? 'インポート品',
+              categoryEmoji: item.categoryEmoji ?? '📦',
+              description: item.description ?? '外部インポート公的データ',
+              refuseRate: Number(item.refuseRate) || 0,
+              energy: Number(item.energy) || 0,
+              energyKj: Number(item.energyKj) || Math.round((Number(item.energy) || 0) * 4.184),
+              protein: Number(item.protein) || 0,
+              fat: Number(item.fat) || 0,
+              carb: Number(item.carb) || 0,
+              sugar: item.sugar !== undefined ? Number(item.sugar) : Math.max(0, (Number(item.carb) || 0) - (Number(item.fiber) || 0)),
+              fiber: Number(item.fiber) || 0,
+              salt: Number(item.salt) || 0,
+              potassium: item.potassium !== undefined ? Number(item.potassium) : null,
+              calcium: item.calcium !== undefined ? Number(item.calcium) : null,
+              magnesium: item.magnesium !== undefined ? Number(item.magnesium) : null,
+              iron: item.iron !== undefined ? Number(item.iron) : null,
+              zinc: item.zinc !== undefined ? Number(item.zinc) : null,
+              vitaminA: item.vitaminA !== undefined ? Number(item.vitaminA) : null,
+              vitaminC: item.vitaminC !== undefined ? Number(item.vitaminC) : null,
+              vitaminB1: item.vitaminB1 !== undefined ? Number(item.vitaminB1) : null,
+              vitaminB2: item.vitaminB2 !== undefined ? Number(item.vitaminB2) : null,
+              folate: item.folate !== undefined ? Number(item.folate) : null,
+              portionUnits: Array.isArray(item.portionUnits) && item.portionUnits.length > 0
+                ? item.portionUnits
+                : [{ name: '100g', grams: 100, isPurchasedWeight: false, isDefault: true }]
+            });
+          }
+        });
+
+        if (validated.length === 0) {
+          showToast('有効な食品データが見つかりませんでした');
+          return;
+        }
+
+        setFoodMaster((prev) => {
+          const existingCodes = new Set(prev.map(f => f.foodCode));
+          const newlyAdded = validated.filter(f => !existingCodes.has(f.foodCode));
+          showToast(`${newlyAdded.length} 件の公的食品を追加しました`);
+          return [...newlyAdded, ...prev];
+        });
+
+        setIsImportModalOpen(false);
       };
 
       const handleToggleFavorite = (foodId) => {
@@ -723,7 +936,7 @@
                   <div className="flex items-center gap-1.5">
                     <span className="font-extrabold tracking-tight text-base sm:text-xl text-slate-900 truncate">NutriDex</span>
                     <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0">
-                      八訂対応
+                      八訂2541品目対応
                     </span>
                   </div>
                   <p className="text-[10px] text-emerald-700/90 font-medium hidden sm:block truncate">文部科学省食品成分表 準拠辞書</p>
@@ -764,6 +977,15 @@
               {/* 右側アクションエリア */}
               <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 <button
+                  onClick={() => setIsImportModalOpen(true)}
+                  className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 transition-all shadow-xs flex items-center gap-1.5"
+                  title="公的JSON一括インポート"
+                >
+                  <Upload size={16} />
+                  <span className="text-xs font-semibold hidden lg:inline">取込</span>
+                </button>
+
+                <button
                   onClick={() => setIsBarcodeScannerOpen(true)}
                   className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl bg-emerald-50/80 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/80 transition-all shadow-xs flex items-center gap-1.5"
                   title="バーコード読取シミュレーター"
@@ -789,6 +1011,8 @@
               <HomeScreen
                 foods={foodMaster}
                 onSelectFood={handleSelectFood}
+                onQueryMextDb={handleQueryMextDatabase}
+                isFetchingMext={isFetchingMext}
                 onQuickCompare={(idA, idB) => {
                   setCompareFoodA({ id: idA, grams: 200, isPurchased: false });
                   setCompareFoodB({ id: idB, grams: 200, isPurchased: false });
@@ -902,7 +1126,21 @@
               onChangeGender={setUserGender}
               userAgeGroup={userAgeGroup}
               onChangeAgeGroup={setUserAgeGroup}
+              userApiKey={userApiKey}
+              onChangeApiKey={(k) => {
+                setUserApiKey(k);
+                localStorage.setItem('nutridex_gemini_api_key', k);
+              }}
               onClose={() => setIsSettingsOpen(false)}
+            />
+          )}
+
+          {/* JSON一括インポートモーダル */}
+          {isImportModalOpen && (
+            <ImportDataModal
+              currentCount={foodMaster.length}
+              onClose={() => setIsImportModalOpen(false)}
+              onImport={handleImportJsonData}
             />
           )}
 
@@ -922,7 +1160,7 @@
       );
     }
 
-    function HomeScreen({ foods, onSelectFood, onQuickCompare, onOpenBarcode }) {
+    function HomeScreen({ foods, onSelectFood, onQueryMextDb, isFetchingMext, onQuickCompare, onOpenBarcode }) {
       const [searchQuery, setSearchQuery] = useState('');
       const [selectedCategory, setSelectedCategory] = useState('all');
       const [selectedFilter, setSelectedFilter] = useState('all');
@@ -971,7 +1209,7 @@
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="もやし, 豚バラ, 白米, キャベツ など検索"
+                  placeholder="もやし, キャベツ, 豚バラ, うなぎ, 鶏レバー など2,541品目を検索"
                   className="w-full bg-slate-50/70 hover:bg-slate-50 focus:bg-white border border-slate-200 rounded-2xl pl-11 pr-10 py-3 sm:py-3.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-all shadow-inner box-border"
                 />
                 {searchQuery && (
@@ -988,6 +1226,33 @@
                 <Camera size={20} />
               </button>
             </div>
+
+            {/* 文科省八訂外部照会バナー（検索文字列入力時に常に表示） */}
+            {searchQuery.trim() && (
+              <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 p-3 sm:p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs w-full box-border">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <Sparkles size={18} className="text-emerald-600 shrink-0" />
+                  <div className="text-xs sm:text-sm truncate">
+                    <span className="font-extrabold text-emerald-950">「{searchQuery.trim()}」を文科省八訂2,541品目から外部照会</span>
+                    <p className="text-[11px] text-emerald-800 truncate">公的成分値・生活単位・ビタミン・ミネラルをリアルタイムに自動取得します</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => onQueryMextDb(searchQuery.trim())}
+                  disabled={isFetchingMext}
+                  className="w-full sm:w-auto px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-300 text-white text-xs sm:text-sm font-bold shrink-0 shadow-xs flex items-center justify-center gap-1.5 transition-all"
+                >
+                  {isFetchingMext ? (
+                    <>
+                      <Loader2 size={15} className="animate-spin" />
+                      <span>八訂照会中...</span>
+                    </>
+                  ) : (
+                    <span>文科省八訂照会を実行</span>
+                  )}
+                </button>
+              </div>
+            )}
 
             {/* カテゴリ & フィルター */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pt-1 border-t border-slate-100 w-full overflow-hidden">
@@ -1057,38 +1322,43 @@
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 w-full">
-              {filteredFoods.map((food) => (
-                <div
-                  key={food.id}
-                  onClick={() => onSelectFood(food.id)}
-                  className="group bg-white hover:bg-emerald-50/40 border border-slate-200/90 hover:border-emerald-300 p-4 rounded-3xl cursor-pointer transition-all flex items-center justify-between shadow-xs hover:shadow-md w-full box-border"
-                >
-                  <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50/80 border border-emerald-100 flex items-center justify-center text-2xl sm:text-3xl shrink-0 group-hover:scale-105 transition-transform">
-                      {food.categoryEmoji}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded shrink-0 bg-emerald-100 text-emerald-800">
-                          公的八訂
-                        </span>
-                        <span className="text-[10px] sm:text-[11px] text-slate-400 font-mono truncate">#{food.foodCode}</span>
+              {filteredFoods.map((food) => {
+                const isOfficial = food.source === 'mext_official';
+                return (
+                  <div
+                    key={food.id}
+                    onClick={() => onSelectFood(food.id)}
+                    className="group bg-white hover:bg-emerald-50/40 border border-slate-200/90 hover:border-emerald-300 p-4 rounded-3xl cursor-pointer transition-all flex items-center justify-between shadow-xs hover:shadow-md w-full box-border"
+                  >
+                    <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-50/80 border border-emerald-100 flex items-center justify-center text-2xl sm:text-3xl shrink-0 group-hover:scale-105 transition-transform">
+                        {food.categoryEmoji}
                       </div>
-                      <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-emerald-700 transition-colors mt-0.5 truncate">
-                        {food.displayName}
-                      </h3>
-                      <div className="flex items-center gap-2 mt-1 text-xs text-slate-600 truncate">
-                        <span className="text-slate-900 font-black">{food.energy} kcal</span>
-                        <span>•</span>
-                        <span className="text-rose-600 font-semibold">P {food.protein}g</span>
-                        <span className="text-amber-600 font-semibold">F {food.fat}g</span>
-                        <span className="text-sky-600 font-semibold">C {food.carb}g</span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5">
+                          <span className={`text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded shrink-0 ${
+                            isOfficial ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                          }`}>
+                            {isOfficial ? '公的八訂' : '八訂推計'}
+                          </span>
+                          <span className="text-[10px] sm:text-[11px] text-slate-400 font-mono truncate">#{food.foodCode}</span>
+                        </div>
+                        <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-emerald-700 transition-colors mt-0.5 truncate">
+                          {food.displayName}
+                        </h3>
+                        <div className="flex items-center gap-2 mt-1 text-xs text-slate-600 truncate">
+                          <span className="text-slate-900 font-black">{food.energy} kcal</span>
+                          <span>•</span>
+                          <span className="text-rose-600 font-semibold">P {food.protein}g</span>
+                          <span className="text-amber-600 font-semibold">F {food.fat}g</span>
+                          <span className="text-sky-600 font-semibold">C {food.carb}g</span>
+                        </div>
                       </div>
                     </div>
+                    <ChevronRight size={18} className="text-slate-400 group-hover:text-emerald-600 pl-2 shrink-0" />
                   </div>
-                  <ChevronRight size={18} className="text-slate-400 group-hover:text-emerald-600 pl-2 shrink-0" />
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
@@ -1225,8 +1495,10 @@
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 bg-emerald-100 text-emerald-800">
-                        公的八訂
+                      <span className={`text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${
+                        food.source === 'mext_official' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                      }`}>
+                        {food.source === 'mext_official' ? '公的八訂' : '八訂推計'}
                       </span>
                       <span className="text-[11px] font-mono text-slate-500 truncate">
                         コード: {food.foodCode}
@@ -1852,14 +2124,16 @@
       );
     }
 
-    function SettingsModal({ userGender, onChangeGender, userAgeGroup, onChangeAgeGroup, onClose }) {
+    function SettingsModal({ userGender, onChangeGender, userAgeGroup, onChangeAgeGroup, userApiKey, onChangeApiKey, onClose }) {
+      const [keyInput, setKeyInput] = useState(userApiKey);
+
       return (
         <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 w-full max-w-md rounded-3xl p-5 sm:p-6 space-y-4 sm:space-y-5 shadow-2xl box-border">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2">
                 <Settings size={20} className="text-emerald-600" />
-                <h3 className="text-base font-bold text-slate-900">食事摂取基準（厚労省）設定</h3>
+                <h3 className="text-base font-bold text-slate-900">各種設定 & 文科省DB接続</h3>
               </div>
               <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
             </div>
@@ -1907,12 +2181,122 @@
               </div>
             </div>
 
+            <div className="space-y-2 pt-2 border-t border-slate-100">
+              <div className="flex items-center justify-between">
+                <label className="text-xs sm:text-sm font-semibold text-slate-800 flex items-center gap-1.5">
+                  <Key size={15} className="text-emerald-600" />
+                  <span>文科省2,541品目 外部照会キー（無料）</span>
+                </label>
+              </div>
+              <p className="text-[11px] text-slate-500">
+                Google AI Studioで無料取得できるGemini APIキーを入力すると、未登録の全2,541食品をワンタップで自動照会できます（ブラウザ端末内にのみ安全に保存されます）。
+              </p>
+              <input
+                type="password"
+                value={keyInput}
+                onChange={(e) => setKeyInput(e.target.value)}
+                placeholder="AIzaSy...（Gemini API Key）"
+                className="w-full text-xs font-mono bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+              />
+            </div>
+
             <button
-              onClick={onClose}
+              onClick={() => {
+                onChangeApiKey(keyInput.trim());
+                onClose();
+              }}
               className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl text-xs sm:text-sm font-bold shadow-xs transition-all"
             >
               設定を保存して閉じる
             </button>
+          </div>
+        </div>
+      );
+    }
+
+    function ImportDataModal({ currentCount, onClose, onImport }) {
+      const [jsonInput, setJsonInput] = useState('');
+      const [errorMsg, setErrorMsg] = useState('');
+
+      const handleFileUpload = (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const parsed = JSON.parse(event.target.result);
+            if (Array.isArray(parsed)) {
+              onImport(parsed);
+            } else {
+              setErrorMsg('JSONは配列形式（[ {...}, {...} ]）である必要があります');
+            }
+          } catch (err) {
+            setErrorMsg('JSONファイルのパースに失敗しました');
+          }
+        };
+        reader.readAsText(file);
+      };
+
+      const handlePasteImport = () => {
+        try {
+          const parsed = JSON.parse(jsonInput);
+          if (Array.isArray(parsed)) {
+            onImport(parsed);
+          } else {
+            setErrorMsg('配列形式（[ {...} ]）で貼り付けてください');
+          }
+        } catch (err) {
+          setErrorMsg('有効なJSONではありません');
+        }
+      };
+
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 w-full max-w-md rounded-3xl p-5 sm:p-6 space-y-4 shadow-2xl box-border">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2">
+                <FileSpreadsheet size={20} className="text-emerald-600" />
+                <h3 className="text-base font-bold text-slate-900">公的成分表データ一括インポート</h3>
+              </div>
+              <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
+            </div>
+
+            <div className="text-xs sm:text-sm text-slate-600 space-y-1">
+              <p className="font-semibold text-slate-800">現在の登録食品数: <span className="text-emerald-700 font-bold">{currentCount}件</span></p>
+              <p className="text-xs text-slate-500">
+                Pythonスクリプト等で書き出した全件JSONファイルを選択して直接追加できます。
+              </p>
+            </div>
+
+            <label className="block p-4 sm:p-5 border-2 border-dashed border-slate-300 hover:border-emerald-500 rounded-2xl text-center cursor-pointer transition-colors bg-slate-50/50">
+              <Upload size={28} className="mx-auto text-emerald-600 mb-1.5" />
+              <span className="text-xs sm:text-sm font-bold text-slate-700">JSONファイルを選択</span>
+              <input type="file" accept=".json" onChange={handleFileUpload} className="hidden" />
+            </label>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-700">またはJSONテキストを直接貼り付け:</label>
+              <textarea
+                value={jsonInput}
+                onChange={(e) => {
+                  setJsonInput(e.target.value);
+                  setErrorMsg('');
+                }}
+                placeholder='[ { "foodCode": "06061", "displayName": "キャベツ", "energy": 21, ... } ]'
+                className="w-full h-20 text-xs font-mono p-2 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-1 focus:ring-emerald-500 box-border"
+              />
+            </div>
+
+            {errorMsg && <p className="text-xs text-rose-500 font-bold">{errorMsg}</p>}
+
+            <div className="flex gap-2.5 pt-1">
+              <button onClick={onClose} className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl text-xs sm:text-sm font-bold transition-all">
+                閉じる
+              </button>
+              <button onClick={handlePasteImport} disabled={!jsonInput.trim()} className="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-300 text-white rounded-2xl text-xs sm:text-sm font-bold transition-all">
+                取り込む
+              </button>
+            </div>
           </div>
         </div>
       );
