@@ -590,16 +590,18 @@
       }
     ];
 
-    // 文科省八訂リアルタイム照会エンジン (Gemini 2.5 Flash 連携)
+    // 文科省八訂リアルタイム照会エンジン（AQ.新形式キー & AIzaSy旧形式キー 両対応）
     async function fetchMextFoodFromApi(foodQuery, customApiKey) {
-      const apiKey = customApiKey || localStorage.getItem('nutridex_gemini_api_key') || "";
+      const apiKey = (customApiKey || localStorage.getItem('nutridex_gemini_api_key') || "").trim();
       if (!apiKey) {
         throw new Error("NO_API_KEY");
       }
 
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+      // 無料枠で最も安定し、全世界の全アカウントで利用可能な標準モデル
+      const modelName = "gemini-1.5-flash";
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
 
-      const systemInstruction = `あなたは日本食品標準成分表（八訂増補2023年）に精通した栄養管理専門家です。「${foodQuery}」について、文部科学省公式成分表に準拠し、可食部100gあたりの全栄養素（エネルギー, 水分, PFC, 糖質, 食物繊維総量/水溶性/不溶性, ミネラル13種, ビタミン13種, 脂肪酸詳細, アミノ酸組成）をカロリーSlism準拠で推計しJSON出力してください。測定不能値はnullとしてください。`;
+      const systemInstruction = `あなたは日本食品標準成分表（八訂増補2023年）に精通した栄養管理専門家です。「${foodQuery}」について、文部科学省公式成分表に準拠し、可食部100gあたりの全栄養素（エネルギー, 水分, PFC, 糖質, 食物繊維総量/水溶性/不溶性, ミネラル13種, ビタミン13種, 脂肪酸詳細, アミノ酸組成）をカロリーSlism準拠で推計し、マークダウンを用いずJSON形式のみで出力してください。測定不能値はnullとしてください。`;
       const userPrompt = `食品名「${foodQuery}」の文科省八訂可食部100gあたり全栄養素データと生活単位をJSON出力してください。`;
 
       const payload = {
@@ -607,106 +609,127 @@
         systemInstruction: { parts: [{ text: systemInstruction }] },
         generationConfig: {
           responseMimeType: "application/json",
-          responseSchema: {
-            type: "OBJECT",
-            properties: {
-              foodCode: { type: "STRING" },
-              displayName: { type: "STRING" },
-              shortName: { type: "STRING" },
-              kana: { type: "STRING" },
-              categoryCode: { type: "STRING" },
-              categoryName: { type: "STRING" },
-              categoryEmoji: { type: "STRING" },
-              description: { type: "STRING" },
-              refuseRate: { type: "NUMBER" },
-              energy: { type: "NUMBER" },
-              protein: { type: "NUMBER" },
-              fat: { type: "NUMBER" },
-              carb: { type: "NUMBER" },
-              sugar: { type: "NUMBER" },
-              fiber: { type: "NUMBER" },
-              fiberSoluble: { type: "NUMBER" },
-              fiberInsoluble: { type: "NUMBER" },
-              salt: { type: "NUMBER" },
-              // ミネラル 13種
-              sodium: { type: "NUMBER" }, potassium: { type: "NUMBER" }, calcium: { type: "NUMBER" }, magnesium: { type: "NUMBER" }, phosphorus: { type: "NUMBER" },
-              iron: { type: "NUMBER" }, zinc: { type: "NUMBER" }, copper: { type: "NUMBER" }, manganese: { type: "NUMBER" },
-              iodine: { type: "NUMBER" }, selenium: { type: "NUMBER" }, chromium: { type: "NUMBER" }, molybdenum: { type: "NUMBER" },
-              // ビタミン 13種
-              vitaminA: { type: "NUMBER" }, vitaminD: { type: "NUMBER" }, vitaminE: { type: "NUMBER" }, vitaminK: { type: "NUMBER" },
-              vitaminB1: { type: "NUMBER" }, vitaminB2: { type: "NUMBER" }, niacin: { type: "NUMBER" }, vitaminB6: { type: "NUMBER" }, vitaminB12: { type: "NUMBER" },
-              folate: { type: "NUMBER" }, pantothenicAcid: { type: "NUMBER" }, biotin: { type: "NUMBER" }, vitaminC: { type: "NUMBER" },
-              // 脂質詳細
-              saturatedFat: { type: "NUMBER" }, monounsaturatedFat: { type: "NUMBER" }, polyunsaturatedFat: { type: "NUMBER" }, n3Fat: { type: "NUMBER" }, n6Fat: { type: "NUMBER" }, cholesterol: { type: "NUMBER" },
-              // アミノ酸
-              isoleucine: { type: "NUMBER" }, leucine: { type: "NUMBER" }, valine: { type: "NUMBER" }, lysine: { type: "NUMBER" },
-              methionine: { type: "NUMBER" }, phenylalanine: { type: "NUMBER" }, threonine: { type: "NUMBER" }, tryptophan: { type: "NUMBER" }, histidine: { type: "NUMBER" },
-              aminoAcidScore: { type: "NUMBER" }, giIndex: { type: "NUMBER" },
-              portionUnits: {
-                type: "ARRAY",
-                items: {
-                  type: "OBJECT",
-                  properties: {
-                    name: { type: "STRING" },
-                    grams: { type: "NUMBER" },
-                    isPurchasedWeight: { type: "BOOLEAN" },
-                    isDefault: { type: "BOOLEAN" }
-                  },
-                  required: ["name", "grams", "isDefault"]
-                }
-              }
-            },
-            required: ["displayName", "energy", "protein", "fat", "carb", "portionUnits"]
-          }
+          temperature: 0.1
         }
       };
 
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      if (!response.ok) throw new Error(`HTTP_${response.status}`);
+      let response;
+      try {
+        response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": apiKey // 新形式AQ.キーで401エラーを防ぐ必須ヘッダー
+          },
+          body: JSON.stringify(payload)
+        });
+      } catch (networkErr) {
+        throw new Error("インターネット接続を確認してください（通信失敗）");
+      }
+
+      if (!response.ok) {
+        let errMessage = `HTTP ${response.status}`;
+        try {
+          const errData = await response.json();
+          if (errData.error?.message) {
+            errMessage = errData.error.message;
+          }
+        } catch (_) {}
+
+        if (response.status === 400 || response.status === 401) {
+          throw new Error(`APIキーが無効または認証エラーです (${errMessage})`);
+        } else if (response.status === 429) {
+          throw new Error("APIの利用制限（リクエスト上限）に達しました。数十秒後に再試行してください");
+        } else {
+          throw new Error(`Google APIエラー (${response.status}): ${errMessage}`);
+        }
+      }
+
       const data = await response.json();
-      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!text) throw new Error("EMPTY_RESPONSE");
-      const parsed = JSON.parse(text);
+      const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!rawText) throw new Error("Google APIからの返答が空でした");
+
+      // マークダウンコードブロックが混入している場合は除去
+      let cleaned = rawText.trim();
+      if (cleaned.startsWith("```json")) {
+        cleaned = cleaned.replace(/^```json\s*/, "").replace(/\s*```$/, "");
+      } else if (cleaned.startsWith("```")) {
+        cleaned = cleaned.replace(/^```\s*/, "").replace(/\s*```$/, "");
+      }
+
+      let parsed;
+      try {
+        parsed = JSON.parse(cleaned);
+      } catch (parseErr) {
+        throw new Error("データのJSON解析に失敗しました。再試行してください");
+      }
 
       const generatedId = `food_ai_${Date.now().toString(36)}`;
       return {
         id: generatedId,
         foodCode: parsed.foodCode ?? "AI-EST",
         source: 'ai_estimate',
-        name: parsed.displayName,
-        displayName: parsed.displayName,
-        shortName: parsed.shortName ?? parsed.displayName,
-        kana: parsed.kana ?? parsed.displayName,
+        name: parsed.displayName || foodQuery,
+        displayName: parsed.displayName || foodQuery,
+        shortName: parsed.shortName ?? parsed.displayName ?? foodQuery,
+        kana: parsed.kana ?? parsed.displayName ?? foodQuery,
         categoryCode: parsed.categoryCode ?? "06",
         categoryName: parsed.categoryName ?? "一般食品",
         categoryEmoji: parsed.categoryEmoji ?? "🥗",
-        description: parsed.description ?? "文部科学省八訂成分表基準に基づくAI参考推計値です。",
+        description: parsed.description ?? "文部科学省八訂成分表基準に基づく推計値です。",
         refuseRate: parsed.refuseRate ?? 0.0,
-        energy: parsed.energy ?? 0,
-        energyKj: Math.round((parsed.energy ?? 0) * 4.184),
-        water: parsed.water ?? null,
-        protein: parsed.protein ?? 0.0,
-        fat: parsed.fat ?? 0.0,
-        carb: parsed.carb ?? 0.0,
-        sugar: parsed.sugar ?? Math.max(0, (parsed.carb ?? 0) - (parsed.fiber ?? 0)),
-        fiber: parsed.fiber ?? 0.0,
-        fiberSoluble: parsed.fiberSoluble ?? null,
-        fiberInsoluble: parsed.fiberInsoluble ?? null,
-        salt: parsed.salt ?? 0.0,
-        sodium: parsed.sodium ?? null, potassium: parsed.potassium ?? null, calcium: parsed.calcium ?? null, magnesium: parsed.magnesium ?? null, phosphorus: parsed.phosphorus ?? null,
-        iron: parsed.iron ?? null, zinc: parsed.zinc ?? null, copper: parsed.copper ?? null, manganese: parsed.manganese ?? null,
-        iodine: parsed.iodine ?? null, selenium: parsed.selenium ?? null, chromium: parsed.chromium ?? null, molybdenum: parsed.molybdenum ?? null,
-        vitaminA: parsed.vitaminA ?? null, vitaminD: parsed.vitaminD ?? null, vitaminE: parsed.vitaminE ?? null, vitaminK: parsed.vitaminK ?? null,
-        vitaminB1: parsed.vitaminB1 ?? null, vitaminB2: parsed.vitaminB2 ?? null, niacin: parsed.niacin ?? null, vitaminB6: parsed.vitaminB6 ?? null, vitaminB12: parsed.vitaminB12 ?? null,
-        folate: parsed.folate ?? null, pantothenicAcid: parsed.pantothenicAcid ?? null, biotin: parsed.biotin ?? null, vitaminC: parsed.vitaminC ?? null,
-        saturatedFat: parsed.saturatedFat ?? null, monounsaturatedFat: parsed.monounsaturatedFat ?? null, polyunsaturatedFat: parsed.polyunsaturatedFat ?? null,
-        n3Fat: parsed.n3Fat ?? null, n6Fat: parsed.n6Fat ?? null, cholesterol: parsed.cholesterol ?? null,
-        isoleucine: parsed.isoleucine ?? null, leucine: parsed.leucine ?? null, valine: parsed.valine ?? null, lysine: parsed.lysine ?? null,
-        methionine: parsed.methionine ?? null, phenylalanine: parsed.phenylalanine ?? null, threonine: parsed.threonine ?? null, tryptophan: parsed.tryptophan ?? null, histidine: parsed.histidine ?? null,
+        energy: Number(parsed.energy) || 0,
+        energyKj: Math.round((Number(parsed.energy) || 0) * 4.184),
+        water: parsed.water !== undefined ? parsed.water : null,
+        protein: Number(parsed.protein) || 0.0,
+        fat: Number(parsed.fat) || 0.0,
+        carb: Number(parsed.carb) || 0.0,
+        sugar: parsed.sugar !== undefined ? Number(parsed.sugar) : Math.max(0, (Number(parsed.carb) || 0) - (Number(parsed.fiber) || 0)),
+        fiber: Number(parsed.fiber) || 0.0,
+        fiberSoluble: parsed.fiberSoluble !== undefined ? parsed.fiberSoluble : null,
+        fiberInsoluble: parsed.fiberInsoluble !== undefined ? parsed.fiberInsoluble : null,
+        salt: Number(parsed.salt) || 0.0,
+        sodium: parsed.sodium !== undefined ? parsed.sodium : null,
+        potassium: parsed.potassium !== undefined ? parsed.potassium : null,
+        calcium: parsed.calcium !== undefined ? parsed.calcium : null,
+        magnesium: parsed.magnesium !== undefined ? parsed.magnesium : null,
+        phosphorus: parsed.phosphorus !== undefined ? parsed.phosphorus : null,
+        iron: parsed.iron !== undefined ? parsed.iron : null,
+        zinc: parsed.zinc !== undefined ? parsed.zinc : null,
+        copper: parsed.copper !== undefined ? parsed.copper : null,
+        manganese: parsed.manganese !== undefined ? parsed.manganese : null,
+        iodine: parsed.iodine !== undefined ? parsed.iodine : null,
+        selenium: parsed.selenium !== undefined ? parsed.selenium : null,
+        chromium: parsed.chromium !== undefined ? parsed.chromium : null,
+        molybdenum: parsed.molybdenum !== undefined ? parsed.molybdenum : null,
+        vitaminA: parsed.vitaminA !== undefined ? parsed.vitaminA : null,
+        vitaminD: parsed.vitaminD !== undefined ? parsed.vitaminD : null,
+        vitaminE: parsed.vitaminE !== undefined ? parsed.vitaminE : null,
+        vitaminK: parsed.vitaminK !== undefined ? parsed.vitaminK : null,
+        vitaminB1: parsed.vitaminB1 !== undefined ? parsed.vitaminB1 : null,
+        vitaminB2: parsed.vitaminB2 !== undefined ? parsed.vitaminB2 : null,
+        niacin: parsed.niacin !== undefined ? parsed.niacin : null,
+        vitaminB6: parsed.vitaminB6 !== undefined ? parsed.vitaminB6 : null,
+        vitaminB12: parsed.vitaminB12 !== undefined ? parsed.vitaminB12 : null,
+        folate: parsed.folate !== undefined ? parsed.folate : null,
+        pantothenicAcid: parsed.pantothenicAcid !== undefined ? parsed.pantothenicAcid : null,
+        biotin: parsed.biotin !== undefined ? parsed.biotin : null,
+        vitaminC: parsed.vitaminC !== undefined ? parsed.vitaminC : null,
+        saturatedFat: parsed.saturatedFat !== undefined ? parsed.saturatedFat : null,
+        monounsaturatedFat: parsed.monounsaturatedFat !== undefined ? parsed.monounsaturatedFat : null,
+        polyunsaturatedFat: parsed.polyunsaturatedFat !== undefined ? parsed.polyunsaturatedFat : null,
+        n3Fat: parsed.n3Fat !== undefined ? parsed.n3Fat : null,
+        n6Fat: parsed.n6Fat !== undefined ? parsed.n6Fat : null,
+        cholesterol: parsed.cholesterol !== undefined ? parsed.cholesterol : null,
+        isoleucine: parsed.isoleucine !== undefined ? parsed.isoleucine : null,
+        leucine: parsed.leucine !== undefined ? parsed.leucine : null,
+        valine: parsed.valine !== undefined ? parsed.valine : null,
+        lysine: parsed.lysine !== undefined ? parsed.lysine : null,
+        methionine: parsed.methionine !== undefined ? parsed.methionine : null,
+        phenylalanine: parsed.phenylalanine !== undefined ? parsed.phenylalanine : null,
+        threonine: parsed.threonine !== undefined ? parsed.threonine : null,
+        tryptophan: parsed.tryptophan !== undefined ? parsed.tryptophan : null,
+        histidine: parsed.histidine !== undefined ? parsed.histidine : null,
         aminoAcidScore: parsed.aminoAcidScore ?? null,
         giIndex: parsed.giIndex ?? null,
         portionUnits: Array.isArray(parsed.portionUnits) && parsed.portionUnits.length > 0
@@ -758,7 +781,7 @@
         toastTimeoutRef.current = setTimeout(() => {
           setToastMessage(null);
           toastTimeoutRef.current = null;
-        }, 3000);
+        }, 3500);
       };
 
       const handleSelectFood = (foodId, directFood = null) => {
@@ -792,9 +815,10 @@
         } catch (err) {
           if (err.message === "NO_API_KEY") {
             setIsSettingsOpen(true);
-            showToast("外部照会用APIキーを設定してください（無料）");
+            showToast("右上の設定からGemini APIキーを設定してください");
           } else {
-            showToast("照会に失敗しました。接続環境やAPIキーを確認してください");
+            console.error("MEXT Query Error:", err);
+            showToast(err.message || "照会に失敗しました。キーを確認してください");
           }
         } finally {
           setIsFetchingMext(false);
@@ -2188,14 +2212,14 @@
                   <span>文科省2,541品目 外部照会キー（無料）</span>
                 </label>
               </div>
-              <p className="text-[11px] text-slate-500">
-                Google AI Studioで無料取得できるGemini APIキーを入力すると、未登録の全2,541食品をワンタップで自動照会できます（ブラウザ端末内にのみ安全に保存されます）。
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                Google AI Studioで無料発行できるAPIキー（<code>AQ.</code> または <code>AIzaSy</code> で始まるキー）を入力すると、未登録の全2,541食品をワンタップで自動照会できます。
               </p>
               <input
                 type="password"
                 value={keyInput}
                 onChange={(e) => setKeyInput(e.target.value)}
-                placeholder="AIzaSy...（Gemini API Key）"
+                placeholder="AQ... または AIzaSy..."
                 className="w-full text-xs font-mono bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-500"
               />
             </div>
