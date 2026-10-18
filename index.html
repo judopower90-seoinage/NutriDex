@@ -2,9 +2,61 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>NutriDex（ニュートリデックス）- 総合栄養辞書・計算ツール</title>
-  
+
+  <!-- iOS / iPhone ホーム画面追加用（PWA）メタタグ -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="NutriDex">
+  <meta name="theme-color" content="#059669">
+
+  <!-- インライン埋め込み型 Web App Manifest (Data URI) -->
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22NutriDex%22%2C%22short_name%22%3A%22NutriDex%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F4F7F5%22%2C%22theme_color%22%3A%22%23059669%22%7D">
+
+  <!-- ブラウザ用ファビコン (SVG Data URI: エメラルド×ホワイトフレイム) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='100%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23059669'/%3E%3Cstop offset='100%25' stop-color='%230d9488'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Cpath transform='translate(14, 14) scale(3)' fill='%23ffffff' stroke='%23ffffff' stroke-width='0.5' stroke-linecap='round' stroke-linejoin='round' d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z'/%3E%3C/svg%3E">
+
+  <!-- iPhone用 apple-touch-icon タグ (初期SVG + JSによる高解像度PNG自動生成) -->
+  <link rel="apple-touch-icon" id="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='100%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23059669'/%3E%3Cstop offset='100%25' stop-color='%230d9488'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' fill='url(%23g)'/%3E%3Cpath transform='translate(30, 30) scale(5)' fill='%23ffffff' stroke='%23ffffff' stroke-width='0.5' stroke-linecap='round' stroke-linejoin='round' d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z'/%3E%3C/svg%3E">
+
+  <script>
+    // iOS SafariがSVGのapple-touch-iconを正しく認識しない仕様を完全回避するため、
+    // ページロード時にCanvasで180x180のPNGを即座に生成してData URIをセット
+    (function() {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = 180;
+        canvas.height = 180;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          const grad = ctx.createLinearGradient(0, 180, 180, 0);
+          grad.addColorStop(0, '#059669');
+          grad.addColorStop(1, '#0d9488');
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 0, 180, 180);
+
+          const p = new Path2D("M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z");
+          ctx.save();
+          ctx.translate(30, 30);
+          ctx.scale(5, 5);
+          ctx.fillStyle = '#ffffff';
+          ctx.fill(p);
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 0.5;
+          ctx.stroke(p);
+          ctx.restore();
+
+          const pngDataUrl = canvas.toDataURL('image/png');
+          const touchIcon = document.getElementById('apple-touch-icon');
+          if (touchIcon) touchIcon.href = pngDataUrl;
+        }
+      } catch (e) {
+        // フォールバック時はSVG Data URIがそのまま使われます
+      }
+    })();
+  </script>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
@@ -12,11 +64,11 @@
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   
-  <!-- Babel Standalone (JSXをブラウザ上で直接実行可能にするエンジン) -->
+  <!-- Babel Standalone (JSXトランスパイラ) -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
-    /* モバイルブラウザでの入力フォーカス時自動ズームを完全防止 */
+    /* モバイルブラウザでのフォーカス時自動ズームを完全防止 */
     input, select, textarea {
       font-size: 16px !important;
     }
@@ -32,6 +84,10 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+    /* iOSのホームインジケーター（下部バー）との干渉を防止 */
+    .pb-safe {
+      padding-bottom: env(safe-area-inset-bottom, 12px);
+    }
   </style>
 </head>
 <body class="bg-[#F4F7F5] text-slate-800 antialiased selection:bg-emerald-500 selection:text-white touch-manipulation">
@@ -40,7 +96,7 @@
   <script type="text/babel">
     const { useState, useMemo, useEffect, useRef } = React;
 
-    // --- 完全自給自足用 SVG アイコンコンポーネント群（外部依存関係ゼロで確実に動作） ---
+    // --- 完全自立型 SVG アイコンコンポーネント群 ---
     const IconBase = ({ children, size = 18, className = "" }) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -76,13 +132,10 @@
     const Settings = (p) => <IconBase {...p}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></IconBase>;
     const Scan = (p) => <IconBase {...p}><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/></IconBase>;
     const Camera = (p) => <IconBase {...p}><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></IconBase>;
-    const Upload = (p) => <IconBase {...p}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></IconBase>;
     const Copy = (p) => <IconBase {...p}><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></IconBase>;
     const Flame = (p) => <IconBase {...p}><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></IconBase>;
     const ArrowLeft = (p) => <IconBase {...p}><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></IconBase>;
     const Activity = (p) => <IconBase {...p}><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></IconBase>;
-    const FileSpreadsheet = (p) => <IconBase {...p}><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 13h2"/><path d="M14 13h2"/><path d="M8 17h2"/><path d="M14 17h2"/></IconBase>;
-    const Loader2 = (p) => <IconBase {...p} className={`${p.className || ""} animate-spin`}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></IconBase>;
 
     // 厚生労働省「日本人の食事摂取基準（2020年版）」身体活動レベルII（ふつう）準拠
     const DETAILED_DRI_TABLE = {
@@ -161,7 +214,7 @@
       const salt = +( (food.salt ?? 0) * ratio ).toFixed(2);
       const ash = scaleNum(food.ash, 1);
 
-      // 無機質（ミネラル 13種）
+      // ミネラル 13種
       const sodium = scaleInt(food.sodium);
       const potassium = scaleInt(food.potassium);
       const calcium = scaleInt(food.calcium);
@@ -176,7 +229,7 @@
       const chromium = scaleNum(food.chromium, 1);
       const molybdenum = scaleNum(food.molybdenum, 1);
 
-      // ビタミン（13種 + 詳細）
+      // ビタミン 13種 + 詳細
       const vitaminA = scaleInt(food.vitaminA);
       const retinol = scaleInt(food.retinol);
       const betaCarotene = scaleInt(food.betaCarotene);
@@ -193,7 +246,7 @@
       const biotin = scaleNum(food.biotin, 1);
       const vitaminC = scaleNum(food.vitaminC, 1);
 
-      // 脂質・脂肪酸詳細
+      // 脂質詳細
       const saturatedFat = scaleNum(food.saturatedFat, 2);
       const monounsaturatedFat = scaleNum(food.monounsaturatedFat, 2);
       const polyunsaturatedFat = scaleNum(food.polyunsaturatedFat, 2);
@@ -244,7 +297,7 @@
       };
     }
 
-    // 文部科学省「日本食品標準成分表（八訂）増補2023年」完全準拠シードマスター
+    // 文部科学省「日本食品標準成分表（八訂）増補2023年」準拠データマスター
     const COMPREHENSIVE_FOOD_MASTER = [
       {
         id: 'food_06297',
@@ -541,8 +594,6 @@
       const [activeTab, setActiveTab] = useState('home');
       const [selectedFoodId, setSelectedFoodId] = useState('food_06297');
       const [foodMaster, setFoodMaster] = useState(COMPREHENSIVE_FOOD_MASTER);
-      const [isFetchingMext, setIsFetchingMext] = useState(false);
-      const [importModalOpen, setImportModalOpen] = useState(false);
 
       const [userGender, setUserGender] = useState('male');
       const [userAgeGroup, setUserAgeGroup] = useState('30-49');
@@ -814,7 +865,7 @@
           )}
 
           {/* モバイルボトムナビゲーション */}
-          <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 flex justify-center pointer-events-none">
+          <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 flex justify-center pointer-events-none pb-safe">
             <div className="w-full max-w-lg bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-2 py-2 flex items-center justify-around pointer-events-auto shadow-lg">
               {navigationItems.map((item) => {
                 const Icon = item.icon;
