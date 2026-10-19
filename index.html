@@ -57,8 +57,8 @@
   <script type="text/babel">
     const { useState, useMemo, useEffect, useRef } = React;
 
-    // バージョン管理定数（v2.9: 油脂類・主要食材直接内蔵＆Safariセーフ同期版）
-    const APP_VERSION = "v2.9";
+    // バージョン管理定数（v2.10: もち麦・押麦・麦ごはん内蔵版）
+    const APP_VERSION = "v2.10";
 
     // --- ローカル保存管理ヘルパー ---
     const STORAGE_KEYS = {
@@ -398,6 +398,53 @@
           { name: '茶碗大盛 (200g)', grams: 200, isPurchasedWeight: false, isDefault: false }
         ]
       },
+      // --- 大麦・もち麦類（八訂公的押麦 ＋ もち麦代表分析値） ---
+      {
+        id: 'food_mochimugi_dry', foodCode: 'M-MOCHI', source: 'ai_estimate',
+        name: 'もち性大麦/もち麦/乾', displayName: 'もち麦（もち性大麦 乾）', shortName: 'もち麦（乾）',
+        kana: 'もちむぎ もちせいおおむぎ おおむぎ 大麦 麦 食物繊維 ベータグルカン', categoryCode: '01', categoryName: '穀類', categoryEmoji: '🌾',
+        refuseRate: 0.0, energy: 339, energyKj: 1418, protein: 9.5, fat: 1.6, carb: 77.0, sugar: 64.1, fiber: 12.9, salt: 0.0,
+        potassium: 310, calcium: 38, magnesium: 80, iron: 2.5, zinc: 2.2, vitaminB1: 0.20, vitaminE: 0.4,
+        portionUnits: [
+          { name: '米1合に混ぜる目安 (50g)', grams: 50, isPurchasedWeight: false, isDefault: true },
+          { name: '大さじ1 (約12g)', grams: 12, isPurchasedWeight: false, isDefault: false },
+          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
+        ]
+      },
+      {
+        id: 'food_mochimugi_meshi', foodCode: 'M-MOCHIMESHI', source: 'ai_estimate',
+        name: 'もち麦ごはん/3割炊飯/めし', displayName: 'もち麦ごはん（3割炊飯 めし）', shortName: 'もち麦ごはん',
+        kana: 'もちむぎごはん もちむぎめし むぎめし 麦飯 麦ごはん 雑穀', categoryCode: '01', categoryName: '穀類', categoryEmoji: '🍚',
+        refuseRate: 0.0, energy: 160, energyKj: 669, protein: 3.2, fat: 0.5, carb: 37.8, sugar: 35.0, fiber: 2.8, salt: 0.0,
+        potassium: 55, calcium: 8, magnesium: 18, iron: 0.4,
+        portionUnits: [
+          { name: '茶碗普通盛 (150g)', grams: 150, isPurchasedWeight: false, isDefault: true },
+          { name: '茶碗小盛 (120g)', grams: 120, isPurchasedWeight: false, isDefault: false },
+          { name: 'おにぎり1個 (110g)', grams: 110, isPurchasedWeight: false, isDefault: false }
+        ]
+      },
+      {
+        id: 'food_01006', foodCode: '01006', source: 'mext_official',
+        name: 'おおむぎ/押麦/乾', displayName: '押麦（うるち性大麦 乾）', shortName: '押麦（乾）',
+        kana: 'おしむぎ おおむぎ 大麦 麦 押し麦 麦ごはん', categoryCode: '01', categoryName: '穀類', categoryEmoji: '🌾',
+        refuseRate: 0.0, energy: 329, energyKj: 1377, protein: 6.7, fat: 1.5, carb: 77.8, sugar: 67.5, fiber: 10.3, salt: 0.0,
+        potassium: 210, calcium: 23, magnesium: 41, iron: 1.2, zinc: 1.2, vitaminB1: 0.12,
+        portionUnits: [
+          { name: '米1合に混ぜる目安 (50g)', grams: 50, isPurchasedWeight: false, isDefault: true },
+          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
+        ]
+      },
+      {
+        id: 'food_01170', foodCode: '01170', source: 'mext_official',
+        name: 'おおむぎ/押麦/めし', displayName: '押麦（めし 茹で・麦飯）', shortName: '押麦（めし）',
+        kana: 'おしむぎめし むぎめし 麦ごはん 押し麦飯', categoryCode: '01', categoryName: '穀類', categoryEmoji: '🍚',
+        refuseRate: 0.0, energy: 118, energyKj: 494, protein: 2.2, fat: 0.5, carb: 28.5, sugar: 26.3, fiber: 2.2, salt: 0.0,
+        potassium: 38, calcium: 7, magnesium: 12, iron: 0.3,
+        portionUnits: [
+          { name: '茶碗普通盛 (150g)', grams: 150, isPurchasedWeight: false, isDefault: true },
+          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
+        ]
+      },
 
       // --- 豆類・卵類 ---
       {
@@ -463,6 +510,8 @@
       if (code === '14003' || name.includes('米ぬか油')) kana += ' こめあぶら こめゆ まいゆ 米油 こめ油 ライスオイル';
       if (code === '14002' || name.includes('ごま油')) kana += ' ごまあぶら ごまゆ 胡麻油';
       if (code === '14004' || name.includes('なたね油')) kana += ' きゃのーらゆ キャノーラ油 菜種油 サラダ油';
+      if (code === '01006' || name.includes('押麦')) kana += ' おしむぎ おおむぎ 大麦 もち麦 麦ごはん';
+      if (code === '01007' || name.includes('米粒麦')) kana += ' まいりゅうばく おおむぎ 大麦 もち麦';
 
       let portionUnits = raw.portionUnits;
       if (!portionUnits || portionUnits.length === 0) {
@@ -822,7 +871,7 @@
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="米ぬか油, 米油, こめ油, オリーブ油, 鶏もも肉 など"
+                placeholder="もち麦, 米油, オリーブ油, 鶏もも肉, 押麦 など"
                 className="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-11 pr-10 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
               />
               {searchQuery && (
