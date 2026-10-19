@@ -57,8 +57,8 @@
   <script type="text/babel">
     const { useState, useMemo, useEffect, useRef } = React;
 
-    // バージョン管理定数（v3.1 + 0.1 ➔ v3.2）
-    const APP_VERSION = "v3.2";
+    // バージョン管理定数（v3.2 + 0.1 ➔ v3.3）
+    const APP_VERSION = "v3.3";
 
     // --- ローカル保存管理ヘルパー ---
     const STORAGE_KEYS = {
@@ -168,7 +168,7 @@
     const Activity = (p) => <IconBase {...p}><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></IconBase>;
     const Database = (p) => <IconBase {...p}><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></IconBase>;
 
-    // 厚生労働省「日本人の食事摂取基準（2020年版）」全栄養素完全網羅
+    // 厚生労働省「日本人の食事摂取基準（2020年版）」
     const DETAILED_DRI_TABLE = {
       male: {
         '18-29': { energy: 2650, protein: 65, fiber: 21, saltMax: 7.5, potassium: 3000, calcium: 800, magnesium: 340, iron: 7.5, zinc: 11.0, vitaminA: 850, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.4, vitaminB2: 1.6, vitaminC: 100, saturatedFatMax: 20.0 },
@@ -238,10 +238,8 @@
       };
     }
 
-    // ★文部科学省「日本食品標準成分表（八訂）」公的完全シードマスター
-    // 通信が一切繋がらなくても、油脂類・主要食材は開いた瞬間から100%確実にヒットします
+    // 文部科学省八訂公的シードマスター
     const INTRINSIC_OFFICIAL_FOODS = [
-      // --- 油脂類（第14群） ---
       {
         id: 'food_14003', foodCode: '14003', source: 'mext_official',
         name: '［植物油脂類］/米ぬか油', displayName: '米ぬか油（こめ油・米油）', shortName: 'こめ油（米油）',
@@ -282,31 +280,6 @@
         ]
       },
       {
-        id: 'food_14004', foodCode: '14004', source: 'mext_official',
-        name: '［植物油脂類］/なたね油', displayName: 'なたね油（キャノーラ油）', shortName: 'キャノーラ油（なたね油）',
-        kana: 'なたねあぶら きゃのーらゆ キャノーラ油 菜種油 サラダ油', categoryCode: '14', categoryName: '油脂類', categoryEmoji: '🌼',
-        refuseRate: 0.0, energy: 884, energyKj: 3638, protein: 0.0, fat: 100.0, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.0,
-        vitaminE: 15.2, saturatedFat: 7.50, monounsaturatedFat: 60.50, polyunsaturatedFat: 26.50,
-        portionUnits: [
-          { name: '大さじ1 (12g)', grams: 12, isPurchasedWeight: false, isDefault: true },
-          { name: '小さじ1 (4g)', grams: 4, isPurchasedWeight: false, isDefault: false }
-        ]
-      },
-      {
-        id: 'food_13002', foodCode: '13002', source: 'mext_official',
-        name: 'バター/有塩バター', displayName: '有塩バター', shortName: 'バター（有塩）',
-        kana: 'ばたー ゆうえんばたー 乳製品', categoryCode: '13', categoryName: '乳類', categoryEmoji: '🧈',
-        refuseRate: 0.0, energy: 700, energyKj: 2883, protein: 0.6, fat: 81.0, carb: 0.2, sugar: 0.2, fiber: 0.0, salt: 1.9,
-        potassium: 19, calcium: 15, vitaminA: 520, vitaminD: 0.6, saturatedFat: 50.1,
-        portionUnits: [
-          { name: '大さじ1 (12g)', grams: 12, isPurchasedWeight: false, isDefault: true },
-          { name: '小さじ1 (4g)', grams: 4, isPurchasedWeight: false, isDefault: false },
-          { name: '薄切り1枚 (10g)', grams: 10, isPurchasedWeight: false, isDefault: false }
-        ]
-      },
-
-      // --- 肉類（第11群） ---
-      {
         id: 'food_11221', foodCode: '11221', source: 'mext_official',
         name: 'にわとり/［若鶏肉］/もも/皮つき/生', displayName: '若鶏もも肉（皮つき 生）', shortName: '鶏もも肉（皮つき）',
         kana: 'とりももにく かわつき とりにく 鶏肉 チキン 鳥モモ', categoryCode: '11', categoryName: '肉類', categoryEmoji: '🍗',
@@ -340,19 +313,6 @@
         ]
       },
       {
-        id: 'food_11129', foodCode: '11129', source: 'mext_official',
-        name: 'ぶた/［大型種肉］/ばら/脂身つき/生', displayName: '豚ばら肉（脂身つき 生）', shortName: '豚バラ肉',
-        kana: 'ぶたばら ぶたにく 豚肉 豚バラ 豚こま', categoryCode: '11', categoryName: '肉類', categoryEmoji: '🥓',
-        refuseRate: 0.0, energy: 366, energyKj: 1530, protein: 14.4, fat: 35.4, carb: 0.1, sugar: 0.1, fiber: 0.0, salt: 0.1,
-        potassium: 240, calcium: 4, iron: 0.5, zinc: 1.4, vitaminB1: 0.54,
-        portionUnits: [
-          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: true },
-          { name: '薄切り1枚 (約25g)', grams: 25, isPurchasedWeight: false, isDefault: false }
-        ]
-      },
-
-      // --- 野菜類（第06群） ---
-      {
         id: 'food_06297', foodCode: '06297', source: 'mext_official',
         name: 'りょくとうもやし/生', displayName: '緑豆もやし（生）', shortName: 'もやし（緑豆）',
         kana: 'もやし りょくとうもやし 緑豆もやし 野菜 やさい モヤシ', categoryCode: '06', categoryName: '野菜類', categoryEmoji: '🌱',
@@ -364,29 +324,6 @@
         ]
       },
       {
-        id: 'food_06061', foodCode: '06061', source: 'mext_official',
-        name: 'キャベツ/結球葉/生', displayName: 'キャベツ（生）', shortName: 'キャベツ',
-        kana: 'きゃべつ やさい サラダ 千切りキャベツ 野菜', categoryCode: '06', categoryName: '野菜類', categoryEmoji: '🥬',
-        refuseRate: 15.0, energy: 21, energyKj: 88, protein: 1.3, fat: 0.2, carb: 5.2, sugar: 3.4, fiber: 1.8, salt: 0.0,
-        potassium: 200, calcium: 43, vitaminC: 38,
-        portionUnits: [
-          { name: '千切り1皿 (60g)', grams: 60, isPurchasedWeight: false, isDefault: true },
-          { name: '1/4玉 (約250g 芯付)', grams: 250, isPurchasedWeight: true, isDefault: false }
-        ]
-      },
-      {
-        id: 'food_06103', foodCode: '06103', source: 'mext_official',
-        name: 'たまねぎ/りん茎/生', displayName: '玉ねぎ（生）', shortName: '玉ねぎ',
-        kana: 'たまねぎ タマネギ やさい 料理', categoryCode: '06', categoryName: '野菜類', categoryEmoji: '🧅',
-        refuseRate: 10.0, energy: 33, energyKj: 138, protein: 1.0, fat: 0.1, carb: 8.8, sugar: 7.2, fiber: 1.6, salt: 0.0,
-        potassium: 150, calcium: 21,
-        portionUnits: [
-          { name: '中玉1個 (約200g)', grams: 200, isPurchasedWeight: true, isDefault: true }
-        ]
-      },
-
-      // --- 穀類（第01群） ---
-      {
         id: 'food_01088', foodCode: '01088', source: 'mext_official',
         name: 'こめ/［水稲穀実］/精白米/うるち米/水稲めし', displayName: '白米（うるち米 水稲めし）', shortName: '白米（ご飯）',
         kana: 'はくまい せいはくまい ごはん こめ おこめ ライス', categoryCode: '01', categoryName: '穀類', categoryEmoji: '🍚',
@@ -394,77 +331,18 @@
         potassium: 29, calcium: 3, iron: 0.1,
         portionUnits: [
           { name: '茶碗普通盛 (150g)', grams: 150, isPurchasedWeight: false, isDefault: true },
-          { name: '茶碗小盛 (120g)', grams: 120, isPurchasedWeight: false, isDefault: false },
-          { name: '茶碗大盛 (200g)', grams: 200, isPurchasedWeight: false, isDefault: false }
+          { name: '茶碗小盛 (120g)', grams: 120, isPurchasedWeight: false, isDefault: false }
         ]
       },
-      // --- 大麦・もち麦類（八訂公的押麦 ＋ もち麦代表分析値） ---
       {
         id: 'food_mochimugi_dry', foodCode: 'M-MOCHI', source: 'ai_estimate',
         name: 'もち性大麦/もち麦/乾', displayName: 'もち麦（もち性大麦 乾）', shortName: 'もち麦（乾）',
         kana: 'もちむぎ もちせいおおむぎ おおむぎ 大麦 麦 食物繊維 ベータグルカン', categoryCode: '01', categoryName: '穀類', categoryEmoji: '🌾',
         refuseRate: 0.0, energy: 339, energyKj: 1418, protein: 9.5, fat: 1.6, carb: 77.0, sugar: 64.1, fiber: 12.9, salt: 0.0,
-        potassium: 310, calcium: 38, magnesium: 80, iron: 2.5, zinc: 2.2, vitaminB1: 0.20, vitaminE: 0.4,
+        potassium: 310, calcium: 38, magnesium: 80, iron: 2.5, zinc: 2.2, vitaminB1: 0.20,
         portionUnits: [
           { name: '米1合に混ぜる目安 (50g)', grams: 50, isPurchasedWeight: false, isDefault: true },
-          { name: '大さじ1 (約12g)', grams: 12, isPurchasedWeight: false, isDefault: false },
-          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
-        ]
-      },
-      {
-        id: 'food_mochimugi_meshi', foodCode: 'M-MOCHIMESHI', source: 'ai_estimate',
-        name: 'もち麦ごはん/3割炊飯/めし', displayName: 'もち麦ごはん（3割炊飯 めし）', shortName: 'もち麦ごはん',
-        kana: 'もちむぎごはん もちむぎめし むぎめし 麦飯 麦ごはん 雑穀', categoryCode: '01', categoryName: '穀類', categoryEmoji: '🍚',
-        refuseRate: 0.0, energy: 160, energyKj: 669, protein: 3.2, fat: 0.5, carb: 37.8, sugar: 35.0, fiber: 2.8, salt: 0.0,
-        potassium: 55, calcium: 8, magnesium: 18, iron: 0.4,
-        portionUnits: [
-          { name: '茶碗普通盛 (150g)', grams: 150, isPurchasedWeight: false, isDefault: true },
-          { name: '茶碗小盛 (120g)', grams: 120, isPurchasedWeight: false, isDefault: false },
-          { name: 'おにぎり1個 (110g)', grams: 110, isPurchasedWeight: false, isDefault: false }
-        ]
-      },
-      {
-        id: 'food_01006', foodCode: '01006', source: 'mext_official',
-        name: 'おおむぎ/押麦/乾', displayName: '押麦（うるち性大麦 乾）', shortName: '押麦（乾）',
-        kana: 'おしむぎ おおむぎ 大麦 麦 押し麦 麦ごはん', categoryCode: '01', categoryName: '穀類', categoryEmoji: '🌾',
-        refuseRate: 0.0, energy: 329, energyKj: 1377, protein: 6.7, fat: 1.5, carb: 77.8, sugar: 67.5, fiber: 10.3, salt: 0.0,
-        potassium: 210, calcium: 23, magnesium: 41, iron: 1.2, zinc: 1.2, vitaminB1: 0.12,
-        portionUnits: [
-          { name: '米1合に混ぜる目安 (50g)', grams: 50, isPurchasedWeight: false, isDefault: true },
-          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
-        ]
-      },
-      {
-        id: 'food_01170', foodCode: '01170', source: 'mext_official',
-        name: 'おおむぎ/押麦/めし', displayName: '押麦（めし 茹で・麦飯）', shortName: '押麦（めし）',
-        kana: 'おしむぎめし むぎめし 麦ごはん 押し麦飯', categoryCode: '01', categoryName: '穀類', categoryEmoji: '🍚',
-        refuseRate: 0.0, energy: 118, energyKj: 494, protein: 2.2, fat: 0.5, carb: 28.5, sugar: 26.3, fiber: 2.2, salt: 0.0,
-        potassium: 38, calcium: 7, magnesium: 12, iron: 0.3,
-        portionUnits: [
-          { name: '茶碗普通盛 (150g)', grams: 150, isPurchasedWeight: false, isDefault: true },
-          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
-        ]
-      },
-
-      // --- 豆類・卵類 ---
-      {
-        id: 'food_04046', foodCode: '04046', source: 'mext_official',
-        name: 'だいず/［納豆類］/糸引き納豆', displayName: '糸引き納豆', shortName: '納豆',
-        kana: 'なっとう いとひきなっとう だいず 発酵', categoryCode: '04', categoryName: '豆類', categoryEmoji: '🥢',
-        refuseRate: 0.0, energy: 190, energyKj: 795, protein: 16.5, fat: 10.0, carb: 12.1, sugar: 5.4, fiber: 6.7, salt: 0.0,
-        potassium: 660, calcium: 90, iron: 3.3, vitaminK: 600,
-        portionUnits: [
-          { name: '市販1パック (約45g)', grams: 45, isPurchasedWeight: false, isDefault: true }
-        ]
-      },
-      {
-        id: 'food_12004', foodCode: '12004', source: 'mext_official',
-        name: 'にわとり/卵/全卵/生', displayName: '鶏卵（生 全卵）', shortName: 'たまご（全卵）',
-        kana: 'たまご けいらん なまたまご 卵 目玉焼き', categoryCode: '12', categoryName: '卵類', categoryEmoji: '🥚',
-        refuseRate: 11.0, energy: 142, energyKj: 595, protein: 12.2, fat: 10.2, carb: 0.4, sugar: 0.3, fiber: 0.0, salt: 0.4,
-        potassium: 130, calcium: 47, iron: 1.5, vitaminA: 140, vitaminD: 2.5,
-        portionUnits: [
-          { name: 'Mサイズ1個 (可食50g)', grams: 50, isPurchasedWeight: false, isDefault: true }
+          { name: '大さじ1 (約12g)', grams: 12, isPurchasedWeight: false, isDefault: false }
         ]
       }
     ];
@@ -509,9 +387,7 @@
       if (code === '14001' || name.includes('オリーブ油')) kana += ' おりーぶおいる オリーブオイル エクストラバージン';
       if (code === '14003' || name.includes('米ぬか油')) kana += ' こめあぶら こめゆ まいゆ 米油 こめ油 ライスオイル';
       if (code === '14002' || name.includes('ごま油')) kana += ' ごまあぶら ごまゆ 胡麻油';
-      if (code === '14004' || name.includes('なたね油')) kana += ' きゃのーらゆ キャノーラ油 菜種油 サラダ油';
       if (code === '01006' || name.includes('押麦')) kana += ' おしむぎ おおむぎ 大麦 もち麦 麦ごはん';
-      if (code === '01007' || name.includes('米粒麦')) kana += ' まいりゅうばく おおむぎ 大麦 もち麦';
 
       let portionUnits = raw.portionUnits;
       if (!portionUnits || portionUnits.length === 0) {
@@ -576,15 +452,13 @@
 
     function App() {
       const [activeTab, setActiveTab] = useState('home');
-      const [selectedFoodId, setSelectedFoodId] = useState('food_14003'); // 初期選択: 米ぬか油
+      const [selectedFoodId, setSelectedFoodId] = useState('food_14003');
 
-      // 初期シードとして油脂類・主要食材を確実に保持
       const [foodMaster, setFoodMaster] = useState(INTRINSIC_OFFICIAL_FOODS);
       const [dbSyncStatus, setDbSyncStatus] = useState('syncing');
 
       const [userGender, setUserGender] = useState('male');
       const [userAgeGroup, setUserAgeGroup] = useState('30-49');
-      const [userApiKey, setUserApiKey] = useState(() => safeStorage.getText(STORAGE_KEYS.apiKey, ''));
       const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
       const [detailGrams, setDetailGrams] = useState(12);
@@ -597,21 +471,28 @@
       const [compareFoodA, setCompareFoodA] = useState({ id: 'food_14003', grams: 12, isPurchased: false });
       const [compareFoodB, setCompareFoodB] = useState({ id: 'food_14001', grams: 12, isPurchased: false });
 
-      const [recipeTitle, setRecipeTitle] = useState('マイレシピ');
-      const [servings, setServings] = useState(1);
-      const [recipeItems, setRecipeItems] = useState([]);
+      // レシピアイテム管理
+      const savedRecipeData = useMemo(() => safeStorage.getJSON(STORAGE_KEYS.recipe, null), []);
+      const [recipeTitle, setRecipeTitle] = useState(savedRecipeData?.title || 'マイレシピ');
+      const [servings, setServings] = useState(savedRecipeData?.servings || 1);
+      const [recipeItems, setRecipeItems] = useState(Array.isArray(savedRecipeData?.items) ? savedRecipeData.items : []);
 
-      const [toastMessage, setToastMessage] = useState(null);
+      const [toastData, setToastData] = useState(null);
       const toastTimeoutRef = useRef(null);
       const [isManualSyncing, setIsManualSyncing] = useState(false);
 
-      const showToast = (msg) => {
+      const showToast = (msg, actionLabel = null, onAction = null) => {
         if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
-        setToastMessage(msg);
-        toastTimeoutRef.current = setTimeout(() => setToastMessage(null), 3500);
+        setToastData({ msg, actionLabel, onAction });
+        toastTimeoutRef.current = setTimeout(() => setToastData(null), 4000);
       };
 
-      // 八訂全件データの同期処理
+      // 画面切り替え時にスクロールを上部へ
+      useEffect(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      }, [activeTab]);
+
+      // データベース同期
       const syncDatabase = async (isManual = false) => {
         if (isManual) setIsManualSyncing(true);
         const endpoints = [
@@ -624,7 +505,6 @@
         let success = false;
         for (const url of endpoints) {
           try {
-            // 手動更新時はブラウザキャッシュを無視して最新を取得
             const res = await fetch(url, { cache: isManual ? 'reload' : 'force-cache' });
             if (res.ok) {
               const rawData = await res.json();
@@ -647,7 +527,6 @@
         if (isManual) setIsManualSyncing(false);
       };
 
-      // ★Safariの容量制限（5MB）を壊さない、完全メモリマージ型の八訂全件同期
       useEffect(() => {
         syncDatabase(false);
       }, []);
@@ -668,15 +547,43 @@
         setActiveTab('detail');
       };
 
+      // 「レシピに追加」処理：確実に追加し、トーストからワンタップで移動可能にする
+      const handleAddToRecipe = (foodId, grams, unitName, isPurchased) => {
+        const targetFood = foodMaster.find(f => f.id === foodId);
+        setRecipeItems(prev => {
+          // 同一食材が既にあれば合算または新規追加
+          return [...prev, {
+            foodId,
+            grams: Number(grams) || 100,
+            unitName: unitName || `${grams}g`,
+            isPurchased: !!isPurchased
+          }];
+        });
+        showToast(
+          `「${targetFood?.shortName || '食材'} (${grams}g)」をレシピに追加しました`,
+          'レシピを見る ➔',
+          () => setActiveTab('recipe')
+        );
+      };
+
       const currentDri = useMemo(() => DETAILED_DRI_TABLE[userGender]?.[userAgeGroup] || DETAILED_DRI_TABLE.male['30-49'], [userGender, userAgeGroup]);
+
+      const navItems = [
+        { id: 'home', label: 'さがす', icon: Search },
+        { id: 'detail', label: '詳細・分量', icon: Sliders },
+        { id: 'compare', label: 'くらべる', icon: Scale },
+        { id: 'recipe', label: 'けいさん', icon: Calculator, badgeCount: recipeItems.length },
+        { id: 'favorites', label: '保存・履歴', icon: Bookmark }
+      ];
 
       return (
         <div className="min-h-screen min-h-dvh w-full max-w-full overflow-x-hidden bg-[#F4F7F5] text-slate-800 flex flex-col font-sans">
           
+          {/* ヘッダー */}
           <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-emerald-100 shadow-sm w-full">
-            <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-3 flex items-center justify-between gap-2 sm:gap-3">
+            <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-3">
               
-              {/* ブランドロゴ ＆ アプリ名 ＆ バージョン（スマホで絶対に重ならないようレイアウト最適化） */}
+              {/* ブランドロゴ ＆ アプリ名 ＆ バージョン */}
               <div className="flex items-center gap-2 cursor-pointer group shrink-0 min-w-0" onClick={() => setActiveTab('home')}>
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center font-black text-white shadow-sm group-hover:scale-105 transition-transform shrink-0">
                   <Flame size={18} className="fill-white text-white" />
@@ -704,25 +611,24 @@
 
               {/* PCナビゲーション */}
               <nav className="hidden md:flex items-center gap-1 lg:gap-2">
-                {[
-                  { id: 'home', label: 'さがす', icon: Search },
-                  { id: 'detail', label: '詳細・分量', icon: Sliders },
-                  { id: 'compare', label: 'くらべる', icon: Scale },
-                  { id: 'recipe', label: 'けいさん', icon: Calculator },
-                  { id: 'favorites', label: '保存・履歴', icon: Bookmark }
-                ].map((item) => {
+                {navItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = activeTab === item.id;
                   return (
                     <button
                       key={item.id}
                       onClick={() => setActiveTab(item.id)}
-                      className={`px-3 lg:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                      className={`px-3 lg:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 relative ${
                         isActive ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-sm' : 'text-slate-600 hover:bg-slate-100'
                       }`}
                     >
                       <Icon size={16} />
                       <span>{item.label}</span>
+                      {item.badgeCount > 0 && (
+                        <span className="px-1.5 py-0.2 rounded-full bg-emerald-600 text-white text-[10px] font-black">
+                          {item.badgeCount}
+                        </span>
+                      )}
                     </button>
                   );
                 })}
@@ -730,7 +636,6 @@
 
               {/* 右側：更新ボタン ＆ 設定ボタン */}
               <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                {/* 新設：データ更新・再同期ボタン */}
                 <button
                   onClick={() => syncDatabase(true)}
                   disabled={isManualSyncing}
@@ -753,7 +658,8 @@
             </div>
           </header>
 
-          <main className="flex-1 w-full max-w-7xl mx-auto p-3.5 sm:p-6 lg:p-8 pb-28 box-border">
+          {/* メインコンテンツ */}
+          <main className="flex-1 w-full max-w-7xl mx-auto p-3.5 sm:p-6 lg:p-8 pb-32 md:pb-16 box-border">
             {activeTab === 'home' && (
               <HomeScreen
                 foods={foodMaster}
@@ -777,10 +683,7 @@
                   showToast(favorites.includes(selectedFoodId) ? 'お気に入りを解除' : 'お気に入りに追加');
                 }}
                 onBack={() => setActiveTab('home')}
-                onAddToRecipe={(id, g, u, p) => {
-                  setRecipeItems(prev => [...prev, { foodId: id, grams: g, unitName: u, isPurchased: p }]);
-                  showToast('マイレシピに追加しました');
-                }}
+                onAddToRecipe={handleAddToRecipe}
                 onAddToCompare={(id) => {
                   setCompareFoodB({ id, grams: 12, isPurchased: false });
                   setActiveTab('compare');
@@ -815,6 +718,7 @@
                 items={recipeItems}
                 onChangeItems={setRecipeItems}
                 onAddMore={() => setActiveTab('home')}
+                onSelectFood={handleSelectFood}
               />
             )}
             {activeTab === 'favorites' && (
@@ -827,18 +731,47 @@
             )}
           </main>
 
-          {/* 右下バージョン */}
-          <aside className="fixed bottom-14 md:bottom-3 right-3 z-30 pointer-events-none select-none">
-            <span className="px-2 py-0.5 rounded-full bg-slate-900/80 text-white text-[10px] font-mono font-black shadow border border-white/20">
-              {APP_VERSION}
-            </span>
-          </aside>
+          {/* モバイル用ボトムナビゲーション（スマホ利用時に絶対に消えないよう常駐） */}
+          <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-2 py-1.5 flex items-center justify-around shadow-lg pb-safe">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id)}
+                  className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all relative ${
+                    isActive ? 'text-emerald-700 font-extrabold' : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  <Icon size={20} className={isActive ? 'text-emerald-600 scale-110 transition-transform' : ''} />
+                  <span className="text-[10px] mt-0.5">{item.label}</span>
+                  {item.badgeCount > 0 && (
+                    <span className="absolute top-0.5 right-2 min-w-[16px] h-4 px-1 bg-emerald-600 text-white rounded-full text-[9px] flex items-center justify-center font-black shadow">
+                      {item.badgeCount}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </nav>
 
-          {/* トースト */}
-          {toastMessage && (
-            <div className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 text-white px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2 text-xs font-bold backdrop-blur-md">
-              <Check size={16} className="text-emerald-400" />
-              <span>{toastMessage}</span>
+          {/* トースト表示（アクションボタン付き） */}
+          {toastData && (
+            <div className="fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 text-white px-4 py-2.5 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-bold backdrop-blur-md max-w-[92%] sm:max-w-md border border-slate-700">
+              <Check size={16} className="text-emerald-400 shrink-0" />
+              <span className="truncate flex-1">{toastData.msg}</span>
+              {toastData.actionLabel && (
+                <button
+                  onClick={() => {
+                    if (toastData.onAction) toastData.onAction();
+                    setToastData(null);
+                  }}
+                  className="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-white rounded-lg font-black shrink-0 shadow-sm transition-all text-[11px]"
+                >
+                  {toastData.actionLabel}
+                </button>
+              )}
             </div>
           )}
 
@@ -890,7 +823,7 @@
                 className="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-11 pr-10 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
               />
               {searchQuery && (
-                <button onClick={() => setSearchQuery('')} className="absolute inset-y-0 right-3 flex items-center text-slate-400">×</button>
+                <button onClick={() => setSearchQuery('')} className="absolute inset-y-0 right-3 flex items-center text-slate-400 font-bold">×</button>
               )}
             </div>
 
@@ -927,7 +860,7 @@
               <div
                 key={food.id}
                 onClick={() => onSelectFood(food.id)}
-                className="bg-white hover:bg-emerald-50/40 border border-slate-200 hover:border-emerald-300 p-4 rounded-3xl cursor-pointer transition-all flex items-center justify-between shadow-sm"
+                className="bg-white hover:bg-emerald-50/40 border border-slate-200 hover:border-emerald-300 p-4 rounded-3xl cursor-pointer transition-all flex items-center justify-between shadow-sm active:scale-[0.99]"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl shrink-0">
@@ -959,20 +892,20 @@
       isPurchasedWeight, onChangePurchasedWeight, currentDri, isFavorite,
       onToggleFavorite, onBack, onAddToRecipe, onAddToCompare, onCopySummary
     }) {
+      const [justAdded, setJustAdded] = useState(false);
       const n = useMemo(() => calculateScaledNutrients(food, currentGrams, isPurchasedWeight), [food, currentGrams, isPurchasedWeight]);
 
-      const mealDri = useMemo(() => {
-        const res = {};
-        Object.keys(currentDri).forEach(k => {
-          res[k] = (currentDri[k] ?? 0) / 3.0;
-        });
-        return res;
-      }, [currentDri]);
+      const handleAddClick = () => {
+        onAddToRecipe(food.id, currentGrams, activeUnit, isPurchasedWeight);
+        setJustAdded(true);
+        setTimeout(() => setJustAdded(false), 2000);
+      };
 
       const summaryText = `【NutriDex 栄養サマリー】\n食材: ${food.displayName}\n分量: ${currentGrams}g (${activeUnit})\nエネルギー: ${n.energy}kcal (${n.energyKj}kJ)\nPFC: P ${n.protein}g (${n.pRatio}%) / F ${n.fat}g (${n.fRatio}%) / C ${n.carb}g (${n.cRatio}%)\nビタミンE: ${n.vitaminE ?? '—'}mg / ビタミンK: ${n.vitaminK ?? '—'}μg\n出典: ${sourceInfo(food.source).label}`;
 
       return (
         <div className="space-y-4 max-w-5xl mx-auto">
+          {/* 上部アクションバー */}
           <div className="flex items-center justify-between">
             <button onClick={onBack} className="flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-800">
               <ArrowLeft size={16} />
@@ -986,13 +919,19 @@
                 <Scale size={14} />
                 <span>VS比較</span>
               </button>
-              <button onClick={() => onAddToRecipe(food.id, currentGrams, activeUnit, isPurchasedWeight)} className="px-3 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm">
-                <Plus size={14} />
-                <span>レシピへ</span>
+              <button
+                onClick={handleAddClick}
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow transition-all active:scale-95 ${
+                  justAdded ? 'bg-emerald-700 text-white ring-2 ring-emerald-300' : 'bg-emerald-600 hover:bg-emerald-500 text-white'
+                }`}
+              >
+                {justAdded ? <Check size={14} /> : <Plus size={14} />}
+                <span>{justAdded ? '追加済み！' : 'レシピに追加'}</span>
               </button>
             </div>
           </div>
 
+          {/* 食品詳細カード */}
           <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4">
             <div className="flex items-start gap-4">
               <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-4xl shrink-0">
@@ -1035,11 +974,11 @@
               <input
                 type="range"
                 min="1"
-                max="200"
+                max="250"
                 step="1"
                 value={currentGrams}
                 onChange={(e) => { onChangeGrams(Number(e.target.value)); onChangeUnit('カスタム'); }}
-                className="w-full accent-emerald-600"
+                className="w-full accent-emerald-600 cursor-pointer"
               />
             </div>
 
@@ -1063,6 +1002,17 @@
               </div>
             </div>
 
+            {/* レシピ追加を促すアクションバナー */}
+            <div className="pt-2">
+              <button
+                onClick={handleAddClick}
+                className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 active:scale-98 text-white rounded-2xl text-xs font-bold flex items-center justify-center gap-2 shadow-md transition-all"
+              >
+                <Plus size={16} />
+                <span>この食材（{currentGrams}g）をレシピ・計算に追加</span>
+              </button>
+            </div>
+
             <button
               onClick={() => onCopySummary(summaryText)}
               className="w-full py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 border rounded-2xl text-xs font-bold flex items-center justify-center gap-1.5"
@@ -1072,7 +1022,7 @@
             </button>
           </div>
 
-          {/* 詳細栄養素 */}
+          {/* 詳細栄養成分 */}
           <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
             <h3 className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
               <Activity size={18} className="text-emerald-600" />
@@ -1171,51 +1121,259 @@
       );
     }
 
-    function RecipeScreen({ foodMaster, title, onChangeTitle, servings, onChangeServings, items, onChangeItems, onAddMore }) {
-      const totalKcal = useMemo(() => {
-        return items.reduce((acc, item) => {
+    // レシピ・合算計算画面（完全再構築：食材追加・グラム調整・PFC按分）
+    function RecipeScreen({ foodMaster, title, onChangeTitle, servings, onChangeServings, items, onChangeItems, onAddMore, onSelectFood }) {
+      
+      const handleGramChange = (idx, delta) => {
+        onChangeItems(items.map((it, i) => {
+          if (i === idx) {
+            const nextG = Math.max(1, it.grams + delta);
+            return { ...it, grams: nextG };
+          }
+          return it;
+        }));
+      };
+
+      const handleRemove = (idx) => {
+        onChangeItems(items.filter((_, i) => i !== idx));
+      };
+
+      const totals = useMemo(() => {
+        let energy = 0, protein = 0, fat = 0, carb = 0, sugar = 0, fiber = 0, salt = 0;
+        items.forEach(item => {
           const f = foodMaster.find(x => x.id === item.foodId);
-          return acc + (f ? calculateScaledNutrients(f, item.grams).energy : 0);
-        }, 0);
-      }, [foodMaster, items]);
+          if (f) {
+            const sc = calculateScaledNutrients(f, item.grams, item.isPurchased);
+            energy += sc.energy;
+            protein += sc.protein;
+            fat += sc.fat;
+            carb += sc.carb;
+            sugar += sc.sugar;
+            fiber += sc.fiber;
+            salt += sc.salt;
+          }
+        });
+
+        const s = Math.max(1, Number(servings) || 1);
+        const perServing = {
+          energy: Math.round(energy / s),
+          protein: +(protein / s).toFixed(1),
+          fat: +(fat / s).toFixed(1),
+          carb: +(carb / s).toFixed(1),
+          sugar: +(sugar / s).toFixed(1),
+          fiber: +(fiber / s).toFixed(1),
+          salt: +(salt / s).toFixed(2)
+        };
+
+        const pKcal = perServing.protein * 4;
+        const fKcal = perServing.fat * 9;
+        const cKcal = perServing.carb * 4;
+        const totalPfc = pKcal + fKcal + cKcal;
+        let pRatio = 0, fRatio = 0, cRatio = 0;
+        if (totalPfc > 0) {
+          pRatio = Math.round((pKcal / totalPfc) * 100);
+          fRatio = Math.round((fKcal / totalPfc) * 100);
+          cRatio = Math.max(0, 100 - (pRatio + fRatio));
+        }
+
+        return {
+          totalEnergy: Math.round(energy),
+          perServing,
+          pRatio, fRatio, cRatio
+        };
+      }, [foodMaster, items, servings]);
+
+      const recipeSummaryText = `【NutriDex レシピ計算】\n料理名: ${title}\n登録食材: ${items.length}品\n出来上がり: ${servings}人前\n1人前あたり: ${totals.perServing.energy} kcal\nPFC: P ${totals.perServing.protein}g (${totals.pRatio}%) / F ${totals.perServing.fat}g (${totals.fRatio}%) / C ${totals.perServing.carb}g (${totals.cRatio}%)\n糖質: ${totals.perServing.sugar}g / 食物繊維: ${totals.perServing.fiber}g / 食塩: ${totals.perServing.salt}g`;
+
+      const copyToClipboard = () => {
+        const el = document.createElement('textarea');
+        el.value = recipeSummaryText;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        alert('レシピ栄養サマリーをコピーしました！');
+      };
 
       return (
-        <div className="max-w-2xl mx-auto space-y-4">
-          <div className="bg-white p-4 rounded-3xl border border-slate-200 space-y-3 shadow-sm">
+        <div className="max-w-3xl mx-auto space-y-4">
+          
+          {/* レシピ設定バー */}
+          <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 space-y-3 shadow-sm">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <Calculator size={18} className="text-emerald-600 shrink-0" />
+                <span className="font-extrabold text-slate-800 text-sm">マイレシピ・合算栄養計算</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs">
+                <span className="text-slate-500 font-bold">出来上がり:</span>
+                <select
+                  value={servings}
+                  onChange={(e) => onChangeServings(Number(e.target.value))}
+                  className="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1 text-slate-800 font-bold focus:outline-none"
+                >
+                  {[1, 2, 3, 4, 5, 6].map(num => <option key={num} value={num}>{num} 人前</option>)}
+                </select>
+              </div>
+            </div>
+
             <input
               type="text"
               value={title}
               onChange={(e) => onChangeTitle(e.target.value)}
-              placeholder="レシピ名を入力"
-              className="w-full text-sm font-bold border-b pb-2 focus:outline-none"
+              placeholder="料理名を入力（例: 鶏もも肉と野菜の炒め物）"
+              className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
             />
-            <div className="flex justify-between items-center text-xs">
-              <span className="font-bold">合計: {totalKcal} kcal ({servings}人前: {Math.round(totalKcal / servings)} kcal/人)</span>
-              <button onClick={onAddMore} className="text-emerald-700 font-bold flex items-center gap-1"><Plus size={14} /> 食材追加</button>
-            </div>
           </div>
 
-          <div className="space-y-2">
+          {/* 食材リスト */}
+          <div className="space-y-2.5">
+            <div className="flex items-center justify-between px-1 text-xs font-bold text-slate-500">
+              <span>登録食材（{items.length}品）</span>
+              <button
+                onClick={onAddMore}
+                className="flex items-center gap-1 text-emerald-700 hover:text-emerald-800 font-bold"
+              >
+                <Plus size={15} />
+                <span>食材を検索して追加</span>
+              </button>
+            </div>
+
             {items.length === 0 ? (
-              <div className="bg-white p-6 rounded-2xl border text-center text-xs text-slate-400">
-                食材が登録されていません。「さがす」画面や詳細画面の「レシピへ」ボタンから食材を追加してください。
+              <div className="bg-white p-8 rounded-3xl border border-dashed border-slate-300 text-center space-y-3 shadow-sm">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto text-xl">
+                  🛒
+                </div>
+                <div className="space-y-1">
+                  <h4 className="text-xs sm:text-sm font-extrabold text-slate-800">レシピに食材が入っていません</h4>
+                  <p className="text-[11px] text-slate-400">
+                    「さがす」画面や食材詳細画面の <span className="font-bold text-emerald-700">「レシピに追加」</span> ボタンを押すと、ここに食材が追加されて合計栄養が自動計算されます。
+                  </p>
+                </div>
+                <button
+                  onClick={onAddMore}
+                  className="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-sm inline-flex items-center gap-1.5"
+                >
+                  <Search size={14} />
+                  <span>食材を探しにいく</span>
+                </button>
               </div>
             ) : (
               items.map((item, idx) => {
                 const f = foodMaster.find(x => x.id === item.foodId);
                 if (!f) return null;
+                const sc = calculateScaledNutrients(f, item.grams, item.isPurchased);
+
                 return (
-                  <div key={idx} className="bg-white p-3 rounded-2xl border flex items-center justify-between text-xs">
-                    <div>
-                      <span className="font-bold">{f.shortName}</span>
-                      <span className="text-slate-400 ml-2">({item.grams}g)</span>
+                  <div key={idx} className="bg-white p-3.5 sm:p-4 rounded-3xl border border-slate-200 flex items-center justify-between gap-3 shadow-sm">
+                    <div
+                      className="flex items-center gap-3 min-w-0 flex-1 cursor-pointer"
+                      onClick={() => onSelectFood(f.id)}
+                      title="タップして詳細を確認"
+                    >
+                      <span className="text-2xl sm:text-3xl shrink-0">{f.categoryEmoji}</span>
+                      <div className="min-w-0 flex-1">
+                        <h4 className="text-xs sm:text-sm font-bold text-slate-800 truncate hover:text-emerald-700">{f.shortName}</h4>
+                        <p className="text-[11px] text-slate-500 mt-0.5 truncate">
+                          {item.grams}g • <span className="text-slate-900 font-black">{sc.energy} kcal</span> (P:{sc.protein}g F:{sc.fat}g C:{sc.carb}g)
+                        </p>
+                      </div>
                     </div>
-                    <button onClick={() => onChangeItems(items.filter((_, i) => i !== idx))} className="text-rose-500 font-bold">削除</button>
+
+                    <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+                      <div className="flex items-center bg-slate-50 rounded-xl border border-slate-200 p-0.5">
+                        <button
+                          onClick={() => handleGramChange(idx, -10)}
+                          className="w-7 h-7 flex items-center justify-center text-slate-600 hover:bg-slate-200 rounded-lg"
+                          title="10g減らす"
+                        >
+                          <Minus size={13} />
+                        </button>
+                        <span className="px-2 text-xs font-bold text-slate-900 min-w-[2.5rem] text-center">
+                          {item.grams}g
+                        </span>
+                        <button
+                          onClick={() => handleGramChange(idx, 10)}
+                          className="w-7 h-7 flex items-center justify-center text-slate-600 hover:bg-slate-200 rounded-lg"
+                          title="10g増やす"
+                        >
+                          <Plus size={13} />
+                        </button>
+                      </div>
+
+                      <button
+                        onClick={() => handleRemove(idx)}
+                        className="p-1.5 text-slate-400 hover:text-rose-500 rounded-xl"
+                        title="削除"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </div>
                 );
               })
             )}
           </div>
+
+          {/* 合算サマリー（食材がある場合のみ描画） */}
+          {items.length > 0 && (
+            <div className="bg-gradient-to-br from-emerald-50 via-teal-50/40 to-white p-4 sm:p-5 rounded-3xl border border-emerald-200 space-y-4 shadow-sm">
+              <div className="flex items-baseline justify-between border-b border-emerald-100 pb-3 flex-wrap gap-2">
+                <div>
+                  <span className="text-xs font-bold text-emerald-800">
+                    1人前あたり ({servings}人前換算 / 料理全体 {totals.totalEnergy} kcal)
+                  </span>
+                  <div className="flex items-baseline gap-1.5 mt-0.5">
+                    <span className="text-3xl sm:text-4xl font-black text-slate-900">{totals.perServing.energy}</span>
+                    <span className="text-sm font-bold text-emerald-700">kcal</span>
+                  </div>
+                </div>
+
+                <div className="text-right text-xs text-slate-600 space-y-0.5">
+                  <div>糖質: <span className="font-bold text-slate-800">{totals.perServing.sugar}g</span></div>
+                  <div>食物繊維: <span className="font-bold text-emerald-700">{totals.perServing.fiber}g</span></div>
+                  <div>食塩: <span className="font-bold text-slate-800">{totals.perServing.salt}g</span></div>
+                </div>
+              </div>
+
+              {/* PFCバー */}
+              <div className="space-y-1.5">
+                <div className="flex justify-between text-[11px] font-bold text-slate-600">
+                  <span>PFC比率</span>
+                  <span>P:{totals.pRatio}% / F:{totals.fRatio}% / C:{totals.cRatio}%</span>
+                </div>
+                <div className="h-3.5 w-full bg-slate-100 rounded-full overflow-hidden flex shadow-inner">
+                  <div style={{ width: `${totals.pRatio}%` }} className="bg-rose-500" />
+                  <div style={{ width: `${totals.fRatio}%` }} className="bg-amber-400" />
+                  <div style={{ width: `${totals.cRatio}%` }} className="bg-sky-400" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                <div className="bg-white/80 border border-rose-200 rounded-2xl p-2 min-w-0">
+                  <div className="text-[10px] text-rose-600 font-bold">タンパク質</div>
+                  <div className="font-black text-slate-900 text-sm">{totals.perServing.protein}g</div>
+                </div>
+                <div className="bg-white/80 border border-amber-200 rounded-2xl p-2 min-w-0">
+                  <div className="text-[10px] text-amber-600 font-bold">脂質</div>
+                  <div className="font-black text-slate-900 text-sm">{totals.perServing.fat}g</div>
+                </div>
+                <div className="bg-white/80 border border-sky-200 rounded-2xl p-2 min-w-0">
+                  <div className="text-[10px] text-sky-600 font-bold">炭水化物</div>
+                  <div className="font-black text-slate-900 text-sm">{totals.perServing.carb}g</div>
+                </div>
+              </div>
+
+              <button
+                onClick={copyToClipboard}
+                className="w-full py-2.5 sm:py-3 bg-white hover:bg-emerald-50 text-emerald-800 text-xs font-bold rounded-2xl flex items-center justify-center gap-2 border border-emerald-200 shadow-sm transition-colors"
+              >
+                <Copy size={15} />
+                <span>レシピ栄養サマリーをコピー</span>
+              </button>
+            </div>
+          )}
+
         </div>
       );
     }
