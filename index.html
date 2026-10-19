@@ -57,8 +57,8 @@
   <script type="text/babel">
     const { useState, useMemo, useEffect, useRef } = React;
 
-    // バージョン管理定数（v3.0 + 0.1 ➔ v3.1）
-    const APP_VERSION = "v3.1";
+    // バージョン管理定数（v3.1 + 0.1 ➔ v3.2）
+    const APP_VERSION = "v3.2";
 
     // --- ローカル保存管理ヘルパー ---
     const STORAGE_KEYS = {
@@ -603,6 +603,7 @@
 
       const [toastMessage, setToastMessage] = useState(null);
       const toastTimeoutRef = useRef(null);
+      const [isManualSyncing, setIsManualSyncing] = useState(false);
 
       const showToast = (msg) => {
         if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
@@ -610,42 +611,45 @@
         toastTimeoutRef.current = setTimeout(() => setToastMessage(null), 3500);
       };
 
+      // 八訂全件データの同期処理
+      const syncDatabase = async (isManual = false) => {
+        if (isManual) setIsManualSyncing(true);
+        const endpoints = [
+          './mext_foods.json',
+          'https://raw.githubusercontent.com/katoharu432/standards-tables-of-food-composition-in-japan/master/data.json',
+          'https://fastly.jsdelivr.net/gh/katoharu432/standards-tables-of-food-composition-in-japan@master/data.json',
+          'https://cdn.jsdelivr.net/gh/katoharu432/standards-tables-of-food-composition-in-japan@master/data.json'
+        ];
+
+        let success = false;
+        for (const url of endpoints) {
+          try {
+            // 手動更新時はブラウザキャッシュを無視して最新を取得
+            const res = await fetch(url, { cache: isManual ? 'reload' : 'force-cache' });
+            if (res.ok) {
+              const rawData = await res.json();
+              if (Array.isArray(rawData) && rawData.length > 500) {
+                const formatted = rawData.map(transformExternalMextItem).filter(Boolean);
+                setFoodMaster(prev => mergeFoodLists(prev, formatted));
+                setDbSyncStatus('synced');
+                showToast(isManual ? `データを最新に更新しました（${formatted.length}品目）` : `八訂公式 ${formatted.length}品目を同期完了！`);
+                success = true;
+                break;
+              }
+            }
+          } catch (_) {}
+        }
+
+        if (!success) {
+          setDbSyncStatus('builtin_ready');
+          if (isManual) showToast('内蔵マスターデータを再読み込みしました');
+        }
+        if (isManual) setIsManualSyncing(false);
+      };
+
       // ★Safariの容量制限（5MB）を壊さない、完全メモリマージ型の八訂全件同期
       useEffect(() => {
-        let isMounted = true;
-        const fetchAllMextDatabase = async () => {
-          const endpoints = [
-            './mext_foods.json',
-            'https://raw.githubusercontent.com/katoharu432/standards-tables-of-food-composition-in-japan/master/data.json',
-            'https://fastly.jsdelivr.net/gh/katoharu432/standards-tables-of-food-composition-in-japan@master/data.json',
-            'https://cdn.jsdelivr.net/gh/katoharu432/standards-tables-of-food-composition-in-japan@master/data.json'
-          ];
-
-          for (const url of endpoints) {
-            try {
-              const res = await fetch(url, { cache: 'force-cache' });
-              if (res.ok) {
-                const rawData = await res.json();
-                if (Array.isArray(rawData) && rawData.length > 500) {
-                  const formatted = rawData.map(transformExternalMextItem).filter(Boolean);
-                  if (isMounted) {
-                    setFoodMaster(prev => mergeFoodLists(prev, formatted));
-                    setDbSyncStatus('synced');
-                    showToast(`八訂公式 ${formatted.length}品目を同期完了！`);
-                    return;
-                  }
-                }
-              }
-            } catch (_) {}
-          }
-
-          if (isMounted) {
-            setDbSyncStatus('builtin_ready');
-          }
-        };
-
-        fetchAllMextDatabase();
-        return () => { isMounted = false; };
+        syncDatabase(false);
       }, []);
 
       useEffect(() => { safeStorage.setJSON(STORAGE_KEYS.favorites, favorites); }, [favorites]);
@@ -670,27 +674,31 @@
         <div className="min-h-screen min-h-dvh w-full max-w-full overflow-x-hidden bg-[#F4F7F5] text-slate-800 flex flex-col font-sans">
           
           <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-emerald-100 shadow-sm w-full">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-3">
+            <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-3 flex items-center justify-between gap-2 sm:gap-3">
               
-              <div className="flex items-center gap-2 sm:gap-2.5 cursor-pointer group" onClick={() => setActiveTab('home')}>
+              {/* ブランドロゴ ＆ アプリ名 ＆ バージョン（スマホで絶対に重ならないようレイアウト最適化） */}
+              <div className="flex items-center gap-2 cursor-pointer group shrink-0 min-w-0" onClick={() => setActiveTab('home')}>
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center font-black text-white shadow-sm group-hover:scale-105 transition-transform shrink-0">
-                  <Flame size={19} className="fill-white text-white" />
+                  <Flame size={18} className="fill-white text-white" />
                 </div>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-extrabold tracking-tight text-base sm:text-xl text-slate-900 truncate">NutriDex</span>
-                    <span className="text-[10px] font-black px-1.5 py-0.5 rounded-md bg-slate-900 text-white font-mono tracking-tighter shrink-0 shadow-sm">
-                      {APP_VERSION}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <span className="font-extrabold tracking-tight text-base sm:text-xl text-slate-900 shrink-0">NutriDex</span>
+                  <span className="text-[10px] font-black px-1.5 py-0.5 rounded-md bg-slate-900 text-white font-mono tracking-tighter shrink-0 shadow-sm">
+                    {APP_VERSION}
+                  </span>
+                  <span className={`text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full border shrink-0 flex items-center gap-1 ${
+                    dbSyncStatus === 'synced' ? 'bg-emerald-100 text-emerald-800 border-emerald-200' :
+                    dbSyncStatus === 'syncing' ? 'bg-amber-100 text-amber-800 border-amber-200 animate-pulse' :
+                    'bg-slate-100 text-slate-700 border-slate-200'
+                  }`}>
+                    <Database size={11} />
+                    <span className="hidden xs:inline sm:inline">
+                      {dbSyncStatus === 'synced' ? `八訂 ${foodMaster.length}品目` : dbSyncStatus === 'syncing' ? '同期中...' : `内蔵 ${foodMaster.length}品目`}
                     </span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border shrink-0 flex items-center gap-1 ${
-                      dbSyncStatus === 'synced' ? 'bg-emerald-100 text-emerald-800 border-emerald-200' :
-                      dbSyncStatus === 'syncing' ? 'bg-amber-100 text-amber-800 border-amber-200 animate-pulse' :
-                      'bg-slate-100 text-slate-700 border-slate-200'
-                    }`}>
-                      <Database size={12} />
-                      <span>{dbSyncStatus === 'synced' ? `八訂 ${foodMaster.length}品目` : dbSyncStatus === 'syncing' ? '八訂全件同期中...' : `内蔵 ${foodMaster.length}品目`}</span>
+                    <span className="inline xs:hidden sm:hidden">
+                      {foodMaster.length}
                     </span>
-                  </div>
+                  </span>
                 </div>
               </div>
 
@@ -720,13 +728,26 @@
                 })}
               </nav>
 
-              <div className="flex items-center gap-1.5 sm:gap-2">
+              {/* 右側：更新ボタン ＆ 設定ボタン */}
+              <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                {/* 新設：データ更新・再同期ボタン */}
+                <button
+                  onClick={() => syncDatabase(true)}
+                  disabled={isManualSyncing}
+                  className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl bg-white hover:bg-emerald-50 text-slate-700 border border-slate-200 shadow-sm flex items-center gap-1.5 transition-all active:scale-95 shrink-0"
+                  title="食品データを最新に再同期"
+                  aria-label="データ再同期"
+                >
+                  <RotateCcw size={14} className={`text-emerald-600 ${isManualSyncing ? 'animate-spin' : ''}`} />
+                  <span className="text-xs font-bold hidden sm:inline">更新</span>
+                </button>
+
                 <button
                   onClick={() => setIsSettingsOpen(true)}
-                  className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-emerald-50 text-xs font-semibold text-slate-700 border border-slate-200 transition-all flex items-center gap-1.5 shadow-sm"
+                  className="px-2 sm:px-2.5 py-1.5 rounded-xl bg-white hover:bg-emerald-50 text-xs font-semibold text-slate-700 border border-slate-200 transition-all flex items-center gap-1 sm:gap-1.5 shadow-sm shrink-0"
                 >
-                  <Settings size={14} className="text-emerald-600" />
-                  <span className="font-bold">{userGender === 'male' ? '男性' : '女性'} {userAgeGroup}</span>
+                  <Settings size={14} className="text-emerald-600 shrink-0" />
+                  <span className="font-bold text-[11px] sm:text-xs">{userGender === 'male' ? '男性' : '女性'} {userAgeGroup}</span>
                 </button>
               </div>
             </div>
