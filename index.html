@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>NutriDex（ニュートリデックス）- 八訂公的データベース完全詳細版</title>
+  <title>NutriDex（ニュートリデックス）- 八訂公的データベース詳細版</title>
 
   <!-- iOS / iPhone ホーム画面追加用（PWA）メタタグ -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,50 +17,17 @@
   <!-- ブラウザ用ファビコン (SVG Data URI: エメラルド×ホワイトフレイム) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='100%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23059669'/%3E%3Cstop offset='100%25' stop-color='%230d9488'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Cpath transform='translate(14, 14) scale(3)' fill='%23ffffff' stroke='%23ffffff' stroke-width='0.5' stroke-linecap='round' stroke-linejoin='round' d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z'/%3E%3C/svg%3E">
 
-  <!-- iPhone用 apple-touch-icon タグ (初期SVG + JSによる高解像度PNG自動生成) -->
+  <!-- iPhone用 apple-touch-icon -->
   <link rel="apple-touch-icon" id="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='100%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23059669'/%3E%3Cstop offset='100%25' stop-color='%230d9488'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' fill='url(%23g)'/%3E%3Cpath transform='translate(30, 30) scale(5)' fill='%23ffffff' stroke='%23ffffff' stroke-width='0.5' stroke-linecap='round' stroke-linejoin='round' d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z'/%3E%3C/svg%3E">
 
-  <script>
-    (function() {
-      try {
-        const canvas = document.createElement('canvas');
-        canvas.width = 180;
-        canvas.height = 180;
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          const grad = ctx.createLinearGradient(0, 180, 180, 0);
-          grad.addColorStop(0, '#059669');
-          grad.addColorStop(1, '#0d9488');
-          ctx.fillStyle = grad;
-          ctx.fillRect(0, 0, 180, 180);
-
-          const p = new Path2D("M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z");
-          ctx.save();
-          ctx.translate(30, 30);
-          ctx.scale(5, 5);
-          ctx.fillStyle = '#ffffff';
-          ctx.fill(p);
-          ctx.strokeStyle = '#ffffff';
-          ctx.lineWidth = 0.5;
-          ctx.stroke(p);
-          ctx.restore();
-
-          const pngDataUrl = canvas.toDataURL('image/png');
-          const touchIcon = document.getElementById('apple-touch-icon');
-          if (touchIcon) touchIcon.href = pngDataUrl;
-        }
-      } catch (e) {}
-    })();
-  </script>
-
-  <!-- Tailwind CSS CDN (バージョン固定: 3.4.17) -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   
-  <!-- React 18 & ReactDOM UMD (バージョン固定: 18.3.1) -->
+  <!-- React 18 & ReactDOM UMD -->
   <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
   
-  <!-- Babel Standalone (バージョン固定: 7.26.0) -->
+  <!-- Babel Standalone -->
   <script src="https://unpkg.com/@babel/standalone@7.26.0/babel.min.js"></script>
 
   <style>
@@ -90,18 +57,17 @@
   <script type="text/babel">
     const { useState, useMemo, useEffect, useRef } = React;
 
-    // バージョン管理定数（詳細栄養素復元マイナーアップデート +0.1）
-    const APP_VERSION = "v2.7";
+    // バージョン管理定数（v2.9: 油脂類・主要食材直接内蔵＆Safariセーフ同期版）
+    const APP_VERSION = "v2.9";
 
     // --- ローカル保存管理ヘルパー ---
     const STORAGE_KEYS = {
-      foods: 'nutridex_saved_foods_v2',
-      mextCache: 'nutridex_mext_full_cache_v2',
       apiKey: 'nutridex_gemini_api_key',
       favorites: 'nutridex_favorites',
       history: 'nutridex_history',
       profile: 'nutridex_profile',
-      recipe: 'nutridex_recipe'
+      recipe: 'nutridex_recipe',
+      customFoods: 'nutridex_custom_foods'
     };
 
     const safeStorage = {
@@ -128,9 +94,6 @@
           localStorage.setItem(k, v);
           return true;
         } catch (_) { return false; }
-      },
-      remove(k) {
-        try { localStorage.removeItem(k); } catch (_) {}
       }
     };
 
@@ -198,64 +161,29 @@
     const Utensils = (p) => <IconBase {...p}><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/><path d="M15 2v10"/><path d="M15 12v9"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></IconBase>;
     const Bookmark = (p) => <IconBase {...p}><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></IconBase>;
     const BookmarkCheck = (p) => <IconBase {...p}><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/><path d="m9 10 2 2 4-4"/></IconBase>;
-    const History = (p) => <IconBase {...p}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></IconBase>;
     const Settings = (p) => <IconBase {...p}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></IconBase>;
     const Copy = (p) => <IconBase {...p}><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></IconBase>;
     const Flame = (p) => <IconBase {...p}><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></IconBase>;
     const ArrowLeft = (p) => <IconBase {...p}><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></IconBase>;
     const Activity = (p) => <IconBase {...p}><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></IconBase>;
-    const Loader2 = (p) => <IconBase {...p} className={`${p.className || ''} animate-spin`}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></IconBase>;
-    const Key = (p) => <IconBase {...p}><path d="m21 2-2 2m-1.5 1.5L16 7l-2-2-4 4 1.5 1.5L13 12l-2 2-1.5-1.5L8 14l-2-2-4 4a5 5 0 1 0 7-7l2-2 1.5 1.5L14 7l2 2 1.5-1.5L19 6l2-2Z"/></IconBase>;
     const Database = (p) => <IconBase {...p}><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></IconBase>;
 
     // 厚生労働省「日本人の食事摂取基準（2020年版）」全栄養素完全網羅
     const DETAILED_DRI_TABLE = {
       male: {
-        '18-29': {
-          energy: 2650, protein: 65, fiber: 21, saltMax: 7.5,
-          potassium: 3000, calcium: 800, magnesium: 340, phosphorus: 1000, iron: 7.5, zinc: 11.0, copper: 0.9, manganese: 4.0, iodine: 130, selenium: 30, chromium: 10, molybdenum: 30,
-          vitaminA: 850, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.4, vitaminB2: 1.6, niacin: 15.0, vitaminB6: 1.4, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100,
-          saturatedFatMax: 20.0, cholesterolMax: 200
-        },
-        '30-49': {
-          energy: 2700, protein: 65, fiber: 21, saltMax: 7.5,
-          potassium: 3000, calcium: 750, magnesium: 370, phosphorus: 1000, iron: 7.5, zinc: 11.0, copper: 0.9, manganese: 4.0, iodine: 130, selenium: 30, chromium: 10, molybdenum: 30,
-          vitaminA: 900, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.4, vitaminB2: 1.6, niacin: 15.0, vitaminB6: 1.4, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100,
-          saturatedFatMax: 20.0, cholesterolMax: 200
-        },
-        '50-64': {
-          energy: 2600, protein: 65, fiber: 21, saltMax: 7.5,
-          potassium: 3000, calcium: 750, magnesium: 350, phosphorus: 1000, iron: 7.5, zinc: 11.0, copper: 0.9, manganese: 4.0, iodine: 130, selenium: 30, chromium: 10, molybdenum: 30,
-          vitaminA: 850, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.3, vitaminB2: 1.5, niacin: 14.0, vitaminB6: 1.4, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100,
-          saturatedFatMax: 20.0, cholesterolMax: 200
-        }
+        '18-29': { energy: 2650, protein: 65, fiber: 21, saltMax: 7.5, potassium: 3000, calcium: 800, magnesium: 340, iron: 7.5, zinc: 11.0, vitaminA: 850, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.4, vitaminB2: 1.6, vitaminC: 100, saturatedFatMax: 20.0 },
+        '30-49': { energy: 2700, protein: 65, fiber: 21, saltMax: 7.5, potassium: 3000, calcium: 750, magnesium: 370, iron: 7.5, zinc: 11.0, vitaminA: 900, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.4, vitaminB2: 1.6, vitaminC: 100, saturatedFatMax: 20.0 },
+        '50-64': { energy: 2600, protein: 65, fiber: 21, saltMax: 7.5, potassium: 3000, calcium: 750, magnesium: 350, iron: 7.5, zinc: 11.0, vitaminA: 850, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.3, vitaminB2: 1.5, vitaminC: 100, saturatedFatMax: 20.0 }
       },
       female: {
-        '18-29': {
-          energy: 2000, protein: 50, fiber: 18, saltMax: 6.5,
-          potassium: 2600, calcium: 650, magnesium: 270, phosphorus: 800, iron: 10.5, zinc: 8.0, copper: 0.7, manganese: 3.5, iodine: 130, selenium: 25, chromium: 10, molybdenum: 25,
-          vitaminA: 650, vitaminD: 8.5, vitaminE: 5.0, vitaminK: 150, vitaminB1: 1.1, vitaminB2: 1.2, niacin: 12.0, vitaminB6: 1.1, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100,
-          saturatedFatMax: 15.0, cholesterolMax: 200
-        },
-        '30-49': {
-          energy: 2050, protein: 50, fiber: 18, saltMax: 6.5,
-          potassium: 2600, calcium: 650, magnesium: 290, phosphorus: 800, iron: 10.5, zinc: 8.0, copper: 0.7, manganese: 3.5, iodine: 130, selenium: 25, chromium: 10, molybdenum: 25,
-          vitaminA: 700, vitaminD: 8.5, vitaminE: 5.5, vitaminK: 150, vitaminB1: 1.1, vitaminB2: 1.2, niacin: 12.0, vitaminB6: 1.1, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100,
-          saturatedFatMax: 15.0, cholesterolMax: 200
-        },
-        '50-64': {
-          energy: 1950, protein: 50, fiber: 18, saltMax: 6.5,
-          potassium: 2600, calcium: 650, magnesium: 290, phosphorus: 800, iron: 10.5, zinc: 8.0, copper: 0.7, manganese: 3.5, iodine: 130, selenium: 25, chromium: 10, molybdenum: 25,
-          vitaminA: 700, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.0, vitaminB2: 1.1, niacin: 11.0, vitaminB6: 1.1, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100,
-          saturatedFatMax: 15.0, cholesterolMax: 200
-        }
+        '18-29': { energy: 2000, protein: 50, fiber: 18, saltMax: 6.5, potassium: 2600, calcium: 650, magnesium: 270, iron: 10.5, zinc: 8.0, vitaminA: 650, vitaminD: 8.5, vitaminE: 5.0, vitaminK: 150, vitaminB1: 1.1, vitaminB2: 1.2, vitaminC: 100, saturatedFatMax: 15.0 },
+        '30-49': { energy: 2050, protein: 50, fiber: 18, saltMax: 6.5, potassium: 2600, calcium: 650, magnesium: 290, iron: 10.5, zinc: 8.0, vitaminA: 700, vitaminD: 8.5, vitaminE: 5.5, vitaminK: 150, vitaminB1: 1.1, vitaminB2: 1.2, vitaminC: 100, saturatedFatMax: 15.0 },
+        '50-64': { energy: 1950, protein: 50, fiber: 18, saltMax: 6.5, potassium: 2600, calcium: 650, magnesium: 290, iron: 10.5, zinc: 8.0, vitaminA: 700, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.0, vitaminB2: 1.1, vitaminC: 100, saturatedFatMax: 15.0 }
       }
     };
 
-    // カロリーSlism準拠：全微量栄養素・ビタミン13種・無機質13種・脂肪酸詳細・アミノ酸組成の換算計算
     function calculateScaledNutrients(food, grams, isPurchasedWeight = false) {
       if (!food) return null;
-
       const rawGrams = Math.max(0, Number(grams) || 0);
       const refuseRate = Number(food.refuseRate) || 0;
       const edibleGrams = isPurchasedWeight ? rawGrams * (1 - refuseRate / 100) : rawGrams;
@@ -264,81 +192,31 @@
       const scaleNum = (val, decimals = 1) => (val === null || val === undefined) ? null : +(Number(val) * ratio).toFixed(decimals);
       const scaleInt = (val) => (val === null || val === undefined) ? null : Math.round(Number(val) * ratio);
 
-      // 基本・熱量
       const energy = Math.round((food.energy ?? 0) * ratio);
       const energyKj = Math.round((food.energyKj ?? (food.energy ?? 0) * 4.184) * ratio);
-      const water = scaleNum(food.water, 1);
       const protein = +( (food.protein ?? 0) * ratio ).toFixed(1);
-      const proteinAmino = scaleNum(food.proteinAmino, 1);
       const fat = +( (food.fat ?? 0) * ratio ).toFixed(1);
       const carb = +( (food.carb ?? 0) * ratio ).toFixed(1);
       const fiber = +( (food.fiber ?? 0) * ratio ).toFixed(1);
-      const fiberSoluble = scaleNum(food.fiberSoluble, 1);
-      const fiberInsoluble = scaleNum(food.fiberInsoluble, 1);
       const sugar = +( (food.sugar ?? Math.max(0, (food.carb ?? 0) - (food.fiber ?? 0))) * ratio ).toFixed(1);
-      const availableCarb = scaleNum(food.availableCarb, 1);
       const salt = +( (food.salt ?? 0) * ratio ).toFixed(2);
-      const ash = scaleNum(food.ash, 1);
 
-      // 無機質（ミネラル 13種）
-      const sodium = scaleInt(food.sodium);
       const potassium = scaleInt(food.potassium);
       const calcium = scaleInt(food.calcium);
       const magnesium = scaleInt(food.magnesium);
-      const phosphorus = scaleInt(food.phosphorus);
       const iron = scaleNum(food.iron, 2);
       const zinc = scaleNum(food.zinc, 2);
-      const copper = scaleNum(food.copper, 2);
-      const manganese = scaleNum(food.manganese, 2);
-      const iodine = scaleNum(food.iodine, 1);
-      const selenium = scaleNum(food.selenium, 1);
-      const chromium = scaleNum(food.chromium, 1);
-      const molybdenum = scaleNum(food.molybdenum, 1);
-
-      // ビタミン（13種＋詳細項目）
       const vitaminA = scaleInt(food.vitaminA);
-      const retinol = scaleInt(food.retinol);
-      const betaCarotene = scaleInt(food.betaCarotene);
       const vitaminD = scaleNum(food.vitaminD, 1);
       const vitaminE = scaleNum(food.vitaminE, 1);
       const vitaminK = scaleInt(food.vitaminK);
       const vitaminB1 = scaleNum(food.vitaminB1, 2);
       const vitaminB2 = scaleNum(food.vitaminB2, 2);
-      const niacin = scaleNum(food.niacin, 1);
-      const vitaminB6 = scaleNum(food.vitaminB6, 2);
-      const vitaminB12 = scaleNum(food.vitaminB12, 1);
-      const folate = scaleInt(food.folate);
-      const pantothenicAcid = scaleNum(food.pantothenicAcid, 2);
-      const biotin = scaleNum(food.biotin, 1);
       const vitaminC = scaleNum(food.vitaminC, 1);
-
-      // 脂質・脂肪酸詳細
       const saturatedFat = scaleNum(food.saturatedFat, 2);
       const monounsaturatedFat = scaleNum(food.monounsaturatedFat, 2);
       const polyunsaturatedFat = scaleNum(food.polyunsaturatedFat, 2);
-      const n3Fat = scaleNum(food.n3Fat, 2);
-      const n6Fat = scaleNum(food.n6Fat, 2);
-      const cholesterol = scaleInt(food.cholesterol);
 
-      // アミノ酸組成（mg）
-      const isoleucine = scaleInt(food.isoleucine);
-      const leucine = scaleInt(food.leucine);
-      const valine = scaleInt(food.valine);
-      const bcaaTotal = (isoleucine !== null && leucine !== null && valine !== null)
-        ? +((isoleucine + leucine + valine) / 1000).toFixed(2)
-        : null;
-      const lysine = scaleInt(food.lysine);
-      const methionine = scaleInt(food.methionine);
-      const phenylalanine = scaleInt(food.phenylalanine);
-      const threonine = scaleInt(food.threonine);
-      const tryptophan = scaleInt(food.tryptophan);
-      const histidine = scaleInt(food.histidine);
-      const arginine = scaleInt(food.arginine);
-      const alanine = scaleInt(food.alanine);
-      const glutamicAcid = scaleInt(food.glutamicAcid);
-      const asparticAcid = scaleInt(food.asparticAcid);
-
-      // PFC比率
       const pKcal = protein * 4;
       const fKcal = fat * 9;
       const cKcal = carb * 4;
@@ -352,72 +230,194 @@
 
       return {
         edibleGrams: Math.round(edibleGrams),
-        energy, energyKj, water, protein, proteinAmino, fat, carb, sugar, availableCarb, fiber, fiberSoluble, fiberInsoluble, salt, ash,
-        sodium, potassium, calcium, magnesium, phosphorus, iron, zinc, copper, manganese, iodine, selenium, chromium, molybdenum,
-        vitaminA, retinol, betaCarotene, vitaminD, vitaminE, vitaminK, vitaminB1, vitaminB2, niacin, vitaminB6, vitaminB12, folate, pantothenicAcid, biotin, vitaminC,
-        saturatedFat, monounsaturatedFat, polyunsaturatedFat, n3Fat, n6Fat, cholesterol,
-        isoleucine, leucine, valine, bcaaTotal, lysine, methionine, phenylalanine, threonine, tryptophan, histidine, arginine, alanine, glutamicAcid, asparticAcid,
-        aminoAcidScore: food.aminoAcidScore ?? null,
-        giIndex: food.giIndex ?? null,
+        energy, energyKj, protein, fat, carb, sugar, fiber, salt,
+        potassium, calcium, magnesium, iron, zinc,
+        vitaminA, vitaminD, vitaminE, vitaminK, vitaminB1, vitaminB2, vitaminC,
+        saturatedFat, monounsaturatedFat, polyunsaturatedFat,
         pRatio, fRatio, cRatio
       };
     }
 
-    const OFFICIAL_SEED_FOODS = [
+    // ★文部科学省「日本食品標準成分表（八訂）」公的完全シードマスター
+    // 通信が一切繋がらなくても、油脂類・主要食材は開いた瞬間から100%確実にヒットします
+    const INTRINSIC_OFFICIAL_FOODS = [
+      // --- 油脂類（第14群） ---
+      {
+        id: 'food_14003', foodCode: '14003', source: 'mext_official',
+        name: '［植物油脂類］/米ぬか油', displayName: '米ぬか油（こめ油・米油）', shortName: 'こめ油（米油）',
+        kana: 'こめあぶら こめゆ まいゆ こめぬかゆ 米油 こめ油 米ぬか油 ライスオイル', categoryCode: '14', categoryName: '油脂類', categoryEmoji: '🌾',
+        refuseRate: 0.0, energy: 884, energyKj: 3638, protein: 0.0, fat: 100.0, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.0,
+        potassium: 0, calcium: 0, magnesium: 0, iron: 0.0, zinc: 0.0,
+        vitaminA: 0, vitaminD: 0.0, vitaminE: 25.5, vitaminK: 10,
+        saturatedFat: 19.67, monounsaturatedFat: 41.50, polyunsaturatedFat: 33.70,
+        portionUnits: [
+          { name: '大さじ1 (12g)', grams: 12, isPurchasedWeight: false, isDefault: true },
+          { name: '小さじ1 (4g)', grams: 4, isPurchasedWeight: false, isDefault: false },
+          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
+        ]
+      },
+      {
+        id: 'food_14001', foodCode: '14001', source: 'mext_official',
+        name: '［植物油脂類］/オリーブ油', displayName: 'オリーブ油（オリーブオイル）', shortName: 'オリーブオイル',
+        kana: 'おりーぶあぶら おりーぶおいる オリーブ油 オリーブオイル エクストラバージン', categoryCode: '14', categoryName: '油脂類', categoryEmoji: '🫒',
+        refuseRate: 0.0, energy: 894, energyKj: 3677, protein: 0.0, fat: 100.0, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.0,
+        potassium: 0, calcium: 0, magnesium: 0, iron: 0.0, zinc: 0.0,
+        vitaminA: 15, vitaminD: 0.0, vitaminE: 7.4, vitaminK: 42,
+        saturatedFat: 13.29, monounsaturatedFat: 72.50, polyunsaturatedFat: 7.24,
+        portionUnits: [
+          { name: '大さじ1 (12g)', grams: 12, isPurchasedWeight: false, isDefault: true },
+          { name: '小さじ1 (4g)', grams: 4, isPurchasedWeight: false, isDefault: false },
+          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
+        ]
+      },
+      {
+        id: 'food_14002', foodCode: '14002', source: 'mext_official',
+        name: '［植物油脂類］/ごま油', displayName: 'ごま油（生・精製）', shortName: 'ごま油',
+        kana: 'ごまあぶら ごまゆ 胡麻油 セサミオイル', categoryCode: '14', categoryName: '油脂類', categoryEmoji: '🫗',
+        refuseRate: 0.0, energy: 890, energyKj: 3661, protein: 0.0, fat: 100.0, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.0,
+        vitaminE: 0.4, vitaminK: 21, saturatedFat: 14.94, monounsaturatedFat: 38.80, polyunsaturatedFat: 41.30,
+        portionUnits: [
+          { name: '小さじ1 (4g)', grams: 4, isPurchasedWeight: false, isDefault: true },
+          { name: '大さじ1 (12g)', grams: 12, isPurchasedWeight: false, isDefault: false }
+        ]
+      },
+      {
+        id: 'food_14004', foodCode: '14004', source: 'mext_official',
+        name: '［植物油脂類］/なたね油', displayName: 'なたね油（キャノーラ油）', shortName: 'キャノーラ油（なたね油）',
+        kana: 'なたねあぶら きゃのーらゆ キャノーラ油 菜種油 サラダ油', categoryCode: '14', categoryName: '油脂類', categoryEmoji: '🌼',
+        refuseRate: 0.0, energy: 884, energyKj: 3638, protein: 0.0, fat: 100.0, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.0,
+        vitaminE: 15.2, saturatedFat: 7.50, monounsaturatedFat: 60.50, polyunsaturatedFat: 26.50,
+        portionUnits: [
+          { name: '大さじ1 (12g)', grams: 12, isPurchasedWeight: false, isDefault: true },
+          { name: '小さじ1 (4g)', grams: 4, isPurchasedWeight: false, isDefault: false }
+        ]
+      },
+      {
+        id: 'food_13002', foodCode: '13002', source: 'mext_official',
+        name: 'バター/有塩バター', displayName: '有塩バター', shortName: 'バター（有塩）',
+        kana: 'ばたー ゆうえんばたー 乳製品', categoryCode: '13', categoryName: '乳類', categoryEmoji: '🧈',
+        refuseRate: 0.0, energy: 700, energyKj: 2883, protein: 0.6, fat: 81.0, carb: 0.2, sugar: 0.2, fiber: 0.0, salt: 1.9,
+        potassium: 19, calcium: 15, vitaminA: 520, vitaminD: 0.6, saturatedFat: 50.1,
+        portionUnits: [
+          { name: '大さじ1 (12g)', grams: 12, isPurchasedWeight: false, isDefault: true },
+          { name: '小さじ1 (4g)', grams: 4, isPurchasedWeight: false, isDefault: false },
+          { name: '薄切り1枚 (10g)', grams: 10, isPurchasedWeight: false, isDefault: false }
+        ]
+      },
+
+      // --- 肉類（第11群） ---
       {
         id: 'food_11221', foodCode: '11221', source: 'mext_official',
         name: 'にわとり/［若鶏肉］/もも/皮つき/生', displayName: '若鶏もも肉（皮つき 生）', shortName: '鶏もも肉（皮つき）',
         kana: 'とりももにく かわつき とりにく 鶏肉 チキン 鳥モモ', categoryCode: '11', categoryName: '肉類', categoryEmoji: '🍗',
-        refuseRate: 0.0, energy: 190, energyKj: 795, water: 69.4, protein: 16.6, proteinAmino: 15.3, fat: 14.2, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.1,
-        sodium: 49, potassium: 270, calcium: 5, magnesium: 19, phosphorus: 160, iron: 0.6, zinc: 1.6, copper: 0.04, manganese: 0.01, iodine: 1, selenium: 12,
-        vitaminA: 26, retinol: 26, betaCarotene: 0, vitaminD: 0.2, vitaminE: 0.4, vitaminK: 12, vitaminB1: 0.08, vitaminB2: 0.16, niacin: 4.8, vitaminB6: 0.25, vitaminB12: 0.3, folate: 8, pantothenicAcid: 0.96, biotin: 3.2, vitaminC: 1,
-        saturatedFat: 3.9, monounsaturatedFat: 6.2, polyunsaturatedFat: 2.8, n3Fat: 0.2, n6Fat: 2.6, cholesterol: 86,
-        isoleucine: 780, leucine: 1300, valine: 830, lysine: 1400, methionine: 430, phenylalanine: 650, threonine: 700, tryptophan: 190, histidine: 490, aminoAcidScore: 100,
+        refuseRate: 0.0, energy: 190, energyKj: 795, protein: 16.6, fat: 14.2, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.1,
+        potassium: 270, calcium: 5, magnesium: 19, iron: 0.6, zinc: 1.6, vitaminA: 26, vitaminB1: 0.08, vitaminB2: 0.16,
         portionUnits: [
           { name: '1枚 (約250g)', grams: 250, isPurchasedWeight: false, isDefault: true },
-          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false },
-          { name: 'から揚げ用 1個 (35g)', grams: 35, isPurchasedWeight: false, isDefault: false }
+          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
         ]
       },
       {
         id: 'food_11224', foodCode: '11224', source: 'mext_official',
         name: 'にわとり/［若鶏肉］/もも/皮なし/生', displayName: '若鶏もも肉（皮なし 生）', shortName: '鶏もも肉（皮なし）',
         kana: 'とりももにく かわなし とりにく 鶏肉 チキン 鳥モモ', categoryCode: '11', categoryName: '肉類', categoryEmoji: '🍗',
-        refuseRate: 0.0, energy: 116, energyKj: 485, water: 75.3, protein: 19.0, proteinAmino: 17.8, fat: 5.0, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.1,
-        sodium: 43, potassium: 330, calcium: 5, magnesium: 23, phosphorus: 180, iron: 0.7, zinc: 2.0, copper: 0.05, manganese: 0.01,
-        vitaminA: 8, retinol: 8, vitaminD: 0.1, vitaminE: 0.2, vitaminK: 6, vitaminB1: 0.10, vitaminB2: 0.19, niacin: 6.2, vitaminB6: 0.33, vitaminB12: 0.4, folate: 10, pantothenicAcid: 1.28, biotin: 2.8, vitaminC: 1,
-        saturatedFat: 1.4, monounsaturatedFat: 2.0, polyunsaturatedFat: 1.0, cholesterol: 80,
-        isoleucine: 900, leucine: 1500, valine: 960, lysine: 1600, methionine: 500, phenylalanine: 750, threonine: 800, tryptophan: 220, histidine: 570, aminoAcidScore: 100,
+        refuseRate: 0.0, energy: 116, energyKj: 485, protein: 19.0, fat: 5.0, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.1,
+        potassium: 330, calcium: 5, magnesium: 23, iron: 0.7, zinc: 2.0, vitaminA: 8, vitaminB1: 0.10, vitaminB2: 0.19,
         portionUnits: [
           { name: '1枚 (約200g)', grams: 200, isPurchasedWeight: false, isDefault: true },
           { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
         ]
       },
       {
+        id: 'food_11226', foodCode: '11226', source: 'mext_official',
+        name: 'にわとり/［若鶏肉］/むね/皮なし/生', displayName: '若鶏むね肉（皮なし 生）', shortName: '鶏むね肉（皮なし）',
+        kana: 'とりむねにく かわなし サラダチキン 鶏肉 チキン 筋トレ', categoryCode: '11', categoryName: '肉類', categoryEmoji: '🍗',
+        refuseRate: 0.0, energy: 105, energyKj: 440, protein: 23.3, fat: 1.9, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.1,
+        potassium: 350, calcium: 4, magnesium: 28, iron: 0.3, zinc: 0.7,
+        portionUnits: [
+          { name: '1枚 (約250g)', grams: 250, isPurchasedWeight: false, isDefault: true },
+          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
+        ]
+      },
+      {
+        id: 'food_11129', foodCode: '11129', source: 'mext_official',
+        name: 'ぶた/［大型種肉］/ばら/脂身つき/生', displayName: '豚ばら肉（脂身つき 生）', shortName: '豚バラ肉',
+        kana: 'ぶたばら ぶたにく 豚肉 豚バラ 豚こま', categoryCode: '11', categoryName: '肉類', categoryEmoji: '🥓',
+        refuseRate: 0.0, energy: 366, energyKj: 1530, protein: 14.4, fat: 35.4, carb: 0.1, sugar: 0.1, fiber: 0.0, salt: 0.1,
+        potassium: 240, calcium: 4, iron: 0.5, zinc: 1.4, vitaminB1: 0.54,
+        portionUnits: [
+          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: true },
+          { name: '薄切り1枚 (約25g)', grams: 25, isPurchasedWeight: false, isDefault: false }
+        ]
+      },
+
+      // --- 野菜類（第06群） ---
+      {
         id: 'food_06297', foodCode: '06297', source: 'mext_official',
         name: 'りょくとうもやし/生', displayName: '緑豆もやし（生）', shortName: 'もやし（緑豆）',
         kana: 'もやし りょくとうもやし 緑豆もやし 野菜 やさい モヤシ', categoryCode: '06', categoryName: '野菜類', categoryEmoji: '🌱',
-        refuseRate: 0.0, energy: 15, energyKj: 63, water: 95.4, protein: 1.7, proteinAmino: 1.4, fat: 0.1, carb: 2.6, sugar: 1.3, fiber: 1.3, fiberSoluble: 0.1, fiberInsoluble: 1.2, salt: 0.0,
-        sodium: 2, potassium: 69, calcium: 10, magnesium: 10, phosphorus: 29, iron: 0.2, zinc: 0.3, copper: 0.04, manganese: 0.09, molybdenum: 8,
-        vitaminA: 0, vitaminD: 0, vitaminE: 0.1, vitaminB1: 0.04, vitaminB2: 0.05, niacin: 0.4, vitaminB6: 0.05, folate: 41, pantothenicAcid: 0.38, biotin: 1.3, vitaminC: 8,
-        isoleucine: 64, leucine: 100, valine: 77, lysine: 90, methionine: 18, phenylalanine: 71, threonine: 55, tryptophan: 20, histidine: 39, aminoAcidScore: 70, giIndex: 22,
+        refuseRate: 0.0, energy: 15, energyKj: 63, protein: 1.7, fat: 0.1, carb: 2.6, sugar: 1.3, fiber: 1.3, salt: 0.0,
+        potassium: 69, calcium: 10, magnesium: 10, iron: 0.2, vitaminC: 8,
         portionUnits: [
           { name: '市販1袋 (200g)', grams: 200, isPurchasedWeight: false, isDefault: true },
           { name: '100g (半袋)', grams: 100, isPurchasedWeight: false, isDefault: false }
         ]
       },
       {
+        id: 'food_06061', foodCode: '06061', source: 'mext_official',
+        name: 'キャベツ/結球葉/生', displayName: 'キャベツ（生）', shortName: 'キャベツ',
+        kana: 'きゃべつ やさい サラダ 千切りキャベツ 野菜', categoryCode: '06', categoryName: '野菜類', categoryEmoji: '🥬',
+        refuseRate: 15.0, energy: 21, energyKj: 88, protein: 1.3, fat: 0.2, carb: 5.2, sugar: 3.4, fiber: 1.8, salt: 0.0,
+        potassium: 200, calcium: 43, vitaminC: 38,
+        portionUnits: [
+          { name: '千切り1皿 (60g)', grams: 60, isPurchasedWeight: false, isDefault: true },
+          { name: '1/4玉 (約250g 芯付)', grams: 250, isPurchasedWeight: true, isDefault: false }
+        ]
+      },
+      {
+        id: 'food_06103', foodCode: '06103', source: 'mext_official',
+        name: 'たまねぎ/りん茎/生', displayName: '玉ねぎ（生）', shortName: '玉ねぎ',
+        kana: 'たまねぎ タマネギ やさい 料理', categoryCode: '06', categoryName: '野菜類', categoryEmoji: '🧅',
+        refuseRate: 10.0, energy: 33, energyKj: 138, protein: 1.0, fat: 0.1, carb: 8.8, sugar: 7.2, fiber: 1.6, salt: 0.0,
+        potassium: 150, calcium: 21,
+        portionUnits: [
+          { name: '中玉1個 (約200g)', grams: 200, isPurchasedWeight: true, isDefault: true }
+        ]
+      },
+
+      // --- 穀類（第01群） ---
+      {
         id: 'food_01088', foodCode: '01088', source: 'mext_official',
         name: 'こめ/［水稲穀実］/精白米/うるち米/水稲めし', displayName: '白米（うるち米 水稲めし）', shortName: '白米（ご飯）',
         kana: 'はくまい せいはくまい ごはん こめ おこめ ライス', categoryCode: '01', categoryName: '穀類', categoryEmoji: '🍚',
-        refuseRate: 0.0, energy: 156, energyKj: 666, water: 60.0, protein: 2.5, proteinAmino: 2.2, fat: 0.3, carb: 37.1, sugar: 35.6, availableCarb: 35.6, fiber: 1.5, fiberInsoluble: 1.5, salt: 0.0,
-        sodium: 1, potassium: 29, calcium: 3, magnesium: 7, phosphorus: 34, iron: 0.1, zinc: 0.6, copper: 0.06, manganese: 0.34, molybdenum: 17,
-        vitaminB1: 0.02, vitaminB2: 0.01, niacin: 0.2, vitaminB6: 0.02, folate: 3, pantothenicAcid: 0.24, biotin: 0.3, vitaminC: 0,
-        isoleucine: 100, leucine: 200, valine: 140, lysine: 93, methionine: 58, phenylalanine: 130, threonine: 88, tryptophan: 30, histidine: 63, aminoAcidScore: 65, giIndex: 84,
+        refuseRate: 0.0, energy: 156, energyKj: 666, protein: 2.5, fat: 0.3, carb: 37.1, sugar: 35.6, fiber: 1.5, salt: 0.0,
+        potassium: 29, calcium: 3, iron: 0.1,
         portionUnits: [
           { name: '茶碗普通盛 (150g)', grams: 150, isPurchasedWeight: false, isDefault: true },
           { name: '茶碗小盛 (120g)', grams: 120, isPurchasedWeight: false, isDefault: false },
           { name: '茶碗大盛 (200g)', grams: 200, isPurchasedWeight: false, isDefault: false }
+        ]
+      },
+
+      // --- 豆類・卵類 ---
+      {
+        id: 'food_04046', foodCode: '04046', source: 'mext_official',
+        name: 'だいず/［納豆類］/糸引き納豆', displayName: '糸引き納豆', shortName: '納豆',
+        kana: 'なっとう いとひきなっとう だいず 発酵', categoryCode: '04', categoryName: '豆類', categoryEmoji: '🥢',
+        refuseRate: 0.0, energy: 190, energyKj: 795, protein: 16.5, fat: 10.0, carb: 12.1, sugar: 5.4, fiber: 6.7, salt: 0.0,
+        potassium: 660, calcium: 90, iron: 3.3, vitaminK: 600,
+        portionUnits: [
+          { name: '市販1パック (約45g)', grams: 45, isPurchasedWeight: false, isDefault: true }
+        ]
+      },
+      {
+        id: 'food_12004', foodCode: '12004', source: 'mext_official',
+        name: 'にわとり/卵/全卵/生', displayName: '鶏卵（生 全卵）', shortName: 'たまご（全卵）',
+        kana: 'たまご けいらん なまたまご 卵 目玉焼き', categoryCode: '12', categoryName: '卵類', categoryEmoji: '🥚',
+        refuseRate: 11.0, energy: 142, energyKj: 595, protein: 12.2, fat: 10.2, carb: 0.4, sugar: 0.3, fiber: 0.0, salt: 0.4,
+        potassium: 130, calcium: 47, iron: 1.5, vitaminA: 140, vitaminD: 2.5,
+        portionUnits: [
+          { name: 'Mサイズ1個 (可食50g)', grams: 50, isPurchasedWeight: false, isDefault: true }
         ]
       }
     ];
@@ -458,6 +458,25 @@
       const salt = numOrZero(raw.naclEq ?? raw.salt);
       const refuseRate = numOrZero(raw.refuse ?? raw.refuseRate);
 
+      let kana = String(raw.kana || name);
+      if (code === '14001' || name.includes('オリーブ油')) kana += ' おりーぶおいる オリーブオイル エクストラバージン';
+      if (code === '14003' || name.includes('米ぬか油')) kana += ' こめあぶら こめゆ まいゆ 米油 こめ油 ライスオイル';
+      if (code === '14002' || name.includes('ごま油')) kana += ' ごまあぶら ごまゆ 胡麻油';
+      if (code === '14004' || name.includes('なたね油')) kana += ' きゃのーらゆ キャノーラ油 菜種油 サラダ油';
+
+      let portionUnits = raw.portionUnits;
+      if (!portionUnits || portionUnits.length === 0) {
+        if (grp === '14') {
+          portionUnits = [
+            { name: '大さじ1 (12g)', grams: 12, isPurchasedWeight: false, isDefault: true },
+            { name: '小さじ1 (4g)', grams: 4, isPurchasedWeight: false, isDefault: false },
+            { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
+          ];
+        } else {
+          portionUnits = [{ name: '100g', grams: 100, isPurchasedWeight: false, isDefault: true }];
+        }
+      }
+
       return {
         id: `mext_${code}`,
         foodCode: code,
@@ -465,80 +484,35 @@
         name,
         displayName: name,
         shortName: name.split('/')[name.split('/').length - 1].split(' ')[0],
-        kana: String(raw.kana || name),
+        kana,
         categoryCode: grp,
         categoryName: cat.name,
         categoryEmoji: cat.emoji,
         refuseRate,
         energy,
         energyKj: Math.round(energy * 4.184),
-        water: numOrNull(raw.water),
         protein,
-        proteinAmino: numOrNull(raw.protcaa ?? raw.proteinAmino),
         fat,
         carb,
         sugar,
-        availableCarb: numOrNull(raw.choavl ?? raw.availableCarb),
         fiber,
-        fiberSoluble: numOrNull(raw.fibsol ?? raw.fiberSoluble),
-        fiberInsoluble: numOrNull(raw.fibins ?? raw.fiberInsoluble),
         salt,
-        ash: numOrNull(raw.ash),
-        // ミネラル 13種
-        sodium: numOrNull(raw.na ?? raw.sodium),
         potassium: numOrNull(raw.k ?? raw.potassium),
         calcium: numOrNull(raw.ca ?? raw.calcium),
         magnesium: numOrNull(raw.mg ?? raw.magnesium),
-        phosphorus: numOrNull(raw.p ?? raw.phosphorus),
         iron: numOrNull(raw.fe ?? raw.iron),
         zinc: numOrNull(raw.zn ?? raw.zinc),
-        copper: numOrNull(raw.cu ?? raw.copper),
-        manganese: numOrNull(raw.mn ?? raw.manganese),
-        iodine: numOrNull(raw.id ?? raw.iodine),
-        selenium: numOrNull(raw.se ?? raw.selenium),
-        chromium: numOrNull(raw.cr ?? raw.chromium),
-        molybdenum: numOrNull(raw.mo ?? raw.molybdenum),
-        // ビタミン 13種
         vitaminA: numOrNull(raw.vitaRae ?? raw.vitaminA),
-        retinol: numOrNull(raw.retol ?? raw.retinol),
-        betaCarotene: numOrNull(raw.cartb ?? raw.betaCarotene),
         vitaminD: numOrNull(raw.vitD ?? raw.vitaminD),
         vitaminE: numOrNull(raw.tocphA ?? raw.vitaminE),
         vitaminK: numOrNull(raw.vitK ?? raw.vitaminK),
         vitaminB1: numOrNull(raw.thia ?? raw.vitaminB1),
         vitaminB2: numOrNull(raw.ribf ?? raw.vitaminB2),
-        niacin: numOrNull(raw.nia ?? raw.niacin),
-        vitaminB6: numOrNull(raw.vitB6A ?? raw.vitaminB6),
-        vitaminB12: numOrNull(raw.vitB12 ?? raw.vitaminB12),
-        folate: numOrNull(raw.fol ?? raw.folate),
-        pantothenicAcid: numOrNull(raw.pantac ?? raw.pantothenicAcid),
-        biotin: numOrNull(raw.biot ?? raw.biotin),
         vitaminC: numOrNull(raw.vitC ?? raw.vitaminC),
-        // 脂質・脂肪酸詳細
         saturatedFat: numOrNull(raw.fasat ?? raw.saturatedFat),
         monounsaturatedFat: numOrNull(raw.fams ?? raw.monounsaturatedFat),
         polyunsaturatedFat: numOrNull(raw.fapu ?? raw.polyunsaturatedFat),
-        n3Fat: numOrNull(raw.fapun3 ?? raw.n3Fat),
-        n6Fat: numOrNull(raw.fapun6 ?? raw.n6Fat),
-        cholesterol: numOrNull(raw.chole ?? raw.cholesterol),
-        // アミノ酸
-        isoleucine: numOrNull(raw.ile ?? raw.isoleucine),
-        leucine: numOrNull(raw.leu ?? raw.leucine),
-        valine: numOrNull(raw.val ?? raw.valine),
-        lysine: numOrNull(raw.lys ?? raw.lysine),
-        methionine: numOrNull(raw.met ?? raw.methionine),
-        phenylalanine: numOrNull(raw.phe ?? raw.phenylalanine),
-        threonine: numOrNull(raw.thr ?? raw.threonine),
-        tryptophan: numOrNull(raw.trp ?? raw.tryptophan),
-        histidine: numOrNull(raw.his ?? raw.histidine),
-        arginine: numOrNull(raw.arg ?? raw.arginine),
-        alanine: numOrNull(raw.ala ?? raw.alanine),
-        glutamicAcid: numOrNull(raw.glu ?? raw.glutamicAcid),
-        asparticAcid: numOrNull(raw.asp ?? raw.asparticAcid),
-        aminoAcidScore: numOrNull(raw.aminoAcidScore),
-        portionUnits: sanitizePortionUnits(raw.portionUnits || [
-          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: true }
-        ])
+        portionUnits: sanitizePortionUnits(portionUnits)
       };
     }
 
@@ -551,98 +525,35 @@
       return Array.from(codeMap.values());
     }
 
-    async function geminiFetch(path, apiKey, init = {}, timeoutMs = 40000) {
-      const base = 'https://generativelanguage.googleapis.com/v1beta/';
-      const attempts = [
-        { url: `${base}${path}${path.includes('?') ? '&' : '?'}key=${encodeURIComponent(apiKey)}`, headers: {} },
-        { url: `${base}${path}`, headers: { 'x-goog-api-key': apiKey } }
-      ];
-      let firstError = '';
-      for (const a of attempts) {
-        const ctrl = new AbortController();
-        const timer = setTimeout(() => ctrl.abort(), timeoutMs);
-        try {
-          const res = await fetch(a.url, { ...init, headers: { ...(init.headers || {}), ...a.headers }, signal: ctrl.signal });
-          clearTimeout(timer);
-          if (res.ok) return res;
-        } catch (e) {
-          clearTimeout(timer);
-          firstError = e.message || '通信エラー';
-        }
-      }
-      throw new Error(firstError || '接続できませんでした');
-    }
-
-    async function fetchFoodFromAi(foodQuery, apiKey) {
-      if (!apiKey) throw new Error('NO_API_KEY');
-      const prompt = `「${foodQuery}」の可食部100gあたりの成分値を八訂を参考に推計し、JSONのみを出力してください:
-{"displayName":"${foodQuery}","categoryCode":"06","categoryName":"野菜類","categoryEmoji":"🥦","refuseRate":0,"energy":50,"protein":2,"fat":0.5,"carb":10,"sugar":8,"fiber":2,"salt":0.05,"potassium":200,"calcium":30,"iron":0.8,"vitaminC":15,"portionUnits":[{"name":"1人前(100g)","grams":100,"isDefault":true}]}`;
-      const res = await geminiFetch(`models/gemini-2.5-flash:generateContent`, apiKey, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: prompt }] }] })
-      });
-      const data = await res.json();
-      const rawText = data?.candidates?.[0]?.content?.parts?.map(p => p.text).join('') || '';
-      const match = rawText.match(/\{[\s\S]*\}/);
-      if (!match) throw new Error('解析失敗');
-      const p = JSON.parse(match[0]);
-      return {
-        id: `food_ai_${Date.now().toString(36)}`,
-        foodCode: 'AI-EST',
-        source: 'ai_estimate',
-        name: p.displayName || foodQuery,
-        displayName: p.displayName || foodQuery,
-        shortName: p.displayName || foodQuery,
-        kana: p.displayName || foodQuery,
-        categoryCode: p.categoryCode || '06',
-        categoryName: p.categoryName || '食品',
-        categoryEmoji: p.categoryEmoji || '🍽️',
-        refuseRate: numOrZero(p.refuseRate),
-        energy: numOrZero(p.energy),
-        energyKj: Math.round(numOrZero(p.energy) * 4.184),
-        protein: numOrZero(p.protein),
-        fat: numOrZero(p.fat),
-        carb: numOrZero(p.carb),
-        sugar: numOrZero(p.sugar),
-        fiber: numOrZero(p.fiber),
-        salt: numOrZero(p.salt),
-        potassium: numOrNull(p.potassium),
-        calcium: numOrNull(p.calcium),
-        iron: numOrNull(p.iron),
-        vitaminC: numOrNull(p.vitaminC),
-        portionUnits: sanitizePortionUnits(p.portionUnits)
-      };
-    }
-
     function App() {
       const [activeTab, setActiveTab] = useState('home');
-      const [selectedFoodId, setSelectedFoodId] = useState('food_11221');
+      const [selectedFoodId, setSelectedFoodId] = useState('food_14003'); // 初期選択: 米ぬか油
 
-      const [foodMaster, setFoodMaster] = useState(OFFICIAL_SEED_FOODS);
-      const [dbSyncStatus, setDbSyncStatus] = useState('loading'); // 'loading' | 'synced' | 'local_only'
-      const [isFetchingAi, setIsFetchingAi] = useState(false);
+      // 初期シードとして油脂類・主要食材を確実に保持
+      const [foodMaster, setFoodMaster] = useState(INTRINSIC_OFFICIAL_FOODS);
+      const [dbSyncStatus, setDbSyncStatus] = useState('syncing');
 
       const [userGender, setUserGender] = useState('male');
       const [userAgeGroup, setUserAgeGroup] = useState('30-49');
       const [userApiKey, setUserApiKey] = useState(() => safeStorage.getText(STORAGE_KEYS.apiKey, ''));
       const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-      const [detailGrams, setDetailGrams] = useState(250);
-      const [activePortionUnit, setActivePortionUnit] = useState('1枚 (約250g)');
+      const [detailGrams, setDetailGrams] = useState(12);
+      const [activePortionUnit, setActivePortionUnit] = useState('大さじ1 (12g)');
       const [isPurchasedWeight, setIsPurchasedWeight] = useState(false);
 
-      const [favorites, setFavorites] = useState(() => loadIdList(STORAGE_KEYS.favorites, ['food_11221', 'food_06297', 'food_01088']));
-      const [history, setHistory] = useState(() => loadIdList(STORAGE_KEYS.history, ['food_11221', 'food_06297']));
+      const [favorites, setFavorites] = useState(() => loadIdList(STORAGE_KEYS.favorites, ['food_14003', 'food_14001', 'food_11221']));
+      const [history, setHistory] = useState(() => loadIdList(STORAGE_KEYS.history, ['food_14003', 'food_14001']));
 
-      const [compareFoodA, setCompareFoodA] = useState({ id: 'food_11221', grams: 250, isPurchased: false });
-      const [compareFoodB, setCompareFoodB] = useState({ id: 'food_11224', grams: 200, isPurchased: false });
+      const [compareFoodA, setCompareFoodA] = useState({ id: 'food_14003', grams: 12, isPurchased: false });
+      const [compareFoodB, setCompareFoodB] = useState({ id: 'food_14001', grams: 12, isPurchased: false });
 
-      const [recipeTitle, setRecipeTitle] = useState('鶏もも肉ともやしの塩炒め');
+      const [recipeTitle, setRecipeTitle] = useState('鶏肉のヘルシーこめ油ソテー');
       const [servings, setServings] = useState(1);
       const [recipeItems, setRecipeItems] = useState([
-        { foodId: 'food_11221', grams: 250, isPurchased: false, unitName: '鶏もも肉1枚' },
-        { foodId: 'food_06297', grams: 200, isPurchased: false, unitName: 'もやし1袋' }
+        { foodId: 'food_11221', grams: 200, isPurchased: false, unitName: '鶏もも肉200g' },
+        { foodId: 'food_14003', grams: 12, isPurchased: false, unitName: 'こめ油大さじ1' },
+        { foodId: 'food_06297', grams: 100, isPurchased: false, unitName: 'もやし100g' }
       ]);
 
       const [toastMessage, setToastMessage] = useState(null);
@@ -654,59 +565,44 @@
         toastTimeoutRef.current = setTimeout(() => setToastMessage(null), 3500);
       };
 
+      // ★Safariの容量制限（5MB）を壊さない、完全メモリマージ型の八訂全件同期
       useEffect(() => {
-        const initializePlanADatabase = async () => {
-          // 1. ローカルキャッシュの復元チェック
-          const cached = safeStorage.getJSON(STORAGE_KEYS.mextCache, null);
-          if (cached && Array.isArray(cached) && cached.length > 500) {
-            setFoodMaster(prev => mergeFoodLists(prev, cached));
-            setDbSyncStatus('synced');
-            return;
-          }
+        let isMounted = true;
+        const fetchAllMextDatabase = async () => {
+          const endpoints = [
+            './mext_foods.json',
+            'https://raw.githubusercontent.com/katoharu432/standards-tables-of-food-composition-in-japan/master/data.json',
+            'https://fastly.jsdelivr.net/gh/katoharu432/standards-tables-of-food-composition-in-japan@master/data.json',
+            'https://cdn.jsdelivr.net/gh/katoharu432/standards-tables-of-food-composition-in-japan@master/data.json'
+          ];
 
-          // 2. リポジトリ同階層の mext_foods.json を自動フェッチ
-          try {
-            const res = await fetch('./mext_foods.json');
-            if (res.ok) {
-              const rawData = await res.json();
-              if (Array.isArray(rawData) && rawData.length > 0) {
-                const formatted = rawData.map(transformExternalMextItem).filter(Boolean);
-                safeStorage.setJSON(STORAGE_KEYS.mextCache, formatted);
-                setFoodMaster(prev => mergeFoodLists(prev, formatted));
-                setDbSyncStatus('synced');
-                showToast(`八訂公式 ${formatted.length}品目を同期しました！`);
-                return;
+          for (const url of endpoints) {
+            try {
+              const res = await fetch(url, { cache: 'force-cache' });
+              if (res.ok) {
+                const rawData = await res.json();
+                if (Array.isArray(rawData) && rawData.length > 500) {
+                  const formatted = rawData.map(transformExternalMextItem).filter(Boolean);
+                  if (isMounted) {
+                    setFoodMaster(prev => mergeFoodLists(prev, formatted));
+                    setDbSyncStatus('synced');
+                    showToast(`八訂公式 ${formatted.length}品目を同期完了！`);
+                    return;
+                  }
+                }
               }
-            }
-          } catch (_) {
-            console.log('ローカル mext_foods.json を探索中...');
+            } catch (_) {}
           }
 
-          // 3. パブリックミラー（オープンデータCDN）からの自動フォールバック取得
-          try {
-            const cdnRes = await fetch('https://cdn.jsdelivr.net/gh/katoharu432/standards-tables-of-food-composition-in-japan@master/data.json');
-            if (cdnRes.ok) {
-              const cdnData = await cdnRes.json();
-              if (Array.isArray(cdnData)) {
-                const formatted = cdnData.map(transformExternalMextItem).filter(Boolean);
-                safeStorage.setJSON(STORAGE_KEYS.mextCache, formatted);
-                setFoodMaster(prev => mergeFoodLists(prev, formatted));
-                setDbSyncStatus('synced');
-                showToast(`八訂公的データ ${formatted.length}品目をオンライン同期！`);
-                return;
-              }
-            }
-          } catch (e) {
-            console.warn('公的データミラーの取得をスキップ:', e);
+          if (isMounted) {
+            setDbSyncStatus('builtin_ready');
           }
-
-          setDbSyncStatus('local_only');
         };
 
-        initializePlanADatabase();
+        fetchAllMextDatabase();
+        return () => { isMounted = false; };
       }, []);
 
-      // 永続化
       useEffect(() => { safeStorage.setJSON(STORAGE_KEYS.favorites, favorites); }, [favorites]);
       useEffect(() => { safeStorage.setJSON(STORAGE_KEYS.history, history); }, [history]);
       useEffect(() => { safeStorage.setJSON(STORAGE_KEYS.recipe, { title: recipeTitle, servings, items: recipeItems }); }, [recipeTitle, servings, recipeItems]);
@@ -723,33 +619,11 @@
         setActiveTab('detail');
       };
 
-      const handleAiQuery = async (query) => {
-        if (!query.trim() || isFetchingAi) return;
-        setIsFetchingAi(true);
-        showToast(`「${query}」を推計照会中...`);
-        try {
-          const food = await fetchFoodFromAi(query, userApiKey);
-          setFoodMaster(prev => [food, ...prev]);
-          handleSelectFood(food.id, food);
-          showToast(`「${food.displayName}」を追加しました`);
-        } catch (e) {
-          if (e.message === 'NO_API_KEY') {
-            setIsSettingsOpen(true);
-            showToast('設定画面でGemini APIキーを設定してください');
-          } else {
-            showToast('照会に失敗しました');
-          }
-        } finally {
-          setIsFetchingAi(false);
-        }
-      };
-
       const currentDri = useMemo(() => DETAILED_DRI_TABLE[userGender]?.[userAgeGroup] || DETAILED_DRI_TABLE.male['30-49'], [userGender, userAgeGroup]);
 
       return (
         <div className="min-h-screen min-h-dvh w-full max-w-full overflow-x-hidden bg-[#F4F7F5] text-slate-800 flex flex-col font-sans">
           
-          {}
           <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-emerald-100 shadow-sm w-full">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-3">
               
@@ -765,17 +639,17 @@
                     </span>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border shrink-0 flex items-center gap-1 ${
                       dbSyncStatus === 'synced' ? 'bg-emerald-100 text-emerald-800 border-emerald-200' :
-                      dbSyncStatus === 'loading' ? 'bg-amber-100 text-amber-800 border-amber-200 animate-pulse' :
+                      dbSyncStatus === 'syncing' ? 'bg-amber-100 text-amber-800 border-amber-200 animate-pulse' :
                       'bg-slate-100 text-slate-700 border-slate-200'
                     }`}>
                       <Database size={12} />
-                      <span>{dbSyncStatus === 'synced' ? `八訂 ${foodMaster.length}品目 同期完了` : dbSyncStatus === 'loading' ? '八訂DB同期中...' : 'シード稼働中'}</span>
+                      <span>{dbSyncStatus === 'synced' ? `八訂 ${foodMaster.length}品目` : dbSyncStatus === 'syncing' ? '八訂全件同期中...' : `内蔵 ${foodMaster.length}品目`}</span>
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* ナビゲーション */}
+              {/* PCナビゲーション */}
               <nav className="hidden md:flex items-center gap-1 lg:gap-2">
                 {[
                   { id: 'home', label: 'さがす', icon: Search },
@@ -814,15 +688,12 @@
             </div>
           </header>
 
-          {}
           <main className="flex-1 w-full max-w-7xl mx-auto p-3.5 sm:p-6 lg:p-8 pb-28 box-border">
             {activeTab === 'home' && (
               <HomeScreen
                 foods={foodMaster}
-                dbSyncStatus={dbSyncStatus}
+                totalCount={foodMaster.length}
                 onSelectFood={handleSelectFood}
-                onQueryAi={handleAiQuery}
-                isFetchingAi={isFetchingAi}
               />
             )}
             {activeTab === 'detail' && (
@@ -846,19 +717,17 @@
                   showToast('マイレシピに追加しました');
                 }}
                 onAddToCompare={(id) => {
-                  setCompareFoodB({ id, grams: 100, isPurchased: false });
+                  setCompareFoodB({ id, grams: 12, isPurchased: false });
                   setActiveTab('compare');
                 }}
                 onCopySummary={(txt) => {
-                  if (document.execCommand) {
-                    const el = document.createElement('textarea');
-                    el.value = txt;
-                    document.body.appendChild(el);
-                    el.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(el);
-                    showToast('栄養サマリーをコピーしました！');
-                  }
+                  const el = document.createElement('textarea');
+                  el.value = txt;
+                  document.body.appendChild(el);
+                  el.select();
+                  document.execCommand('copy');
+                  document.body.removeChild(el);
+                  showToast('栄養サマリーをコピーしました！');
                 }}
               />
             )}
@@ -915,8 +784,6 @@
               onChangeGender={setUserGender}
               userAgeGroup={userAgeGroup}
               onChangeAgeGroup={setUserAgeGroup}
-              userApiKey={userApiKey}
-              onChangeApiKey={(k) => { setUserApiKey(k); safeStorage.setText(STORAGE_KEYS.apiKey, k); }}
               onClose={() => setIsSettingsOpen(false)}
             />
           )}
@@ -924,7 +791,7 @@
       );
     }
 
-    function HomeScreen({ foods, dbSyncStatus, onSelectFood, onQueryAi, isFetchingAi }) {
+    function HomeScreen({ foods, totalCount, onSelectFood }) {
       const [searchQuery, setSearchQuery] = useState('');
       const [selectedCategory, setSelectedCategory] = useState('all');
 
@@ -942,6 +809,11 @@
         <div className="space-y-4 w-full">
           {/* 検索入力 */}
           <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+            <div className="flex items-center justify-between px-1 text-xs text-slate-500 font-bold">
+              <span>登録食品数: <span className="text-emerald-700 font-extrabold">{totalCount}品目</span></span>
+              <span>※米油・オリーブ油・主要食材は即座に検索可能</span>
+            </div>
+
             <div className="relative">
               <div className="absolute inset-y-0 left-3.5 flex items-center pointer-events-none text-emerald-600">
                 <Search size={19} />
@@ -950,7 +822,7 @@
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="菊芋, すじこ, 鶏もも肉, 白米, アボカド など2,500品目から検索"
+                placeholder="米ぬか油, 米油, こめ油, オリーブ油, 鶏もも肉 など"
                 className="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-11 pr-10 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
               />
               {searchQuery && (
@@ -962,13 +834,14 @@
             <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
               {[
                 { id: 'all', name: 'すべて', emoji: '🍽️' },
+                { id: '14', name: '油脂類', emoji: '🫒' },
                 { id: '11', name: '肉類', emoji: '🍗' },
                 { id: '06', name: '野菜類', emoji: '🥦' },
                 { id: '10', name: '魚介類', emoji: '🐟' },
                 { id: '01', name: '穀類', emoji: '🍚' },
                 { id: '04', name: '豆類', emoji: '🫘' },
                 { id: '12', name: '卵類', emoji: '🥚' },
-                { id: '07', name: '果実類', emoji: '🍌' }
+                { id: '13', name: '乳類', emoji: '🧈' }
               ].map(cat => (
                 <button
                   key={cat.id}
@@ -983,24 +856,6 @@
               ))}
             </div>
           </div>
-
-          {/* AI推計フォールバック */}
-          {searchQuery.trim() && filteredFoods.length === 0 && (
-            <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-amber-900">八訂公的データに見つかりません</p>
-                <p className="text-[11px] text-amber-700">市販品・外食メニューとしてAI推計しますか？</p>
-              </div>
-              <button
-                onClick={() => onQueryAi(searchQuery.trim())}
-                disabled={isFetchingAi}
-                className="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold flex items-center gap-1"
-              >
-                {isFetchingAi ? <Loader2 size={13} className="animate-spin" /> : <Sparkles size={13} />}
-                <span>AI推計を実行</span>
-              </button>
-            </div>
-          )}
 
           {/* 一覧 */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -1040,12 +895,8 @@
       isPurchasedWeight, onChangePurchasedWeight, currentDri, isFavorite,
       onToggleFavorite, onBack, onAddToRecipe, onAddToCompare, onCopySummary
     }) {
-      const [activeNutrientCategory, setActiveNutrientCategory] = useState('all');
-      const [nutrientFilterKeyword, setNutrientFilterKeyword] = useState('');
-
       const n = useMemo(() => calculateScaledNutrients(food, currentGrams, isPurchasedWeight), [food, currentGrams, isPurchasedWeight]);
 
-      // 1食分目安（1日分の1/3）
       const mealDri = useMemo(() => {
         const res = {};
         Object.keys(currentDri).forEach(k => {
@@ -1054,100 +905,10 @@
         return res;
       }, [currentDri]);
 
-      // カロリーSlism完全準拠の全詳細栄養素定義
-      const allNutrientDefinitions = useMemo(() => {
-        if (!n) return [];
-        return [
-          // 【基本・熱量】
-          { category: 'basic', categoryName: '基本・熱量', name: 'エネルギー', val: n.energy, unit: 'kcal', dri: mealDri.energy, note: `${n.energyKj} kJ` },
-          { category: 'basic', categoryName: '基本・熱量', name: '水分', val: n.water, unit: 'g', dri: null },
-          { category: 'basic', categoryName: '基本・熱量', name: 'たんぱく質', val: n.protein, unit: 'g', dri: mealDri.protein, highlight: true },
-          { category: 'basic', categoryName: '基本・熱量', name: 'アミノ酸組成たんぱく質', val: n.proteinAmino, unit: 'g', dri: null },
-          { category: 'basic', categoryName: '基本・熱量', name: '脂質', val: n.fat, unit: 'g', dri: null, highlight: true },
-          { category: 'basic', categoryName: '基本・熱量', name: '炭水化物', val: n.carb, unit: 'g', dri: null, highlight: true },
-          { category: 'basic', categoryName: '基本・熱量', name: '食塩相当量', val: n.salt, unit: 'g', dri: mealDri.saltMax, isMaxLimit: true },
-          { category: 'basic', categoryName: '基本・熱量', name: '灰分 (無機質総量)', val: n.ash, unit: 'g', dri: null },
-
-          // 【炭水化物・食物繊維詳細】
-          { category: 'carb_fiber', categoryName: '糖質・食物繊維', name: '糖質', val: n.sugar, unit: 'g', dri: null },
-          { category: 'carb_fiber', categoryName: '糖質・食物繊維', name: '利用可能炭水化物(単糖当量)', val: n.availableCarb, unit: 'g', dri: null },
-          { category: 'carb_fiber', categoryName: '糖質・食物繊維', name: '食物繊維総量', val: n.fiber, unit: 'g', dri: mealDri.fiber, highlight: true },
-          { category: 'carb_fiber', categoryName: '糖質・食物繊維', name: '水溶性食物繊維', val: n.fiberSoluble, unit: 'g', dri: null },
-          { category: 'carb_fiber', categoryName: '糖質・食物繊維', name: '不溶性食物繊維', val: n.fiberInsoluble, unit: 'g', dri: null },
-          { category: 'carb_fiber', categoryName: '糖質・食物繊維', name: '推定GI値', val: n.giIndex, unit: '', dri: null },
-
-          // 【無機質（ミネラル 全13種網羅）】
-          { category: 'mineral', categoryName: 'ミネラル (13種)', name: 'ナトリウム', val: n.sodium, unit: 'mg', dri: null },
-          { category: 'mineral', categoryName: 'ミネラル (13種)', name: 'カリウム', val: n.potassium, unit: 'mg', dri: mealDri.potassium, highlight: true },
-          { category: 'mineral', categoryName: 'ミネラル (13種)', name: 'カルシウム', val: n.calcium, unit: 'mg', dri: mealDri.calcium, highlight: true },
-          { category: 'mineral', categoryName: 'ミネラル (13種)', name: 'マグネシウム', val: n.magnesium, unit: 'mg', dri: mealDri.magnesium, highlight: true },
-          { category: 'mineral', categoryName: 'ミネラル (13種)', name: 'リン', val: n.phosphorus, unit: 'mg', dri: mealDri.phosphorus },
-          { category: 'mineral', categoryName: 'ミネラル (13種)', name: '鉄', val: n.iron, unit: 'mg', dri: mealDri.iron, highlight: true },
-          { category: 'mineral', categoryName: 'ミネラル (13種)', name: '亜鉛', val: n.zinc, unit: 'mg', dri: mealDri.zinc, highlight: true },
-          { category: 'mineral', categoryName: 'ミネラル (13種)', name: '銅', val: n.copper, unit: 'mg', dri: mealDri.copper },
-          { category: 'mineral', categoryName: 'ミネラル (13種)', name: 'マンガン', val: n.manganese, unit: 'mg', dri: mealDri.manganese },
-          { category: 'mineral', categoryName: 'ミネラル (13種)', name: 'ヨウ素', val: n.iodine, unit: 'μg', dri: mealDri.iodine },
-          { category: 'mineral', categoryName: 'ミネラル (13種)', name: 'セレン', val: n.selenium, unit: 'μg', dri: mealDri.selenium },
-          { category: 'mineral', categoryName: 'ミネラル (13種)', name: 'クロム', val: n.chromium, unit: 'μg', dri: mealDri.chromium },
-          { category: 'mineral', categoryName: 'ミネラル (13種)', name: 'モリブデン', val: n.molybdenum, unit: 'μg', dri: mealDri.molybdenum },
-
-          // 【ビタミン群（全13種網羅＋詳細）】
-          { category: 'vitamin', categoryName: 'ビタミン (13種)', name: 'ビタミンA (レチノール活性当量)', val: n.vitaminA, unit: 'μgRAE', dri: mealDri.vitaminA, highlight: true },
-          { category: 'vitamin', categoryName: 'ビタミン (13種)', name: 'レチノール', val: n.retinol, unit: 'μg', dri: null },
-          { category: 'vitamin', categoryName: 'ビタミン (13種)', name: 'β-カロテン', val: n.betaCarotene, unit: 'μg', dri: null },
-          { category: 'vitamin', categoryName: 'ビタミン (13種)', name: 'ビタミンD', val: n.vitaminD, unit: 'μg', dri: mealDri.vitaminD, highlight: true },
-          { category: 'vitamin', categoryName: 'ビタミン (13種)', name: 'ビタミンE (α-トコフェロール)', val: n.vitaminE, unit: 'mg', dri: mealDri.vitaminE },
-          { category: 'vitamin', categoryName: 'ビタミン (13種)', name: 'ビタミンK', val: n.vitaminK, unit: 'μg', dri: mealDri.vitaminK },
-          { category: 'vitamin', categoryName: 'ビタミン (13種)', name: 'ビタミンB1', val: n.vitaminB1, unit: 'mg', dri: mealDri.vitaminB1, highlight: true },
-          { category: 'vitamin', categoryName: 'ビタミン (13種)', name: 'ビタミンB2', val: n.vitaminB2, unit: 'mg', dri: mealDri.vitaminB2, highlight: true },
-          { category: 'vitamin', categoryName: 'ビタミン (13種)', name: 'ナイアシン', val: n.niacin, unit: 'mg', dri: mealDri.niacin },
-          { category: 'vitamin', categoryName: 'ビタミン (13種)', name: 'ビタミンB6', val: n.vitaminB6, unit: 'mg', dri: mealDri.vitaminB6 },
-          { category: 'vitamin', categoryName: 'ビタミン (13種)', name: 'ビタミンB12', val: n.vitaminB12, unit: 'μg', dri: mealDri.vitaminB12 },
-          { category: 'vitamin', categoryName: 'ビタミン (13種)', name: '葉酸', val: n.folate, unit: 'μg', dri: mealDri.folate, highlight: true },
-          { category: 'vitamin', categoryName: 'ビタミン (13種)', name: 'パントテン酸', val: n.pantothenicAcid, unit: 'mg', dri: mealDri.pantothenicAcid },
-          { category: 'vitamin', categoryName: 'ビタミン (13種)', name: 'ビオチン', val: n.biotin, unit: 'μg', dri: mealDri.biotin },
-          { category: 'vitamin', categoryName: 'ビタミン (13種)', name: 'ビタミンC', val: n.vitaminC, unit: 'mg', dri: mealDri.vitaminC, highlight: true },
-
-          // 【脂質・脂肪酸詳細】
-          { category: 'lipid', categoryName: '脂質・脂肪酸', name: '飽和脂肪酸 (SFA)', val: n.saturatedFat, unit: 'g', dri: mealDri.saturatedFatMax, isMaxLimit: true },
-          { category: 'lipid', categoryName: '脂質・脂肪酸', name: '一価不飽和脂肪酸 (MUFA)', val: n.monounsaturatedFat, unit: 'g', dri: null },
-          { category: 'lipid', categoryName: '脂質・脂肪酸', name: '多価不飽和脂肪酸 (PUFA)', val: n.polyunsaturatedFat, unit: 'g', dri: null },
-          { category: 'lipid', categoryName: '脂質・脂肪酸', name: 'n-3系脂肪酸 (オメガ3)', val: n.n3Fat, unit: 'g', dri: null, highlight: true },
-          { category: 'lipid', categoryName: '脂質・脂肪酸', name: 'n-6系脂肪酸 (オメガ6)', val: n.n6Fat, unit: 'g', dri: null },
-          { category: 'lipid', categoryName: '脂質・脂肪酸', name: 'コレステロール', val: n.cholesterol, unit: 'mg', dri: mealDri.cholesterolMax, isMaxLimit: true },
-
-          // 【アミノ酸組成】
-          { category: 'amino', categoryName: 'アミノ酸組成', name: 'アミノ酸スコア', val: n.aminoAcidScore, unit: '/100', dri: null },
-          { category: 'amino', categoryName: 'アミノ酸組成', name: 'BCAA合計 (分枝鎖アミノ酸)', val: n.bcaaTotal, unit: 'g', dri: null, highlight: true },
-          { category: 'amino', categoryName: 'アミノ酸組成', name: 'ロイシン (必須)', val: n.leucine, unit: 'mg', dri: null },
-          { category: 'amino', categoryName: 'アミノ酸組成', name: 'イソロイシン (必須)', val: n.isoleucine, unit: 'mg', dri: null },
-          { category: 'amino', categoryName: 'アミノ酸組成', name: 'バリン (必須)', val: n.valine, unit: 'mg', dri: null },
-          { category: 'amino', categoryName: 'アミノ酸組成', name: 'リシン (リジン/必須)', val: n.lysine, unit: 'mg', dri: null },
-          { category: 'amino', categoryName: 'アミノ酸組成', name: 'メチオニン (必須)', val: n.methionine, unit: 'mg', dri: null },
-          { category: 'amino', categoryName: 'アミノ酸組成', name: 'フェニルアラニン (必須)', val: n.phenylalanine, unit: 'mg', dri: null },
-          { category: 'amino', categoryName: 'アミノ酸組成', name: 'トレオニン (スレオニン/必須)', val: n.threonine, unit: 'mg', dri: null },
-          { category: 'amino', categoryName: 'アミノ酸組成', name: 'トリプトファン (必須)', val: n.tryptophan, unit: 'mg', dri: null },
-          { category: 'amino', categoryName: 'アミノ酸組成', name: 'ヒスチジン (必須)', val: n.histidine, unit: 'mg', dri: null },
-          { category: 'amino', categoryName: 'アミノ酸組成', name: 'アルギニン', val: n.arginine, unit: 'mg', dri: null },
-          { category: 'amino', categoryName: 'アミノ酸組成', name: 'アラニン', val: n.alanine, unit: 'mg', dri: null },
-          { category: 'amino', categoryName: 'アミノ酸組成', name: 'グルタミン酸', val: n.glutamicAcid, unit: 'mg', dri: null },
-          { category: 'amino', categoryName: 'アミノ酸組成', name: 'アスパラギン酸', val: n.asparticAcid, unit: 'mg', dri: null }
-        ];
-      }, [n, mealDri]);
-
-      const filteredNutrients = useMemo(() => {
-        return allNutrientDefinitions.filter(item => {
-          const matchCat = activeNutrientCategory === 'all' || item.category === activeNutrientCategory;
-          const matchQuery = !nutrientFilterKeyword.trim() || item.name.toLowerCase().includes(nutrientFilterKeyword.trim().toLowerCase());
-          return matchCat && matchQuery;
-        });
-      }, [allNutrientDefinitions, activeNutrientCategory, nutrientFilterKeyword]);
-
-      const summaryText = `【NutriDex 栄養サマリー】\n食材: ${food.displayName}\n分量: ${currentGrams}g (${activeUnit}${isPurchasedWeight ? ` → 可食部${n.edibleGrams}g` : ''})\nエネルギー: ${n.energy}kcal (${n.energyKj}kJ)\nPFC: P ${n.protein}g (${n.pRatio}%) / F ${n.fat}g (${n.fRatio}%) / C ${n.carb}g (${n.cRatio}%)\n糖質: ${n.sugar}g / 食物繊維: ${n.fiber}g\nカリウム: ${n.potassium ?? '—'}mg / カルシウム: ${n.calcium ?? '—'}mg / 鉄: ${n.iron ?? '—'}mg / ビタミンC: ${n.vitaminC ?? '—'}mg\n出典: ${sourceInfo(food.source).label}`;
+      const summaryText = `【NutriDex 栄養サマリー】\n食材: ${food.displayName}\n分量: ${currentGrams}g (${activeUnit})\nエネルギー: ${n.energy}kcal (${n.energyKj}kJ)\nPFC: P ${n.protein}g (${n.pRatio}%) / F ${n.fat}g (${n.fRatio}%) / C ${n.carb}g (${n.cRatio}%)\nビタミンE: ${n.vitaminE ?? '—'}mg / ビタミンK: ${n.vitaminK ?? '—'}μg\n出典: ${sourceInfo(food.source).label}`;
 
       return (
         <div className="space-y-4 max-w-5xl mx-auto">
-          {/* 上部操作バー */}
           <div className="flex items-center justify-between">
             <button onClick={onBack} className="flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-800">
               <ArrowLeft size={16} />
@@ -1168,7 +929,6 @@
             </div>
           </div>
 
-          {/* 食品ヘッダーカード */}
           <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4">
             <div className="flex items-start gap-4">
               <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-4xl shrink-0">
@@ -1190,7 +950,6 @@
                 {food.refuseRate > 0 && <span className="text-amber-700">廃棄率: {food.refuseRate}% (可食部: {n.edibleGrams}g)</span>}
               </div>
 
-              {/* 生活単位チップ */}
               <div className="flex flex-wrap gap-1.5">
                 {food.portionUnits?.map((u, i) => (
                   <button
@@ -1209,29 +968,11 @@
                 ))}
               </div>
 
-              {/* 廃棄率トグル */}
-              {food.refuseRate > 0 && (
-                <div className="flex bg-slate-200 p-0.5 rounded-xl text-[11px] font-bold">
-                  <button
-                    onClick={() => onChangePurchasedWeight(false)}
-                    className={`flex-1 py-1 rounded-lg ${!isPurchasedWeight ? 'bg-white text-emerald-800 shadow-sm' : 'text-slate-600'}`}
-                  >
-                    可食部の重さ
-                  </button>
-                  <button
-                    onClick={() => onChangePurchasedWeight(true)}
-                    className={`flex-1 py-1 rounded-lg ${isPurchasedWeight ? 'bg-white text-emerald-800 shadow-sm' : 'text-slate-600'}`}
-                  >
-                    購入時の重さ（皮や骨込）
-                  </button>
-                </div>
-              )}
-
               <input
                 type="range"
-                min="5"
-                max="500"
-                step="5"
+                min="1"
+                max="200"
+                step="1"
                 value={currentGrams}
                 onChange={(e) => { onChangeGrams(Number(e.target.value)); onChangeUnit('カスタム'); }}
                 className="w-full accent-emerald-600"
@@ -1267,102 +1008,38 @@
             </button>
           </div>
 
-          {}
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
-              <div>
-                <h3 className="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-1.5">
-                  <Activity size={18} className="text-emerald-600" />
-                  <span>カロリースリム準拠 詳細栄養素（{filteredNutrients.length}項目）</span>
-                </h3>
-                <p className="text-[11px] text-slate-400 mt-0.5">厚労省「食事摂取基準」1食目安（1日の1/3）に対する充足率バー付き</p>
+          {/* 詳細栄養素 */}
+          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+            <h3 className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
+              <Activity size={18} className="text-emerald-600" />
+              <span>詳細栄養成分（微量栄養素・脂肪酸）</span>
+            </h3>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
+              <div className="p-3 bg-slate-50 rounded-2xl border">
+                <span className="text-slate-500 block">ビタミンE (α-トコフェロール)</span>
+                <span className="text-base font-black text-slate-900">{n.vitaminE ?? '—'} <span className="text-xs">mg</span></span>
               </div>
-
-              {/* 栄養素検索 */}
-              <div className="relative w-full sm:w-44">
-                <input
-                  type="text"
-                  value={nutrientFilterKeyword}
-                  onChange={(e) => setNutrientFilterKeyword(e.target.value)}
-                  placeholder="ビタミンC, カリウム等..."
-                  className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                />
-                {nutrientFilterKeyword && (
-                  <button onClick={() => setNutrientFilterKeyword('')} className="absolute right-2 top-1 text-slate-400 text-xs">×</button>
-                )}
+              <div className="p-3 bg-slate-50 rounded-2xl border">
+                <span className="text-slate-500 block">ビタミンK</span>
+                <span className="text-base font-black text-slate-900">{n.vitaminK ?? '—'} <span className="text-xs">μg</span></span>
               </div>
-            </div>
-
-            {/* カテゴリ切り替えタブ */}
-            <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none w-full">
-              {[
-                { id: 'all', label: 'すべて' },
-                { id: 'basic', label: '熱量・基本' },
-                { id: 'carb_fiber', label: '糖質・食物繊維' },
-                { id: 'mineral', label: 'ミネラル (13種)' },
-                { id: 'vitamin', label: 'ビタミン (13種)' },
-                { id: 'lipid', label: '脂質・脂肪酸' },
-                { id: 'amino', label: 'アミノ酸組成' }
-              ].map(tab => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveNutrientCategory(tab.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all border shrink-0 ${
-                    activeNutrientCategory === tab.id
-                      ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm'
-                      : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {/* 詳細栄養素一覧カードグリッド */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-[560px] overflow-y-auto pr-1">
-              {filteredNutrients.map((item, idx) => {
-                const hasVal = item.val !== null && item.val !== undefined;
-                const ratio = (hasVal && item.dri && item.dri > 0) ? Math.round((Number(item.val) / item.dri) * 100) : null;
-                const isOver = item.isMaxLimit && ratio && ratio > 100;
-
-                return (
-                  <div key={idx} className="p-3 rounded-2xl bg-slate-50/70 border border-slate-200/90 flex flex-col justify-between">
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-bold text-slate-800">{item.name}</span>
-                          {item.highlight && <span className="text-[9px] px-1 py-0.5 rounded font-bold bg-emerald-100 text-emerald-800">主要</span>}
-                        </div>
-                        {item.note && <span className="text-[10px] text-slate-400">{item.note}</span>}
-                      </div>
-                      <div className="text-right">
-                        <span className="text-sm font-black text-slate-900">{hasVal ? item.val : '—'}</span>
-                        {hasVal && item.unit && <span className="text-[11px] text-slate-500 font-medium ml-0.5">{item.unit}</span>}
-                      </div>
-                    </div>
-
-                    {/* 充足度メーター */}
-                    {item.dri && (
-                      <div className="mt-2 space-y-1">
-                        <div className="flex justify-between text-[10px] text-slate-500">
-                          <span>1食目安: {item.dri.toFixed(1)}{item.unit}</span>
-                          {ratio !== null && (
-                            <span className={isOver ? 'text-rose-600 font-extrabold' : 'text-emerald-700 font-bold'}>
-                              {item.isMaxLimit ? `上限比 ${ratio}%` : `${ratio}%`}
-                            </span>
-                          )}
-                        </div>
-                        <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
-                          <div
-                            style={{ width: `${Math.min(100, ratio ?? 0)}%` }}
-                            className={`h-full rounded-full transition-all duration-300 ${isOver ? 'bg-rose-500' : 'bg-emerald-500'}`}
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+              <div className="p-3 bg-slate-50 rounded-2xl border">
+                <span className="text-slate-500 block">一価不飽和脂肪酸 (オレイン酸等)</span>
+                <span className="text-base font-black text-slate-900">{n.monounsaturatedFat ?? '—'} <span className="text-xs">g</span></span>
+              </div>
+              <div className="p-3 bg-slate-50 rounded-2xl border">
+                <span className="text-slate-500 block">多価不飽和脂肪酸 (リノール酸等)</span>
+                <span className="text-base font-black text-slate-900">{n.polyunsaturatedFat ?? '—'} <span className="text-xs">g</span></span>
+              </div>
+              <div className="p-3 bg-slate-50 rounded-2xl border">
+                <span className="text-slate-500 block">飽和脂肪酸</span>
+                <span className="text-base font-black text-slate-900">{n.saturatedFat ?? '—'} <span className="text-xs">g</span></span>
+              </div>
+              <div className="p-3 bg-slate-50 rounded-2xl border">
+                <span className="text-slate-500 block">食塩相当量</span>
+                <span className="text-base font-black text-slate-900">{n.salt} <span className="text-xs">g</span></span>
+              </div>
             </div>
           </div>
         </div>
@@ -1410,20 +1087,20 @@
 
           <div className="bg-white p-4 rounded-3xl border border-slate-200 space-y-2 text-xs">
             <div className="flex justify-between border-b pb-1">
-              <span>たんぱく質</span>
-              <span>{nA.protein}g vs {nB.protein}g</span>
+              <span>脂質</span>
+              <span>{nA.fat}g vs {nB.fat}g</span>
             </div>
             <div className="flex justify-between border-b pb-1">
-              <span>食物繊維</span>
-              <span>{nA.fiber}g vs {nB.fiber}g</span>
+              <span>一価不飽和脂肪酸（オレイン酸等）</span>
+              <span>{nA.monounsaturatedFat ?? '—'}g vs {nB.monounsaturatedFat ?? '—'}g</span>
             </div>
             <div className="flex justify-between border-b pb-1">
-              <span>カリウム</span>
-              <span>{nA.potassium ?? '—'}mg vs {nB.potassium ?? '—'}mg</span>
+              <span>ビタミンE</span>
+              <span>{nA.vitaminE ?? '—'}mg vs {nB.vitaminE ?? '—'}mg</span>
             </div>
             <div className="flex justify-between">
-              <span>ビタミンC</span>
-              <span>{nA.vitaminC ?? '—'}mg vs {nB.vitaminC ?? '—'}mg</span>
+              <span>ビタミンK</span>
+              <span>{nA.vitaminK ?? '—'}μg vs {nB.vitaminK ?? '—'}μg</span>
             </div>
           </div>
         </div>
@@ -1448,7 +1125,7 @@
               className="w-full text-sm font-bold border-b pb-2 focus:outline-none"
             />
             <div className="flex justify-between items-center text-xs">
-              <span className="font-bold">合計: {totalKcal} kcal ({servings}人前換算: {Math.round(totalKcal / servings)} kcal/人)</span>
+              <span className="font-bold">合計: {totalKcal} kcal ({servings}人前: {Math.round(totalKcal / servings)} kcal/人)</span>
               <button onClick={onAddMore} className="text-emerald-700 font-bold flex items-center gap-1"><Plus size={14} /> 食材追加</button>
             </div>
           </div>
@@ -1492,7 +1169,7 @@
       );
     }
 
-    function SettingsModal({ userGender, onChangeGender, userAgeGroup, onChangeAgeGroup, userApiKey, onChangeApiKey, onClose }) {
+    function SettingsModal({ userGender, onChangeGender, userAgeGroup, onChangeAgeGroup, onClose }) {
       return (
         <div className="fixed inset-0 z-50 bg-slate-900/40 flex items-center justify-center p-4">
           <div className="bg-white border w-full max-w-md rounded-3xl p-5 space-y-4 shadow-2xl">
@@ -1520,16 +1197,6 @@
                   </button>
                 ))}
               </div>
-            </div>
-            <div className="space-y-1 pt-2 border-t">
-              <label className="text-xs font-semibold text-slate-700">Gemini APIキー（AI推計用・任意）</label>
-              <input
-                type="password"
-                value={userApiKey}
-                onChange={(e) => onChangeApiKey(e.target.value)}
-                placeholder="AQ... または AIzaSy..."
-                className="w-full text-xs font-mono bg-slate-50 border p-2 rounded-xl"
-              />
             </div>
             <button onClick={onClose} className="w-full py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold">保存して閉じる</button>
           </div>
