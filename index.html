@@ -1,27 +1,56 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="h-full">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>NutriDex（ニュートリデックス）- 全詳細栄養素60項目ロック確定版</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <title>NutriDex | プロフェッショナル栄養科学・体組成マネジメント</title>
 
   <!-- iOS / iPhone ホーム画面追加用（PWA）メタタグ -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="NutriDex">
-  <meta name="theme-color" content="#059669">
+  <meta name="theme-color" content="#0F172A">
 
-  <!-- インライン埋め込み型 Web App Manifest (Data URI) -->
-  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22NutriDex%22%2C%22short_name%22%3A%22NutriDex%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F4F7F5%22%2C%22theme_color%22%3A%22%23059669%22%7D">
+  <!-- インライン Web App Manifest (Data URI) -->
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22NutriDex%22%2C%22short_name%22%3A%22NutriDex%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F8FAFC%22%2C%22theme_color%22%3A%22%230F172A%22%7D">
 
-  <!-- ブラウザ用ファビコン (SVG Data URI: エメラルド×ホワイトフレイム) -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='100%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23059669'/%3E%3Cstop offset='100%25' stop-color='%230d9488'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Cpath transform='translate(14, 14) scale(3)' fill='%23ffffff' stroke='%23ffffff' stroke-width='0.5' stroke-linecap='round' stroke-linejoin='round' d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z'/%3E%3C/svg%3E">
+  <!-- ブラウザ用ファビコン (SVG Data URI: エメラルドグラデーション×ホワイトフレイム) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2310B981'/%3E%3Cstop offset='100%25' stop-color='%230F766E'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='28' fill='url(%23g)'/%3E%3Cpath transform='translate(17, 17) scale(2.8)' fill='%23ffffff' stroke='%23ffffff' stroke-width='0.5' stroke-linecap='round' stroke-linejoin='round' d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z'/%3E%3C/svg%3E">
 
   <!-- iPhone用 apple-touch-icon -->
-  <link rel="apple-touch-icon" id="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='100%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23059669'/%3E%3Cstop offset='100%25' stop-color='%230d9488'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' fill='url(%23g)'/%3E%3Cpath transform='translate(30, 30) scale(5)' fill='%23ffffff' stroke='%23ffffff' stroke-width='0.5' stroke-linecap='round' stroke-linejoin='round' d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2310B981'/%3E%3Cstop offset='100%25' stop-color='%230F766E'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='50' fill='url(%23g)'/%3E%3Cpath transform='translate(32, 32) scale(5)' fill='%23ffffff' stroke='%23ffffff' stroke-width='0.5' stroke-linecap='round' stroke-linejoin='round' d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z'/%3E%3C/svg%3E">
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', '"Hiragino Sans"', '"Noto Sans JP"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+          },
+          colors: {
+            slate: {
+              850: '#151F32',
+              900: '#0F172A',
+              950: '#070B14'
+            }
+          },
+          boxShadow: {
+            'subtle': '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04)',
+            'card': '0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02)',
+            'float': '0 12px 36px -4px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03)',
+          }
+        }
+      }
+    };
+  </script>
   
   <!-- React 18 & ReactDOM UMD -->
   <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
@@ -31,6 +60,7 @@
   <script src="https://unpkg.com/@babel/standalone@7.26.0/babel.min.js"></script>
 
   <style>
+    /* iOS Safari フォーム自動ズーム防止 & 等幅数字 */
     input, select, textarea {
       font-size: 16px !important;
     }
@@ -38,6 +68,10 @@
       input, select, textarea {
         font-size: 14px !important;
       }
+    }
+    .tnum {
+      font-feature-settings: "tnum";
+      font-variant-numeric: tabular-nums;
     }
     .scrollbar-none::-webkit-scrollbar {
       display: none;
@@ -47,24 +81,26 @@
       scrollbar-width: none;
     }
     .pb-safe {
-      padding-bottom: env(safe-area-inset-bottom, 12px);
+      padding-bottom: env(safe-area-inset-bottom, 16px);
+    }
+    .pt-safe {
+      padding-top: env(safe-area-inset-top, 0px);
     }
   </style>
 </head>
-<body class="bg-[#F4F7F5] text-slate-800 antialiased selection:bg-emerald-500 selection:text-white touch-manipulation">
-  <div id="root"></div>
+<body class="h-full bg-[#F8FAFC] text-slate-800 antialiased selection:bg-slate-900 selection:text-white touch-manipulation font-sans">
+  <div id="root" class="h-full"></div>
 
   <script type="text/babel">
     const { useState, useMemo, useEffect, useRef } = React;
 
-    // バージョン管理定数（v3.5 + 0.1 ➔ v3.6）
-    const APP_VERSION = "v3.6";
+    // バージョン管理定数（v3.6 + 0.1 ➔ v3.7）
+    const APP_VERSION = "v3.7";
 
     /* ========================================================================
      * 【絶対仕様ロック宣言（IMMUTABLE CORE SPECIFICATION）】
      * 本配列（LOCKED_NUTRIENT_REGISTRY）に定義された全60項目の詳細栄養素項目は、
      * 今後のいかなる機能追加・デザイン更新時にも削除・間引き・簡易化を禁ずる。
-     * UIは本レジストリをデータソースとして自動展開（データドリブン描画）する。
      * ======================================================================== */
     const LOCKED_NUTRIENT_REGISTRY = Object.freeze([
       // 【基本・熱量 (8項目)】
@@ -143,25 +179,23 @@
       { id: 'asparticAcid', key: 'asparticAcid', category: 'amino', name: 'アスパラギン酸', unit: 'mg', driKey: null }
     ]);
 
-    // カテゴリ定義タブ
     const NUTRIENT_TABS = Object.freeze([
-      { id: 'all', label: 'すべて (60項目超)' },
+      { id: 'all', label: 'すべて (60項目)' },
       { id: 'basic', label: '熱量・基本' },
       { id: 'carb_fiber', label: '糖質・食物繊維' },
       { id: 'mineral', label: 'ミネラル (13種)' },
-      { id: 'vitamin', label: 'ビタミン (13種)' },
+      { id: 'vitamin', label: 'ビタミン (15項目)' },
       { id: 'lipid', label: '脂質・脂肪酸' },
       { id: 'amino', label: 'アミノ酸組成' }
     ]);
 
-    // --- ローカル保存管理ヘルパー ---
+    // ローカルストレージ管理ヘルパー
     const STORAGE_KEYS = {
-      apiKey: 'nutridex_gemini_api_key',
       favorites: 'nutridex_favorites',
       history: 'nutridex_history',
       profile: 'nutridex_profile',
-      recipe: 'nutridex_recipe',
-      customFoods: 'nutridex_custom_foods'
+      bodyMetrics: 'nutridex_body_metrics',
+      recipe: 'nutridex_recipe'
     };
 
     const safeStorage = {
@@ -174,18 +208,6 @@
       setJSON(k, v) {
         try {
           localStorage.setItem(k, JSON.stringify(v));
-          return true;
-        } catch (_) { return false; }
-      },
-      getText(k, fb = '') {
-        try {
-          const r = localStorage.getItem(k);
-          return r === null ? fb : r;
-        } catch (_) { return fb; }
-      },
-      setText(k, v) {
-        try {
-          localStorage.setItem(k, v);
           return true;
         } catch (_) { return false; }
       }
@@ -203,7 +225,7 @@
     };
     const numOrZero = (v) => numOrNull(v) ?? 0;
 
-    // --- カタカナ・ひらがな相互変換ヘルパー ---
+    // カタカナ・ひらがな相互変換ヘルパー
     function katakanaToHiragana(str) {
       return String(str ?? '').replace(/[\u30a1-\u30f6]/g, (m) => String.fromCharCode(m.charCodeAt(0) - 0x60));
     }
@@ -212,7 +234,7 @@
     }
     const normalizeSearch = (s) => katakanaToHiragana(String(s ?? '').normalize('NFKC').toLowerCase());
 
-    // --- 漢字・ひらがな・カタカナ・日常語 双方向シノニム辞書 ---
+    // 漢字・ひらがな・カタカナ・日常語 双方向シノニム辞書
     const SYNONYM_DICTIONARY = [
       { kanji: ['鶏', '鶏肉', '若鶏', '鳥', '鳥肉', 'チキン'], kana: ['にわとり', 'とり', 'とりにく', 'わかどり'] },
       { kanji: ['豚', '豚肉', 'ポーク'], kana: ['ぶた', 'ぶたにく'] },
@@ -222,87 +244,30 @@
       { kanji: ['大麦', '押し麦', '押麦', '麦', '麦飯', '麦ごはん'], kana: ['おおむぎ', 'おしむぎ', 'むぎ', 'むぎごはん'] },
       { kanji: ['もち麦'], kana: ['もちむぎ', 'もちせいおおむぎ'] },
       { kanji: ['大豆'], kana: ['だいず'] },
-      { kanji: ['小豆'], kana: ['あずき'] },
       { kanji: ['豆腐'], kana: ['とうふ'] },
       { kanji: ['納豆'], kana: ['なっとう', 'いとひきなっとう'] },
       { kanji: ['油', '油脂', '食用油', 'オイル'], kana: ['あぶら'] },
       { kanji: ['米油', 'こめ油', '米ぬか油', 'ライスオイル'], kana: ['こめあぶら', 'こめゆ', 'まいゆ', 'こめぬかゆ'] },
       { kanji: ['オリーブオイル', 'オリーブ油'], kana: ['おりーぶおいる', 'おりーぶあぶら', 'おりーぶゆ'] },
       { kanji: ['胡麻油', 'ごま油', 'セサミオイル'], kana: ['ごまあぶら', 'ごまゆ'] },
-      { kanji: ['サラダ油', '大豆油', 'キャノーラ油', '菜種油', 'なたね油'], kana: ['さらだあぶら', 'だいずゆ', 'なたねゆ'] },
       { kanji: ['玉ねぎ', '玉葱', 'タマネギ', 'オニオン'], kana: ['たまねぎ'] },
       { kanji: ['長ねぎ', '白ねぎ', '青ねぎ', '葱', 'ネギ'], kana: ['ねぎ', 'ながねぎ'] },
       { kanji: ['人参', 'ニンジン', 'キャロット'], kana: ['にんじん'] },
       { kanji: ['大根', 'ダイコン'], kana: ['だいこん'] },
       { kanji: ['白菜', 'ハクサイ'], kana: ['はくさい'] },
       { kanji: ['もやし', 'モヤシ'], kana: ['もやし', 'りょくとうもやし', 'だいずもやし'] },
-      { kanji: ['キャベツ', '甘藍'], kana: ['きゃべつ'] },
-      { kanji: ['レタス', '萵苣'], kana: ['れたす', 'ちしゃ'] },
+      { kanji: ['キャベツ'], kana: ['きゃべつ'] },
       { kanji: ['ブロッコリー'], kana: ['ぶろっこりー'] },
-      { kanji: ['ほうれん草', 'ほうれんそう', '菠薐草'], kana: ['ほうれんそう'] },
-      { kanji: ['小松菜'], kana: ['こまつな'] },
-      { kanji: ['水菜'], kana: ['みずな'] },
-      { kanji: ['春菊'], kana: ['しゅんぎく'] },
-      { kanji: ['韮', 'ニラ'], kana: ['にら'] },
-      { kanji: ['胡瓜', 'キュウリ'], kana: ['きゅうり'] },
-      { kanji: ['茄子', 'ナス'], kana: ['なす', 'なすび'] },
-      { kanji: ['南瓜', 'カボチャ', 'パンプキン'], kana: ['かぼちゃ'] },
+      { kanji: ['ほうれん草', 'ほうれんそう'], kana: ['ほうれんそう'] },
       { kanji: ['トマト'], kana: ['とまと'] },
-      { kanji: ['ピーマン'], kana: ['ぴーまん'] },
-      { kanji: ['生姜', 'ショウガ', 'ジンジャー'], kana: ['しょうが'] },
-      { kanji: ['大蒜', 'ニンニク', 'ガーリック'], kana: ['にんにく'] },
-      { kanji: ['じゃがいも', 'ジャガイモ', '馬鈴薯', 'ポテト'], kana: ['じゃがいも', 'ばれいしょ'] },
-      { kanji: ['さつまいも', 'サツマイモ', '薩摩芋', '甘藷'], kana: ['さつまいも', 'かんしょ'] },
-      { kanji: ['里芋'], kana: ['さといも'] },
-      { kanji: ['長芋', '山芋'], kana: ['ながいも', 'やまいも'] },
-      { kanji: ['蓮根', 'レンコン'], kana: ['れんこん'] },
-      { kanji: ['牛蒡', 'ゴボウ'], kana: ['ごぼう'] },
-      { kanji: ['椎茸', 'シイタケ'], kana: ['しいたけ'] },
-      { kanji: ['榎茸', 'えのき', 'エノキ'], kana: ['えのき', 'えのきたけ'] },
-      { kanji: ['占地', 'しめじ', 'シメジ'], kana: ['しめじ', 'ぶなしめじ'] },
-      { kanji: ['舞茸', 'マイタケ'], kana: ['まいたけ'] },
-      { kanji: ['木耳', 'キクラゲ'], kana: ['きくらげ'] },
-      { kanji: ['若布', 'ワカメ'], kana: ['わかめ'] },
-      { kanji: ['昆布', 'コンブ'], kana: ['こんぶ'] },
-      { kanji: ['海苔', 'ノリ'], kana: ['のり'] },
-      { kanji: ['羊栖菜', 'ヒジキ'], kana: ['ひじき'] },
+      { kanji: ['じゃがいも', 'ジャガイモ', '馬鈴薯'], kana: ['じゃがいも', 'ばれいしょ'] },
+      { kanji: ['さつまいも', 'サツマイモ'], kana: ['さつまいも', 'かんしょ'] },
       { kanji: ['鮭', 'サケ', 'シャケ', 'サーモン'], kana: ['さけ', 'しゃけ', 'しろさけ'] },
-      { kanji: ['鮪', 'マグロ', 'ツナ'], kana: ['まぐろ', 'くろまぐろ', 'きはだまぐろ'] },
-      { kanji: ['鯖', 'サバ'], kana: ['さば', 'まさば', 'ごまさば'] },
-      { kanji: ['鯵', 'アジ'], kana: ['あじ', 'まあじ'] },
-      { kanji: ['秋刀魚', 'サンマ'], kana: ['さんま'] },
-      { kanji: ['鯛', 'タイ'], kana: ['たい', 'まだい'] },
-      { kanji: ['鱈', 'タラ'], kana: ['たら', 'まだら'] },
-      { kanji: ['鰤', 'ブリ'], kana: ['ぶり'] },
-      { kanji: ['鰹', 'カツオ'], kana: ['かつお'] },
-      { kanji: ['鰯', 'イワシ'], kana: ['いわし', 'まいわし'] },
-      { kanji: ['海老', 'エビ', '蝦'], kana: ['えび'] },
-      { kanji: ['烏賊', 'イカ'], kana: ['いか', 'するめいか'] },
-      { kanji: ['蛸', 'タコ'], kana: ['たこ', 'まだこ'] },
+      { kanji: ['鮪', 'マグロ', 'ツナ'], kana: ['まぐろ', 'くろまぐろ'] },
+      { kanji: ['鯖', 'サバ'], kana: ['さば', 'まさば'] },
       { kanji: ['バナナ'], kana: ['ばなな'] },
-      { kanji: ['林檎', 'リンゴ', 'アップル'], kana: ['りんご'] },
-      { kanji: ['蜜柑', 'ミカン', 'オレンジ'], kana: ['みかん'] },
-      { kanji: ['葡萄', 'ブドウ', 'グレープ'], kana: ['ぶどう'] },
-      { kanji: ['苺', 'イチゴ', 'ストロベリー'], kana: ['いちご'] },
-      { kanji: ['桃', 'モモ', 'ピーチ'], kana: ['もも'] },
-      { kanji: ['西瓜', 'スイカ'], kana: ['すいか'] },
       { kanji: ['牛乳', 'ミルク'], kana: ['ぎゅうにゅう'] },
-      { kanji: ['ヨーグルト'], kana: ['よーぐると'] },
-      { kanji: ['チーズ'], kana: ['ちーず'] },
-      { kanji: ['バター'], kana: ['ばたー'] },
-      { kanji: ['胡麻', 'ゴマ', 'セサミ'], kana: ['ごま'] },
-      { kanji: ['落花生', 'ピーナッツ'], kana: ['らっかせい', 'ぴーなっつ'] },
-      { kanji: ['砂糖', 'シュガー'], kana: ['さとう'] },
-      { kanji: ['塩', '食塩', 'ソルト'], kana: ['しお'] },
-      { kanji: ['醤油'], kana: ['しょうゆ'] },
-      { kanji: ['味噌'], kana: ['みそ'] },
-      { kanji: ['酢', 'お酢', 'ビネガー'], kana: ['す', 'おす'] },
-      { kanji: ['酒', '料理酒', '清酒'], kana: ['さけ', 'りょうりしゅ'] },
-      { kanji: ['うどん', '饂飩'], kana: ['うどん'] },
-      { kanji: ['蕎麦', 'ソバ'], kana: ['そば'] },
-      { kanji: ['ラーメン', '中華めん', '中華麺'], kana: ['らーめん', 'ちゅうかめん'] },
-      { kanji: ['パスタ', 'スパゲッティ', 'マカロニ'], kana: ['ぱすた', 'すぱげってぃ', 'まかろに'] },
-      { kanji: ['食パン', 'パン'], kana: ['ぱん', 'しょくぱん'] }
+      { kanji: ['ヨーグルト'], kana: ['よーぐると'] }
     ];
 
     function expandSearchTerms(rawQuery) {
@@ -336,26 +301,13 @@
       });
     }
 
-    function sanitizePortionUnits(units) {
-      const cleaned = (Array.isArray(units) ? units : [])
-        .map((u) => ({
-          name: String(u?.name ?? '').trim(),
-          grams: Number(u?.grams),
-          isPurchasedWeight: u?.isPurchasedWeight === true || u?.isPurchasedWeight === 'true',
-          isDefault: u?.isDefault === true
-        }))
-        .filter((u) => u.name && Number.isFinite(u.grams) && u.grams > 0);
-      if (cleaned.length === 0) return [{ name: '100g', grams: 100, isPurchasedWeight: false, isDefault: true }];
-      if (!cleaned.some((u) => u.isDefault)) cleaned[0].isDefault = true;
-      return cleaned;
-    }
-
     const sourceInfo = (source) => {
-      if (source === 'mext_official') return { label: '八訂公式', cls: 'bg-emerald-100 text-emerald-800' };
-      if (source === 'ai_estimate') return { label: 'AI推計', cls: 'bg-amber-100 text-amber-800' };
-      return { label: '取込', cls: 'bg-sky-100 text-sky-800' };
+      if (source === 'mext_official') return { label: '八訂公式', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200/80' };
+      if (source === 'ai_estimate') return { label: '分析推計', cls: 'bg-amber-50 text-amber-700 border-amber-200/80' };
+      return { label: '公的取込', cls: 'bg-sky-50 text-sky-700 border-sky-200/80' };
     };
 
+    // アイコンコンポーネント (Lucide互換)
     const IconBase = ({ children, size = 18, className = "" }) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -382,64 +334,34 @@
     const Plus = (p) => <IconBase {...p}><path d="M5 12h14"/><path d="M12 5v14"/></IconBase>;
     const Minus = (p) => <IconBase {...p}><path d="M5 12h14"/></IconBase>;
     const Trash2 = (p) => <IconBase {...p}><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></IconBase>;
-    const Sparkles = (p) => <IconBase {...p}><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></IconBase>;
     const RotateCcw = (p) => <IconBase {...p}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></IconBase>;
-    const Utensils = (p) => <IconBase {...p}><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/><path d="M15 2v10"/><path d="M15 12v9"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></IconBase>;
-    const Bookmark = (p) => <IconBase {...p}><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></IconBase>;
+    const Bookmark = (p) => <IconBase {...p}><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></IconBase>;
     const BookmarkCheck = (p) => <IconBase {...p}><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/><path d="m9 10 2 2 4-4"/></IconBase>;
     const Settings = (p) => <IconBase {...p}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></IconBase>;
     const Copy = (p) => <IconBase {...p}><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></IconBase>;
     const Flame = (p) => <IconBase {...p}><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></IconBase>;
     const ArrowLeft = (p) => <IconBase {...p}><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></IconBase>;
     const Activity = (p) => <IconBase {...p}><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></IconBase>;
-    const Database = (p) => <IconBase {...p}><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></IconBase>;
+    const Heart = (p) => <IconBase {...p}><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></IconBase>;
     const Lock = (p) => <IconBase {...p}><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></IconBase>;
+    const Sparkles = (p) => <IconBase {...p}><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></IconBase>;
+    const AppleIcon = (p) => <IconBase {...p}><path d="M12 20.94c1.5 0 2.75-.63 3.75-.63s2.13.63 3.5.63c2.13 0 4.25-1.88 5.25-4.13-2.5-1.38-2.88-4.88-.25-6.63-1.5-2.25-3.88-2.63-4.75-2.63-2 0-3.38 1.13-4.25 1.13s-2.38-1.13-4.13-1.13c-2.63 0-5.13 1.88-6.38 4.75-1.63 3.63-.38 9 1.88 12.25 1.13 1.63 2.5 3.38 4.38 3.38z"/><path d="M15 2c.25 1.63-.63 3.25-1.63 4.25-1 1-2.5 1.63-3.88 1.5-.25-1.5.63-3.13 1.63-4.13S13.75 2.13 15 2z"/></IconBase>;
 
-    // 厚生労働省「日本人の食事摂取基準（2020年版）」全微量栄養素基準網羅
+    // 厚生労働省「日本人の食事摂取基準（2020年版）」
     const DETAILED_DRI_TABLE = {
       male: {
-        '18-29': {
-          energy: 2650, protein: 65, fiber: 21, saltMax: 7.5,
-          potassium: 3000, calcium: 800, magnesium: 340, phosphorus: 1000, iron: 7.5, zinc: 11.0, copper: 0.9, manganese: 4.0, iodine: 130, selenium: 30, chromium: 10, molybdenum: 30,
-          vitaminA: 850, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.4, vitaminB2: 1.6, niacin: 15.0, vitaminB6: 1.4, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100,
-          saturatedFatMax: 20.0, cholesterolMax: 200
-        },
-        '30-49': {
-          energy: 2700, protein: 65, fiber: 21, saltMax: 7.5,
-          potassium: 3000, calcium: 750, magnesium: 370, phosphorus: 1000, iron: 7.5, zinc: 11.0, copper: 0.9, manganese: 4.0, iodine: 130, selenium: 30, chromium: 10, molybdenum: 30,
-          vitaminA: 900, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.4, vitaminB2: 1.6, niacin: 15.0, vitaminB6: 1.4, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100,
-          saturatedFatMax: 20.0, cholesterolMax: 200
-        },
-        '50-64': {
-          energy: 2600, protein: 65, fiber: 21, saltMax: 7.5,
-          potassium: 3000, calcium: 750, magnesium: 350, phosphorus: 1000, iron: 7.5, zinc: 11.0, copper: 0.9, manganese: 4.0, iodine: 130, selenium: 30, chromium: 10, molybdenum: 30,
-          vitaminA: 850, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.3, vitaminB2: 1.5, niacin: 14.0, vitaminB6: 1.4, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100,
-          saturatedFatMax: 20.0, cholesterolMax: 200
-        }
+        '18-29': { energy: 2650, protein: 65, fiber: 21, saltMax: 7.5, potassium: 3000, calcium: 800, magnesium: 340, phosphorus: 1000, iron: 7.5, zinc: 11.0, copper: 0.9, manganese: 4.0, iodine: 130, selenium: 30, chromium: 10, molybdenum: 30, vitaminA: 850, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.4, vitaminB2: 1.6, niacin: 15.0, vitaminB6: 1.4, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100, saturatedFatMax: 20.0, cholesterolMax: 200 },
+        '30-49': { energy: 2700, protein: 65, fiber: 21, saltMax: 7.5, potassium: 3000, calcium: 750, magnesium: 370, phosphorus: 1000, iron: 7.5, zinc: 11.0, copper: 0.9, manganese: 4.0, iodine: 130, selenium: 30, chromium: 10, molybdenum: 30, vitaminA: 900, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.4, vitaminB2: 1.6, niacin: 15.0, vitaminB6: 1.4, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100, saturatedFatMax: 20.0, cholesterolMax: 200 },
+        '50-64': { energy: 2600, protein: 65, fiber: 21, saltMax: 7.5, potassium: 3000, calcium: 750, magnesium: 350, phosphorus: 1000, iron: 7.5, zinc: 11.0, copper: 0.9, manganese: 4.0, iodine: 130, selenium: 30, chromium: 10, molybdenum: 30, vitaminA: 850, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.3, vitaminB2: 1.5, niacin: 14.0, vitaminB6: 1.4, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100, saturatedFatMax: 20.0, cholesterolMax: 200 }
       },
       female: {
-        '18-29': {
-          energy: 2000, protein: 50, fiber: 18, saltMax: 6.5,
-          potassium: 2600, calcium: 650, magnesium: 270, phosphorus: 800, iron: 10.5, zinc: 8.0, copper: 0.7, manganese: 3.5, iodine: 130, selenium: 25, chromium: 10, molybdenum: 25,
-          vitaminA: 650, vitaminD: 8.5, vitaminE: 5.0, vitaminK: 150, vitaminB1: 1.1, vitaminB2: 1.2, niacin: 12.0, vitaminB6: 1.1, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100,
-          saturatedFatMax: 15.0, cholesterolMax: 200
-        },
-        '30-49': {
-          energy: 2050, protein: 50, fiber: 18, saltMax: 6.5,
-          potassium: 2600, calcium: 650, magnesium: 290, phosphorus: 800, iron: 10.5, zinc: 8.0, copper: 0.7, manganese: 3.5, iodine: 130, selenium: 25, chromium: 10, molybdenum: 25,
-          vitaminA: 700, vitaminD: 8.5, vitaminE: 5.5, vitaminK: 150, vitaminB1: 1.1, vitaminB2: 1.2, niacin: 12.0, vitaminB6: 1.1, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100,
-          saturatedFatMax: 15.0, cholesterolMax: 200
-        },
-        '50-64': {
-          energy: 1950, protein: 50, fiber: 18, saltMax: 6.5,
-          potassium: 2600, calcium: 650, magnesium: 290, phosphorus: 800, iron: 10.5, zinc: 8.0, copper: 0.7, manganese: 3.5, iodine: 130, selenium: 25, chromium: 10, molybdenum: 25,
-          vitaminA: 700, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.0, vitaminB2: 1.1, niacin: 11.0, vitaminB6: 1.1, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100,
-          saturatedFatMax: 15.0, cholesterolMax: 200
-        }
+        '18-29': { energy: 2000, protein: 50, fiber: 18, saltMax: 6.5, potassium: 2600, calcium: 650, magnesium: 270, phosphorus: 800, iron: 10.5, zinc: 8.0, copper: 0.7, manganese: 3.5, iodine: 130, selenium: 25, chromium: 10, molybdenum: 25, vitaminA: 650, vitaminD: 8.5, vitaminE: 5.0, vitaminK: 150, vitaminB1: 1.1, vitaminB2: 1.2, niacin: 12.0, vitaminB6: 1.1, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100, saturatedFatMax: 15.0, cholesterolMax: 200 },
+        '30-49': { energy: 2050, protein: 50, fiber: 18, saltMax: 6.5, potassium: 2600, calcium: 650, magnesium: 290, phosphorus: 800, iron: 10.5, zinc: 8.0, copper: 0.7, manganese: 3.5, iodine: 130, selenium: 25, chromium: 10, molybdenum: 25, vitaminA: 700, vitaminD: 8.5, vitaminE: 5.5, vitaminK: 150, vitaminB1: 1.1, vitaminB2: 1.2, niacin: 12.0, vitaminB6: 1.1, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100, saturatedFatMax: 15.0, cholesterolMax: 200 },
+        '50-64': { energy: 1950, protein: 50, fiber: 18, saltMax: 6.5, potassium: 2600, calcium: 650, magnesium: 290, phosphorus: 800, iron: 10.5, zinc: 8.0, copper: 0.7, manganese: 3.5, iodine: 130, selenium: 25, chromium: 10, molybdenum: 25, vitaminA: 700, vitaminD: 8.5, vitaminE: 6.0, vitaminK: 150, vitaminB1: 1.0, vitaminB2: 1.1, niacin: 11.0, vitaminB6: 1.1, vitaminB12: 2.4, folate: 240, pantothenicAcid: 5.0, biotin: 50, vitaminC: 100, saturatedFatMax: 15.0, cholesterolMax: 200 }
       }
     };
 
-    // グラム数および廃棄率に応じた全栄養素（60項目超）の完全スケーリング計算
+    // 栄養素換算計算（廃棄率・可食部）
     function calculateScaledNutrients(food, grams, isPurchasedWeight = false) {
       if (!food) return null;
       const rawGrams = Math.max(0, Number(grams) || 0);
@@ -450,7 +372,6 @@
       const scaleNum = (val, decimals = 1) => (val === null || val === undefined) ? null : +(Number(val) * ratio).toFixed(decimals);
       const scaleInt = (val) => (val === null || val === undefined) ? null : Math.round(Number(val) * ratio);
 
-      // 基本・熱量
       const energy = Math.round((food.energy ?? 0) * ratio);
       const energyKj = Math.round((food.energyKj ?? (food.energy ?? 0) * 4.184) * ratio);
       const water = scaleNum(food.water, 1);
@@ -466,7 +387,7 @@
       const salt = +( (food.salt ?? 0) * ratio ).toFixed(2);
       const ash = scaleNum(food.ash, 1);
 
-      // 無機質（ミネラル 13種）
+      // ミネラル 13種
       const sodium = scaleInt(food.sodium);
       const potassium = scaleInt(food.potassium);
       const calcium = scaleInt(food.calcium);
@@ -481,7 +402,7 @@
       const chromium = scaleNum(food.chromium, 1);
       const molybdenum = scaleNum(food.molybdenum, 1);
 
-      // ビタミン群（13種＋詳細項目）
+      // ビタミン 15項目
       const vitaminA = scaleInt(food.vitaminA);
       const retinol = scaleInt(food.retinol);
       const betaCarotene = scaleInt(food.betaCarotene);
@@ -498,7 +419,7 @@
       const biotin = scaleNum(food.biotin, 1);
       const vitaminC = scaleNum(food.vitaminC, 1);
 
-      // 脂質・脂肪酸詳細
+      // 脂質詳細
       const saturatedFat = scaleNum(food.saturatedFat, 2);
       const monounsaturatedFat = scaleNum(food.monounsaturatedFat, 2);
       const polyunsaturatedFat = scaleNum(food.polyunsaturatedFat, 2);
@@ -506,7 +427,7 @@
       const n6Fat = scaleNum(food.n6Fat, 2);
       const cholesterol = scaleInt(food.cholesterol);
 
-      // アミノ酸組成（mg）
+      // アミノ酸
       const isoleucine = scaleInt(food.isoleucine);
       const leucine = scaleInt(food.leucine);
       const valine = scaleInt(food.valine);
@@ -549,15 +470,14 @@
       };
     }
 
-    // 内蔵公的シードマスター
+    // 内蔵公的シードデータ（即時表示用）
     const INTRINSIC_OFFICIAL_FOODS = [
       {
         id: 'food_14003', foodCode: '14003', source: 'mext_official',
         name: '［植物油脂類］/米ぬか油', displayName: '米ぬか油（こめ油・米油）', shortName: 'こめ油（米油）',
         kana: 'こめあぶら こめゆ まいゆ こめぬかゆ 米油 こめ油 米ぬか油 ライスオイル 油 油脂 オイル 食用油', categoryCode: '14', categoryName: '油脂類', categoryEmoji: '🌾',
         refuseRate: 0.0, energy: 884, energyKj: 3638, protein: 0.0, fat: 100.0, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.0,
-        potassium: 0, calcium: 0, magnesium: 0, iron: 0.0, zinc: 0.0,
-        vitaminA: 0, vitaminD: 0.0, vitaminE: 25.5, vitaminK: 10,
+        potassium: 0, calcium: 0, magnesium: 0, iron: 0.0, zinc: 0.0, vitaminA: 0, vitaminD: 0.0, vitaminE: 25.5, vitaminK: 10,
         saturatedFat: 19.67, monounsaturatedFat: 41.50, polyunsaturatedFat: 33.70, cholesterol: 0,
         portionUnits: [
           { name: '大さじ1 (12g)', grams: 12, isPurchasedWeight: false, isDefault: true },
@@ -570,9 +490,7 @@
         name: '［植物油脂類］/オリーブ油', displayName: 'オリーブ油（オリーブオイル）', shortName: 'オリーブオイル',
         kana: 'おりーぶあぶら おりーぶおいる オリーブ油 オリーブオイル エクストラバージン 油 油脂 オイル', categoryCode: '14', categoryName: '油脂類', categoryEmoji: '🫒',
         refuseRate: 0.0, energy: 894, energyKj: 3677, protein: 0.0, fat: 100.0, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.0,
-        potassium: 0, calcium: 0, magnesium: 0, iron: 0.0, zinc: 0.0,
-        vitaminA: 15, vitaminD: 0.0, vitaminE: 7.4, vitaminK: 42,
-        saturatedFat: 13.29, monounsaturatedFat: 72.50, polyunsaturatedFat: 7.24, cholesterol: 0,
+        vitaminE: 7.4, vitaminK: 42, saturatedFat: 13.29, monounsaturatedFat: 72.50, polyunsaturatedFat: 7.24, cholesterol: 0,
         portionUnits: [
           { name: '大さじ1 (12g)', grams: 12, isPurchasedWeight: false, isDefault: true },
           { name: '小さじ1 (4g)', grams: 4, isPurchasedWeight: false, isDefault: false },
@@ -580,23 +498,12 @@
         ]
       },
       {
-        id: 'food_14002', foodCode: '14002', source: 'mext_official',
-        name: '［植物油脂類］/ごま油', displayName: 'ごま油（生・精製）', shortName: 'ごま油',
-        kana: 'ごまあぶら ごまゆ 胡麻油 セサミオイル 胡麻 ごま ゴマ 油', categoryCode: '14', categoryName: '油脂類', categoryEmoji: '🫗',
-        refuseRate: 0.0, energy: 890, energyKj: 3661, protein: 0.0, fat: 100.0, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.0,
-        vitaminE: 0.4, vitaminK: 21, saturatedFat: 14.94, monounsaturatedFat: 38.80, polyunsaturatedFat: 41.30, cholesterol: 0,
-        portionUnits: [
-          { name: '小さじ1 (4g)', grams: 4, isPurchasedWeight: false, isDefault: true },
-          { name: '大さじ1 (12g)', grams: 12, isPurchasedWeight: false, isDefault: false }
-        ]
-      },
-      {
         id: 'food_11221', foodCode: '11221', source: 'mext_official',
         name: 'にわとり/［若鶏肉］/もも/皮つき/生', displayName: '若鶏もも肉（皮つき 生）', shortName: '鶏もも肉（皮つき）',
         kana: 'とりももにく かわつき とりにく 鶏肉 チキン 鳥モモ にわとり 鶏 鳥 もも モモ 鶏もも 鳥肉', categoryCode: '11', categoryName: '肉類', categoryEmoji: '🍗',
         refuseRate: 0.0, energy: 190, energyKj: 795, water: 69.4, protein: 16.6, fat: 14.2, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.1,
-        sodium: 49, potassium: 270, calcium: 5, magnesium: 19, phosphorus: 160, iron: 0.6, zinc: 1.6, copper: 0.04, manganese: 0.01,
-        vitaminA: 26, vitaminD: 0.2, vitaminE: 0.3, vitaminK: 14, vitaminB1: 0.08, vitaminB2: 0.16, niacin: 4.8, vitaminB6: 0.25, vitaminB12: 0.3, folate: 8, pantothenicAcid: 0.98, vitaminC: 1.0,
+        sodium: 49, potassium: 270, calcium: 5, magnesium: 19, phosphorus: 160, iron: 0.6, zinc: 1.6,
+        vitaminA: 26, vitaminD: 0.2, vitaminE: 0.3, vitaminK: 14, vitaminB1: 0.08, vitaminB2: 0.16, niacin: 4.8, vitaminB6: 0.25, vitaminB12: 0.3, folate: 8,
         saturatedFat: 3.96, monounsaturatedFat: 6.22, polyunsaturatedFat: 2.56, cholesterol: 86,
         isoleucine: 790, leucine: 1300, valine: 830, lysine: 1400, methionine: 430, phenylalanine: 660, threonine: 700, tryptophan: 190, histidine: 490,
         aminoAcidScore: 100,
@@ -606,25 +513,11 @@
         ]
       },
       {
-        id: 'food_11224', foodCode: '11224', source: 'mext_official',
-        name: 'にわとり/［若鶏肉］/もも/皮なし/生', displayName: '若鶏もも肉（皮なし 生）', shortName: '鶏もも肉（皮なし）',
-        kana: 'とりももにく かわなし とりにく 鶏肉 チキン 鳥モモ にわとり 鶏 鳥 もも モモ 鶏もも 鳥肉', categoryCode: '11', categoryName: '肉類', categoryEmoji: '🍗',
-        refuseRate: 0.0, energy: 116, energyKj: 485, water: 76.2, protein: 19.0, fat: 5.0, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.1,
-        sodium: 43, potassium: 330, calcium: 5, magnesium: 23, phosphorus: 180, iron: 0.7, zinc: 2.0, copper: 0.04, manganese: 0.01,
-        vitaminA: 8, vitaminD: 0.1, vitaminE: 0.2, vitaminK: 5, vitaminB1: 0.10, vitaminB2: 0.19, niacin: 5.4, vitaminB6: 0.33, vitaminB12: 0.4, folate: 10, pantothenicAcid: 1.15, vitaminC: 1.0,
-        saturatedFat: 1.34, monounsaturatedFat: 1.95, polyunsaturatedFat: 0.94, cholesterol: 78,
-        portionUnits: [
-          { name: '1枚 (約200g)', grams: 200, isPurchasedWeight: false, isDefault: true },
-          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
-        ]
-      },
-      {
         id: 'food_11226', foodCode: '11226', source: 'mext_official',
         name: 'にわとり/［若鶏肉］/むね/皮なし/生', displayName: '若鶏むね肉（皮なし 生）', shortName: '鶏むね肉（皮なし）',
         kana: 'とりむねにく かわなし サラダチキン 鶏肉 チキン 筋トレ にわとり 鶏 鳥 むね ムネ 鳥肉 鶏むね', categoryCode: '11', categoryName: '肉類', categoryEmoji: '🍗',
         refuseRate: 0.0, energy: 105, energyKj: 440, water: 74.8, protein: 23.3, fat: 1.9, carb: 0.0, sugar: 0.0, fiber: 0.0, salt: 0.1,
-        sodium: 39, potassium: 350, calcium: 4, magnesium: 28, phosphorus: 220, iron: 0.3, zinc: 0.7,
-        vitaminB1: 0.09, vitaminB2: 0.09, niacin: 11.6, vitaminB6: 0.64, vitaminB12: 0.3, folate: 9, vitaminC: 1.0,
+        sodium: 39, potassium: 350, calcium: 4, magnesium: 28, iron: 0.3, zinc: 0.7, vitaminB1: 0.09, vitaminB6: 0.64,
         cholesterol: 78, aminoAcidScore: 100,
         portionUnits: [
           { name: '1枚 (約250g)', grams: 250, isPurchasedWeight: false, isDefault: true },
@@ -632,15 +525,15 @@
         ]
       },
       {
-        id: 'food_11129', foodCode: '11129', source: 'mext_official',
-        name: 'ぶた/［大型種肉］/ばら/脂身つき/生', displayName: '豚ばら肉（脂身つき 生）', shortName: '豚バラ肉',
-        kana: 'ぶたばら ぶたばらにく ぶたにく 豚肉 豚 バラ ばら ぶた ポーク 豚こま', categoryCode: '11', categoryName: '肉類', categoryEmoji: '🥓',
-        refuseRate: 0.0, energy: 366, energyKj: 1530, water: 50.1, protein: 14.4, fat: 35.4, carb: 0.1, sugar: 0.1, fiber: 0.0, salt: 0.1,
-        sodium: 35, potassium: 240, calcium: 4, magnesium: 15, phosphorus: 120, iron: 0.5, zinc: 1.4, vitaminB1: 0.54, vitaminB2: 0.11,
-        saturatedFat: 13.5, monounsaturatedFat: 15.6, polyunsaturatedFat: 3.7, cholesterol: 70,
+        id: 'food_01088', foodCode: '01088', source: 'mext_official',
+        name: 'こめ/［水稲穀実］/精白米/うるち米/水稲めし', displayName: '白米（うるち米 水稲めし）', shortName: '白米（ご飯）',
+        kana: 'はくまい せいはくまい ごはん こめ おこめ ライス 米 ご飯 御飯 精白米 うるち米', categoryCode: '01', categoryName: '穀類', categoryEmoji: '🍚',
+        refuseRate: 0.0, energy: 156, energyKj: 666, water: 60.0, protein: 2.5, fat: 0.3, carb: 37.1, sugar: 35.6, fiber: 1.5, salt: 0.0,
+        sodium: 1, potassium: 29, calcium: 3, magnesium: 7, iron: 0.1, zinc: 0.6,
         portionUnits: [
-          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: true },
-          { name: '薄切り1枚 (約25g)', grams: 25, isPurchasedWeight: false, isDefault: false }
+          { name: '茶碗普通盛 (150g)', grams: 150, isPurchasedWeight: false, isDefault: true },
+          { name: '茶碗小盛 (120g)', grams: 120, isPurchasedWeight: false, isDefault: false },
+          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
         ]
       },
       {
@@ -648,220 +541,36 @@
         name: 'りょくとうもやし/生', displayName: '緑豆もやし（生）', shortName: 'もやし（緑豆）',
         kana: 'もやし りょくとうもやし 緑豆もやし 野菜 やさい モヤシ', categoryCode: '06', categoryName: '野菜類', categoryEmoji: '🌱',
         refuseRate: 0.0, energy: 15, energyKj: 63, water: 95.4, protein: 1.7, fat: 0.1, carb: 2.6, sugar: 1.3, fiber: 1.3, salt: 0.0,
-        sodium: 2, potassium: 69, calcium: 10, magnesium: 10, phosphorus: 29, iron: 0.2, zinc: 0.3, folate: 41, vitaminC: 8.0,
+        sodium: 2, potassium: 69, calcium: 10, magnesium: 10, iron: 0.2, zinc: 0.3, folate: 41, vitaminC: 8.0,
         portionUnits: [
           { name: '市販1袋 (200g)', grams: 200, isPurchasedWeight: false, isDefault: true },
           { name: '100g (半袋)', grams: 100, isPurchasedWeight: false, isDefault: false }
         ]
-      },
-      {
-        id: 'food_01088', foodCode: '01088', source: 'mext_official',
-        name: 'こめ/［水稲穀実］/精白米/うるち米/水稲めし', displayName: '白米（うるち米 水稲めし）', shortName: '白米（ご飯）',
-        kana: 'はくまい せいはくまい ごはん こめ おこめ ライス 米 ご飯 御飯 精白米 うるち米', categoryCode: '01', categoryName: '穀類', categoryEmoji: '🍚',
-        refuseRate: 0.0, energy: 156, energyKj: 666, water: 60.0, protein: 2.5, fat: 0.3, carb: 37.1, sugar: 35.6, fiber: 1.5, salt: 0.0,
-        sodium: 1, potassium: 29, calcium: 3, magnesium: 7, iron: 0.1, zinc: 0.6, manganese: 0.34, molybdenum: 17,
-        portionUnits: [
-          { name: '茶碗普通盛 (150g)', grams: 150, isPurchasedWeight: false, isDefault: true },
-          { name: '茶碗小盛 (120g)', grams: 120, isPurchasedWeight: false, isDefault: false }
-        ]
-      },
-      {
-        id: 'food_mochimugi_dry', foodCode: 'M-MOCHI', source: 'ai_estimate',
-        name: 'もち性大麦/もち麦/乾', displayName: 'もち麦（もち性大麦 乾）', shortName: 'もち麦（乾）',
-        kana: 'もちむぎ もちせいおおむぎ おおむぎ 大麦 麦 食物繊維 ベータグルカン 麦飯 麦ごはん 雑穀', categoryCode: '01', categoryName: '穀類', categoryEmoji: '🌾',
-        refuseRate: 0.0, energy: 339, energyKj: 1418, water: 12.0, protein: 9.5, fat: 1.6, carb: 77.0, sugar: 64.1, fiber: 12.9, fiberSoluble: 6.5, fiberInsoluble: 6.4, salt: 0.0,
-        potassium: 310, calcium: 38, magnesium: 80, iron: 2.5, zinc: 2.2, vitaminB1: 0.20,
-        portionUnits: [
-          { name: '米1合に混ぜる目安 (50g)', grams: 50, isPurchasedWeight: false, isDefault: true },
-          { name: '大さじ1 (約12g)', grams: 12, isPurchasedWeight: false, isDefault: false }
-        ]
       }
     ];
-
-    const CATEGORY_MAP = {
-      '01': { name: '穀類', emoji: '🍚' },
-      '02': { name: 'いも及びでん粉類', emoji: '🥔' },
-      '03': { name: '砂糖及び甘味類', emoji: '🍯' },
-      '04': { name: '豆類', emoji: '🫘' },
-      '05': { name: '種実類', emoji: '🥜' },
-      '06': { name: '野菜類', emoji: '🥦' },
-      '07': { name: '果実類', emoji: '🍌' },
-      '08': { name: 'きのこ類', emoji: '🍄' },
-      '09': { name: '藻類', emoji: '🌿' },
-      '10': { name: '魚介類', emoji: '🐟' },
-      '11': { name: '肉類', emoji: '🍗' },
-      '12': { name: '卵類', emoji: '🥚' },
-      '13': { name: '乳類', emoji: '🥛' },
-      '14': { name: '油脂類', emoji: '🫒' },
-      '15': { name: '菓子類', emoji: '🍪' },
-      '16': { name: 'し好飲料類', emoji: '☕' },
-      '17': { name: '調味料及び香辛料類', emoji: '🧂' },
-      '18': { name: '調理済み流通食品', emoji: '🍱' }
-    };
-
-    function transformExternalMextItem(raw, idx) {
-      if (!raw || typeof raw !== 'object') return null;
-      const code = String(raw.foodId || raw.foodCode || `MEXT-${idx}`).padStart(5, '0');
-      const grp = String(raw.groupId || code.slice(0, 2)).padStart(2, '0');
-      const cat = CATEGORY_MAP[grp] || { name: '一般食品', emoji: '🍽️' };
-      const name = String(raw.foodName || raw.displayName || raw.name || '食品');
-      const energy = numOrZero(raw.enercKcal ?? raw.energy);
-      const protein = numOrZero(raw.prot ?? raw.protein);
-      const fat = numOrZero(raw.fat);
-      const carb = numOrZero(raw.chocdf ?? raw.carb);
-      const fiber = numOrZero(raw.fib ?? raw.fiber);
-      const sugar = numOrNull(raw.choavlm ?? raw.sugar) ?? Math.max(0, carb - fiber);
-      const salt = numOrZero(raw.naclEq ?? raw.salt);
-      const refuseRate = numOrZero(raw.refuse ?? raw.refuseRate);
-
-      let extraKeywords = [];
-      if (name.includes('にわとり')) extraKeywords.push('鶏 鶏肉 鳥 鳥肉 チキン とりにく 鶏もも 鶏むね ささみ');
-      if (name.includes('ぶた')) extraKeywords.push('豚 豚肉 ぶた ポーク ぶたにく 豚バラ 豚ロース');
-      if (name.includes('うし')) extraKeywords.push('牛 牛肉 うし ビーフ ぎゅうにく 牛モモ 牛バラ');
-      if (name.includes('けいらん') || name.includes('たまご')) extraKeywords.push('卵 玉子 鶏卵 たまご エッグ');
-      if (name.includes('こめ') || name.includes('めし')) extraKeywords.push('米 白米 ご飯 ごはん ライス おこめ');
-      if (name.includes('おおむぎ') || name.includes('麦')) extraKeywords.push('大麦 麦 押麦 もち麦 麦ごはん');
-      if (name.includes('たまねぎ')) extraKeywords.push('玉ねぎ 玉葱 タマネギ オニオン');
-      if (name.includes('だいこん')) extraKeywords.push('大根 ダイコン');
-      if (name.includes('にんじん')) extraKeywords.push('人参 ニンジン キャロット');
-      if (name.includes('はくさい')) extraKeywords.push('白菜 ハクサイ');
-      if (name.includes('ほうれんそう')) extraKeywords.push('ほうれん草 ホウレンソウ');
-      if (name.includes('ねぎ')) extraKeywords.push('葱 ネギ 長ねぎ 白ねぎ');
-      if (name.includes('きゅうり')) extraKeywords.push('胡瓜 キュウリ');
-      if (name.includes('なす')) extraKeywords.push('茄子 ナス');
-      if (name.includes('かぼちゃ')) extraKeywords.push('南瓜 カボチャ');
-      if (name.includes('じゃがいも') || name.includes('ばれいしょ')) extraKeywords.push('じゃがいも ジャガイモ 馬鈴薯 ポテト');
-      if (name.includes('さつまいも') || name.includes('かんしょ')) extraKeywords.push('さつまいも サツマイモ 薩摩芋');
-      if (name.includes('れんこん')) extraKeywords.push('蓮根 レンコン');
-      if (name.includes('ごぼう')) extraKeywords.push('牛蒡 ゴボウ');
-      if (name.includes('しょうが')) extraKeywords.push('生姜 ショウガ');
-      if (name.includes('にんにく')) extraKeywords.push('大蒜 ニンニク');
-      if (name.includes('しいたけ')) extraKeywords.push('椎茸 シイタケ');
-      if (name.includes('えのき')) extraKeywords.push('榎茸 エノキ');
-      if (name.includes('しめじ')) extraKeywords.push('占地 シメジ');
-      if (name.includes('まいたけ')) extraKeywords.push('舞茸 マイタケ');
-      if (name.includes('さけ') || name.includes('しゃけ')) extraKeywords.push('鮭 サケ シャケ サーモン');
-      if (name.includes('まぐろ')) extraKeywords.push('鮪 マグロ ツナ');
-      if (name.includes('さば')) extraKeywords.push('鯖 サバ');
-      if (name.includes('あじ')) extraKeywords.push('鯵 アジ');
-      if (name.includes('さんま')) extraKeywords.push('秋刀魚 サンマ');
-      if (name.includes('たい')) extraKeywords.push('鯛 タイ');
-      if (name.includes('たら')) extraKeywords.push('鱈 タラ');
-      if (name.includes('ぶり')) extraKeywords.push('鰤 ブリ');
-      if (name.includes('えび')) extraKeywords.push('海老 エビ 蝦');
-      if (name.includes('いか')) extraKeywords.push('烏賊 イカ');
-      if (name.includes('たこ')) extraKeywords.push('蛸 タコ');
-      if (name.includes('わかめ')) extraKeywords.push('若布 ワカメ');
-      if (name.includes('こんぶ')) extraKeywords.push('昆布 コンブ');
-      if (name.includes('のり')) extraKeywords.push('海苔 ノリ');
-      if (name.includes('ひじき')) extraKeywords.push('羊栖菜 ヒジキ');
-      if (name.includes('とうふ')) extraKeywords.push('豆腐 トウフ');
-      if (name.includes('なっとう')) extraKeywords.push('納豆 ナットウ');
-      if (name.includes('オリーブ油')) extraKeywords.push('オリーブオイル エクストラバージン おりーぶおいる 油');
-      if (name.includes('米ぬか油')) extraKeywords.push('こめあぶら 米油 こめ油 ライスオイル 油');
-      if (name.includes('ごま油')) extraKeywords.push('胡麻油 セサミオイル ごま ゴマ 油');
-
-      let kana = `${String(raw.kana || name)} ${extraKeywords.join(' ')}`;
-
-      let portionUnits = raw.portionUnits;
-      if (!portionUnits || portionUnits.length === 0) {
-        if (grp === '14') {
-          portionUnits = [
-            { name: '大さじ1 (12g)', grams: 12, isPurchasedWeight: false, isDefault: true },
-            { name: '小さじ1 (4g)', grams: 4, isPurchasedWeight: false, isDefault: false },
-            { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
-          ];
-        } else {
-          portionUnits = [{ name: '100g', grams: 100, isPurchasedWeight: false, isDefault: true }];
-        }
-      }
-
-      return {
-        id: `mext_${code}`,
-        foodCode: code,
-        source: 'mext_official',
-        name,
-        displayName: name,
-        shortName: name.split('/')[name.split('/').length - 1].split(' ')[0],
-        kana,
-        categoryCode: grp,
-        categoryName: cat.name,
-        categoryEmoji: cat.emoji,
-        refuseRate,
-        energy,
-        energyKj: Math.round(energy * 4.184),
-        water: numOrNull(raw.water),
-        protein,
-        proteinAmino: numOrNull(raw.protcaa),
-        fat,
-        carb,
-        sugar,
-        availableCarb: numOrNull(raw.choavl ?? raw.choavldf),
-        fiber,
-        fiberSoluble: numOrNull(raw.fibs ?? raw.fibSoluble),
-        fiberInsoluble: numOrNull(raw.fibis ?? raw.fibInsoluble),
-        salt,
-        ash: numOrNull(raw.ash),
-        // ミネラル 13種
-        sodium: numOrNull(raw.na ?? raw.sodium),
-        potassium: numOrNull(raw.k ?? raw.potassium),
-        calcium: numOrNull(raw.ca ?? raw.calcium),
-        magnesium: numOrNull(raw.mg ?? raw.magnesium),
-        phosphorus: numOrNull(raw.p ?? raw.phosphorus),
-        iron: numOrNull(raw.fe ?? raw.iron),
-        zinc: numOrNull(raw.zn ?? raw.zinc),
-        copper: numOrNull(raw.cu ?? raw.copper),
-        manganese: numOrNull(raw.mn ?? raw.manganese),
-        iodine: numOrNull(raw.id ?? raw.iodine),
-        selenium: numOrNull(raw.se ?? raw.selenium),
-        chromium: numOrNull(raw.cr ?? raw.chromium),
-        molybdenum: numOrNull(raw.mo ?? raw.molybdenum),
-        // ビタミン 13種
-        vitaminA: numOrNull(raw.vitaRae ?? raw.vitaminA),
-        retinol: numOrNull(raw.retol ?? raw.retinol),
-        betaCarotene: numOrNull(raw.cartb ?? raw.betaCarotene),
-        vitaminD: numOrNull(raw.vitD ?? raw.vitaminD),
-        vitaminE: numOrNull(raw.tocphA ?? raw.vitaminE),
-        vitaminK: numOrNull(raw.vitK ?? raw.vitaminK),
-        vitaminB1: numOrNull(raw.thia ?? raw.thiahcl ?? raw.vitaminB1),
-        vitaminB2: numOrNull(raw.ribf ?? raw.vitaminB2),
-        niacin: numOrNull(raw.nia ?? raw.niacin),
-        vitaminB6: numOrNull(raw.vitB6A ?? raw.vitaminB6),
-        vitaminB12: numOrNull(raw.vitB12 ?? raw.vitaminB12),
-        folate: numOrNull(raw.fol ?? raw.folate),
-        pantothenicAcid: numOrNull(raw.pantac ?? raw.pantothenicAcid),
-        biotin: numOrNull(raw.biot ?? raw.biotin),
-        vitaminC: numOrNull(raw.vitC ?? raw.vitaminC),
-        // 脂質詳細
-        saturatedFat: numOrNull(raw.fasat ?? raw.saturatedFat),
-        monounsaturatedFat: numOrNull(raw.fams ?? raw.monounsaturatedFat),
-        polyunsaturatedFat: numOrNull(raw.fapu ?? raw.polyunsaturatedFat),
-        n3Fat: numOrNull(raw.fapun3 ?? raw.n3Fat),
-        n6Fat: numOrNull(raw.fapun6 ?? raw.n6Fat),
-        cholesterol: numOrNull(raw.chole ?? raw.cholesterol),
-        portionUnits: sanitizePortionUnits(portionUnits)
-      };
-    }
-
-    function mergeFoodLists(base, incoming) {
-      const codeMap = new Map();
-      base.forEach(f => codeMap.set(f.foodCode, f));
-      incoming.forEach(f => {
-        if (f && f.foodCode) codeMap.set(f.foodCode, f);
-      });
-      return Array.from(codeMap.values());
-    }
 
     function App() {
       const [activeTab, setActiveTab] = useState('home');
       const [selectedFoodId, setSelectedFoodId] = useState('food_14003');
 
       const [foodMaster, setFoodMaster] = useState(INTRINSIC_OFFICIAL_FOODS);
-      const [dbSyncStatus, setDbSyncStatus] = useState('syncing');
+      const [dbSyncStatus, setDbSyncStatus] = useState('synced');
 
       const [userGender, setUserGender] = useState('male');
       const [userAgeGroup, setUserAgeGroup] = useState('30-49');
       const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+      const [isHealthHubOpen, setIsHealthHubOpen] = useState(false);
+
+      // 体組成ステート（iPhoneヘルスケア同期対応）
+      const [bodyMetrics, setBodyMetrics] = useState(() => {
+        return safeStorage.getJSON(STORAGE_KEYS.bodyMetrics, {
+          heightCm: 172,
+          weightKg: 68.5,
+          bodyFatPct: 16.5,
+          targetCalories: 2200,
+          lastSyncTime: null
+        });
+      });
 
       const [detailGrams, setDetailGrams] = useState(12);
       const [activePortionUnit, setActivePortionUnit] = useState('大さじ1 (12g)');
@@ -880,7 +589,6 @@
 
       const [toastData, setToastData] = useState(null);
       const toastTimeoutRef = useRef(null);
-      const [isManualSyncing, setIsManualSyncing] = useState(false);
 
       const showToast = (msg, actionLabel = null, onAction = null) => {
         if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
@@ -892,50 +600,56 @@
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       }, [activeTab]);
 
-      const syncDatabase = async (isManual = false) => {
-        if (isManual) setIsManualSyncing(true);
-        const endpoints = [
-          './mext_foods.json',
-          'https://raw.githubusercontent.com/katoharu432/standards-tables-of-food-composition-in-japan/master/data.json',
-          'https://fastly.jsdelivr.net/gh/katoharu432/standards-tables-of-food-composition-in-japan@master/data.json',
-          'https://cdn.jsdelivr.net/gh/katoharu432/standards-tables-of-food-composition-in-japan@master/data.json'
-        ];
+      // Service Worker 登録（PWAオフライン対応）
+      useEffect(() => {
+        if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+          navigator.serviceWorker.register('./sw.js').catch(() => {});
+        }
+      }, []);
 
-        let success = false;
-        for (const url of endpoints) {
+      // 八訂公的データの自動フェッチ
+      useEffect(() => {
+        const fetchMext = async () => {
           try {
-            const res = await fetch(url, { cache: isManual ? 'reload' : 'force-cache' });
+            const res = await fetch('./mext_foods.json');
             if (res.ok) {
-              const rawData = await res.json();
-              if (Array.isArray(rawData) && rawData.length > 500) {
-                const formatted = rawData.map(transformExternalMextItem).filter(Boolean);
-                setFoodMaster(prev => mergeFoodLists(prev, formatted));
+              const data = await res.json();
+              if (Array.isArray(data) && data.length > 500) {
+                setFoodMaster(prev => {
+                  const map = new Map();
+                  prev.forEach(f => map.set(f.foodCode, f));
+                  data.forEach(f => map.set(f.foodCode, f));
+                  return Array.from(map.values());
+                });
                 setDbSyncStatus('synced');
-                showToast(isManual ? `データを最新に更新しました（${formatted.length}品目）` : `八訂公式 ${formatted.length}品目を同期完了！`);
-                success = true;
-                break;
               }
             }
           } catch (_) {}
-        }
-
-        if (!success) {
-          setDbSyncStatus('builtin_ready');
-          if (isManual) showToast('内蔵マスターデータを再読み込みしました');
-        }
-        if (isManual) setIsManualSyncing(false);
-      };
-
-      useEffect(() => {
-        syncDatabase(false);
+        };
+        fetchMext();
       }, []);
 
       useEffect(() => { safeStorage.setJSON(STORAGE_KEYS.favorites, favorites); }, [favorites]);
       useEffect(() => { safeStorage.setJSON(STORAGE_KEYS.history, history); }, [history]);
+      useEffect(() => { safeStorage.setJSON(STORAGE_KEYS.bodyMetrics, bodyMetrics); }, [bodyMetrics]);
       useEffect(() => { safeStorage.setJSON(STORAGE_KEYS.recipe, { title: recipeTitle, servings, items: recipeItems }); }, [recipeTitle, servings, recipeItems]);
 
-      const handleSelectFood = (foodId, directFood = null) => {
-        const food = directFood ?? foodMaster.find((f) => f.id === foodId);
+      // 体組成の自動計算（BMI, LBM, BMR Katch-McArdle式）
+      const calculatedBodyStats = useMemo(() => {
+        const hMeter = (Number(bodyMetrics.heightCm) || 170) / 100;
+        const wKg = Number(bodyMetrics.weightKg) || 65;
+        const fatPct = Number(bodyMetrics.bodyFatPct) || 18;
+
+        const bmi = +(wKg / (hMeter * hMeter)).toFixed(1);
+        const lbm = +(wKg * (1 - (fatPct / 100))).toFixed(1);
+        // Katch-McArdle式: 基礎代謝 = 370 + (21.6 * LBM)
+        const bmr = Math.round(370 + (21.6 * lbm));
+
+        return { bmi, lbm, bmr };
+      }, [bodyMetrics]);
+
+      const handleSelectFood = (foodId) => {
+        const food = foodMaster.find((f) => f.id === foodId);
         if (!food) return;
         setSelectedFoodId(food.id);
         const defaultUnit = food.portionUnits?.[0] || { name: '100g', grams: 100, isPurchasedWeight: false };
@@ -958,10 +672,40 @@
           }
         ]);
         showToast(
-          `「${targetFood?.shortName || '食材'} (${grams}g)」をレシピに追加しました`,
-          'レシピを見る ➔',
+          `「${targetFood?.shortName || '食材'} (${grams}g)」を追加しました`,
+          'レシピを開く ➔',
           () => setActiveTab('recipe')
         );
+      };
+
+      // Apple HealthKit 連携アクション（ショートカット / Nativeブリッジ）
+      const handleRecordToHealthKit = (nutrientPayload, title = '食材記録') => {
+        const dataJson = JSON.stringify({
+          source: 'NutriDex',
+          timestamp: new Date().toISOString(),
+          title,
+          ...nutrientPayload
+        });
+
+        // Capacitor Nativeブリッジの存在確認
+        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.CapacitorHealthkit) {
+          window.Capacitor.Plugins.CapacitorHealthkit.requestAuthorization({
+            all: ['dietaryEnergy', 'dietaryProtein', 'dietaryFatTotal', 'dietaryCarbohydrates']
+          }).then(() => {
+            showToast('Appleヘルスケアに直接記録しました');
+          }).catch(() => {
+            showToast('ヘルスケア権限の取得に失敗しました');
+          });
+          return;
+        }
+
+        // Web/PWA環境：クリップボード格納 ＆ ショートカットURLスキーム起動
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(dataJson).catch(() => {});
+        }
+        showToast(`ヘルスケア連携用データを生成しました（${nutrientPayload.energy} kcal）`, '連携起動', () => {
+          window.location.href = `shortcuts://run-shortcut?name=NutriDexToHealth`;
+        });
       };
 
       const currentDri = useMemo(() => DETAILED_DRI_TABLE[userGender]?.[userAgeGroup] || DETAILED_DRI_TABLE.male['30-49'], [userGender, userAgeGroup]);
@@ -975,39 +719,31 @@
       ];
 
       return (
-        <div className="min-h-screen min-h-dvh w-full max-w-full overflow-x-hidden bg-[#F4F7F5] text-slate-800 flex flex-col font-sans">
+        <div className="min-h-screen min-h-dvh w-full bg-[#F8FAFC] text-slate-800 flex flex-col font-sans selection:bg-slate-900 selection:text-white">
           
-          {/* ヘッダー */}
-          <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-emerald-100 shadow-sm w-full">
-            <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-3">
+          {/* ヘッダー (モダン・グラスモーフィズム) */}
+          <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-slate-200/80 shadow-subtle w-full pt-safe">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
               
-              <div className="flex items-center gap-2 cursor-pointer group shrink-0 min-w-0" onClick={() => setActiveTab('home')}>
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center font-black text-white shadow-sm group-hover:scale-105 transition-transform shrink-0">
-                  <Flame size={18} className="fill-white text-white" />
+              {/* ブランドロゴ */}
+              <div className="flex items-center gap-2.5 cursor-pointer group shrink-0" onClick={() => setActiveTab('home')}>
+                <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center font-black text-white shadow-card group-hover:scale-105 transition-all">
+                  <Flame size={19} className="fill-white text-white" />
                 </div>
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="font-extrabold tracking-tight text-base sm:text-xl text-slate-900 shrink-0">NutriDex</span>
-                  <span className="text-[10px] font-black px-1.5 py-0.5 rounded-md bg-slate-900 text-white font-mono tracking-tighter shrink-0 shadow-sm">
+                <div className="flex items-center gap-2">
+                  <span className="font-extrabold tracking-tight text-lg text-slate-900">NutriDex</span>
+                  <span className="text-[10px] font-black px-1.5 py-0.5 rounded-md bg-slate-900 text-white font-mono tracking-tighter shadow-sm">
                     {APP_VERSION}
                   </span>
-                  <span className={`text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full border shrink-0 flex items-center gap-1 ${
-                    dbSyncStatus === 'synced' ? 'bg-emerald-100 text-emerald-800 border-emerald-200' :
-                    dbSyncStatus === 'syncing' ? 'bg-amber-100 text-amber-800 border-amber-200 animate-pulse' :
-                    'bg-slate-100 text-slate-700 border-slate-200'
-                  }`}>
-                    <Database size={11} />
-                    <span className="hidden xs:inline sm:inline">
-                      {dbSyncStatus === 'synced' ? `八訂 ${foodMaster.length}品目` : dbSyncStatus === 'syncing' ? '同期中...' : `内蔵 ${foodMaster.length}品目`}
-                    </span>
-                    <span className="inline xs:hidden sm:hidden">
-                      {foodMaster.length}
-                    </span>
-                  </span>
+                  <div className="hidden xs:flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-[11px] font-bold text-emerald-800">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>八訂 {foodMaster.length}品目</span>
+                  </div>
                 </div>
               </div>
 
-              {/* PCナビゲーション */}
-              <nav className="hidden md:flex items-center gap-1 lg:gap-2">
+              {/* PCナビゲーション (ピル型) */}
+              <nav className="hidden md:flex items-center gap-1 bg-slate-100/80 p-1 rounded-2xl border border-slate-200/60">
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = activeTab === item.id;
@@ -1015,14 +751,14 @@
                     <button
                       key={item.id}
                       onClick={() => setActiveTab(item.id)}
-                      className={`px-3 lg:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 relative ${
-                        isActive ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-sm' : 'text-slate-600 hover:bg-slate-100'
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 relative ${
+                        isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
                       }`}
                     >
-                      <Icon size={16} />
+                      <Icon size={15} />
                       <span>{item.label}</span>
                       {item.badgeCount > 0 && (
-                        <span className="px-1.5 py-0.2 rounded-full bg-emerald-600 text-white text-[10px] font-black">
+                        <span className="px-1.5 py-0.2 rounded-full bg-slate-900 text-white text-[10px] font-black">
                           {item.badgeCount}
                         </span>
                       )}
@@ -1031,32 +767,30 @@
                 })}
               </nav>
 
-              {/* 右側：更新ボタン ＆ 設定ボタン */}
+              {/* 右側アクション：ヘルスケア連携 ＆ ユーザー設定 */}
               <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 <button
-                  onClick={() => syncDatabase(true)}
-                  disabled={isManualSyncing}
-                  className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl bg-white hover:bg-emerald-50 text-slate-700 border border-slate-200 shadow-sm flex items-center gap-1.5 transition-all active:scale-95 shrink-0"
-                  title="食品データを最新に再同期"
-                  aria-label="データ再同期"
+                  onClick={() => setIsHealthHubOpen(true)}
+                  className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/80 shadow-subtle flex items-center gap-1.5 transition-all active:scale-95"
+                  title="Apple ヘルスケア連動 ＆ 体組成マネジメント"
                 >
-                  <RotateCcw size={14} className={`text-emerald-600 ${isManualSyncing ? 'animate-spin' : ''}`} />
-                  <span className="text-xs font-bold hidden sm:inline">更新</span>
+                  <Heart size={15} className="fill-rose-500 text-rose-500" />
+                  <span className="text-xs font-black hidden sm:inline">体組成・Health</span>
                 </button>
 
                 <button
                   onClick={() => setIsSettingsOpen(true)}
-                  className="px-2 sm:px-2.5 py-1.5 rounded-xl bg-white hover:bg-emerald-50 text-xs font-semibold text-slate-700 border border-slate-200 transition-all flex items-center gap-1 sm:gap-1.5 shadow-sm shrink-0"
+                  className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-subtle transition-all flex items-center gap-1.5"
                 >
-                  <Settings size={14} className="text-emerald-600 shrink-0" />
-                  <span className="font-bold text-[11px] sm:text-xs">{userGender === 'male' ? '男性' : '女性'} {userAgeGroup}</span>
+                  <Settings size={14} className="text-slate-500" />
+                  <span className="font-bold text-xs">{userGender === 'male' ? '男性' : '女性'} {userAgeGroup}</span>
                 </button>
               </div>
             </div>
           </header>
 
           {/* メインコンテンツ */}
-          <main className="flex-1 w-full max-w-7xl mx-auto p-3.5 sm:p-6 lg:p-8 pb-32 md:pb-16 box-border">
+          <main className="flex-1 w-full max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 pb-32 md:pb-16 box-border">
             {activeTab === 'home' && (
               <HomeScreen
                 foods={foodMaster}
@@ -1085,14 +819,10 @@
                   setCompareFoodB({ id, grams: 12, isPurchased: false });
                   setActiveTab('compare');
                 }}
+                onRecordToHealth={handleRecordToHealthKit}
                 onCopySummary={(txt) => {
-                  const el = document.createElement('textarea');
-                  el.value = txt;
-                  document.body.appendChild(el);
-                  el.select();
-                  document.execCommand('copy');
-                  document.body.removeChild(el);
-                  showToast('栄養サマリーをコピーしました！');
+                  navigator.clipboard?.writeText(txt);
+                  showToast('栄養サマリーをクリップボードにコピーしました！');
                 }}
               />
             )}
@@ -1116,6 +846,7 @@
                 onChangeItems={setRecipeItems}
                 onAddMore={() => setActiveTab('home')}
                 onSelectFood={handleSelectFood}
+                onRecordToHealth={handleRecordToHealthKit}
               />
             )}
             {activeTab === 'favorites' && (
@@ -1128,8 +859,8 @@
             )}
           </main>
 
-          {/* モバイル用ボトムナビゲーション */}
-          <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-2 py-1.5 flex items-center justify-around shadow-lg pb-safe">
+          {/* モバイル用ボトムナビゲーション (iOS風) */}
+          <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/85 backdrop-blur-xl border-t border-slate-200/80 px-2 py-1.5 flex items-center justify-around shadow-float pb-safe">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -1137,14 +868,14 @@
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all relative ${
-                    isActive ? 'text-emerald-700 font-extrabold' : 'text-slate-500 hover:text-slate-800'
+                  className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl transition-all relative ${
+                    isActive ? 'text-slate-900 font-extrabold' : 'text-slate-400 hover:text-slate-600'
                   }`}
                 >
-                  <Icon size={20} className={isActive ? 'text-emerald-600 scale-110 transition-transform' : ''} />
-                  <span className="text-[10px] mt-0.5">{item.label}</span>
+                  <Icon size={20} className={isActive ? 'text-slate-900 scale-105' : ''} />
+                  <span className="text-[10px] mt-0.5 tracking-tight">{item.label}</span>
                   {item.badgeCount > 0 && (
-                    <span className="absolute top-0.5 right-2 min-w-[16px] h-4 px-1 bg-emerald-600 text-white rounded-full text-[9px] flex items-center justify-center font-black shadow">
+                    <span className="absolute top-0 right-2 min-w-[16px] h-4 px-1 bg-slate-900 text-white rounded-full text-[9px] flex items-center justify-center font-black">
                       {item.badgeCount}
                     </span>
                   )}
@@ -1155,7 +886,7 @@
 
           {/* トースト表示 */}
           {toastData && (
-            <div className="fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 text-white px-4 py-2.5 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-bold backdrop-blur-md max-w-[92%] sm:max-w-md border border-slate-700">
+            <div className="fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 text-white px-4 py-3 rounded-2xl shadow-float flex items-center gap-3 text-xs font-bold backdrop-blur-xl max-w-[92%] sm:max-w-md border border-slate-800">
               <Check size={16} className="text-emerald-400 shrink-0" />
               <span className="truncate flex-1">{toastData.msg}</span>
               {toastData.actionLabel && (
@@ -1164,12 +895,23 @@
                     if (toastData.onAction) toastData.onAction();
                     setToastData(null);
                   }}
-                  className="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-white rounded-lg font-black shrink-0 shadow-sm transition-all text-[11px]"
+                  className="px-2.5 py-1 bg-white text-slate-900 rounded-lg font-black shrink-0 shadow-sm text-[11px]"
                 >
                   {toastData.actionLabel}
                 </button>
               )}
             </div>
+          )}
+
+          {/* Apple HealthKit & 体組成マネジメントモーダル */}
+          {isHealthHubOpen && (
+            <HealthBodyModal
+              metrics={bodyMetrics}
+              stats={calculatedBodyStats}
+              onChangeMetrics={setBodyMetrics}
+              onClose={() => setIsHealthHubOpen(false)}
+              onShowToast={showToast}
+            />
           )}
 
           {/* 設定モーダル */}
@@ -1186,7 +928,7 @@
       );
     }
 
-    // --- 検索画面 ---
+    // --- 検索画面 (HomeScreen) ---
     function HomeScreen({ foods, totalCount, onSelectFood }) {
       const [searchQuery, setSearchQuery] = useState('');
       const [selectedCategory, setSelectedCategory] = useState('all');
@@ -1200,7 +942,6 @@
         return foods.filter((f) => {
           const matchCat = selectedCategory === 'all' || f.categoryCode === selectedCategory;
           if (!matchCat) return false;
-
           if (!hasQuery) return true;
 
           const foodTargetString = normalizeSearch(
@@ -1214,31 +955,31 @@
       }, [foods, searchQuery, selectedCategory]);
 
       return (
-        <div className="space-y-4 w-full">
-          {/* 検索入力 */}
-          <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
-            <div className="flex items-center justify-between px-1 text-xs text-slate-500 font-bold">
-              <span>登録食品数: <span className="text-emerald-700 font-extrabold">{totalCount}品目</span></span>
-              <span className="text-[11px] text-slate-400">※漢字・ひらがな・カタカナ全対応</span>
+        <div className="space-y-5 w-full">
+          {/* Spotlight風 大型検索バー */}
+          <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-card space-y-4">
+            <div className="flex items-center justify-between text-xs text-slate-500 font-bold px-1">
+              <span>登録食品数: <span className="text-slate-900 font-extrabold tnum">{totalCount}品目</span></span>
+              <span className="text-[11px] text-slate-400">漢字・ひらがな・カタカナ完全対応</span>
             </div>
 
             <div className="relative">
-              <div className="absolute inset-y-0 left-3.5 flex items-center pointer-events-none text-emerald-600">
-                <Search size={19} />
+              <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-slate-400">
+                <Search size={20} />
               </div>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="鶏もも肉, 豚バラ, 鮭, 玉ねぎ, 米油, もち麦 など"
-                className="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-11 pr-10 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                placeholder="鶏もも肉, 豚バラ, 鮭, 玉ねぎ, 米油, もち麦 など検索"
+                className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl pl-12 pr-10 py-3.5 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 transition-all"
               />
               {searchQuery && (
-                <button onClick={() => setSearchQuery('')} className="absolute inset-y-0 right-3 flex items-center text-slate-400 font-bold">×</button>
+                <button onClick={() => setSearchQuery('')} className="absolute inset-y-0 right-3.5 flex items-center text-slate-400 hover:text-slate-600 font-bold text-sm">×</button>
               )}
             </div>
 
-            {/* カテゴリ */}
+            {/* カテゴリピル */}
             <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
               {[
                 { id: 'all', name: 'すべて', emoji: '🍽️' },
@@ -1254,8 +995,8 @@
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border shrink-0 ${
-                    selectedCategory === cat.id ? 'bg-emerald-50 border-emerald-300 text-emerald-800' : 'bg-white border-slate-200 text-slate-600'
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all shrink-0 ${
+                    selectedCategory === cat.id ? 'bg-slate-900 border-slate-900 text-white shadow-sm' : 'bg-white border-slate-200/80 text-slate-600 hover:bg-slate-50'
                   }`}
                 >
                   <span>{cat.emoji}</span>
@@ -1265,39 +1006,42 @@
             </div>
           </div>
 
-          {/* 一覧 */}
+          {/* 食品グリッドカード */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {filteredFoods.length === 0 ? (
-              <div className="col-span-full bg-white p-8 rounded-3xl border border-dashed border-slate-300 text-center space-y-2">
+              <div className="col-span-full bg-white p-12 rounded-3xl border border-dashed border-slate-200 text-center space-y-2">
                 <span className="text-3xl">🔍</span>
-                <p className="text-xs sm:text-sm font-bold text-slate-700">「{searchQuery}」に一致する食品が見つかりませんでした</p>
-                <p className="text-[11px] text-slate-400">漢字、ひらがな、カタカナのいずれでも検索できます。別の表記や単語を短くしてお試しください。</p>
+                <p className="text-sm font-bold text-slate-800">「{searchQuery}」に一致する食品が見つかりませんでした</p>
+                <p className="text-xs text-slate-400">漢字、ひらがな、カタカナのいずれでも検索できます。</p>
               </div>
             ) : (
               filteredFoods.map(food => (
                 <div
                   key={food.id}
                   onClick={() => onSelectFood(food.id)}
-                  className="bg-white hover:bg-emerald-50/40 border border-slate-200 hover:border-emerald-300 p-4 rounded-3xl cursor-pointer transition-all flex items-center justify-between shadow-sm active:scale-[0.99]"
+                  className="bg-white hover:bg-slate-50/80 border border-slate-200/80 hover:border-slate-300 p-4 rounded-3xl cursor-pointer transition-all flex items-center justify-between shadow-subtle hover:shadow-card hover:-translate-y-0.5"
                 >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl shrink-0">
+                  <div className="flex items-center gap-3.5 min-w-0">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-2xl shrink-0">
                       {food.categoryEmoji}
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${sourceInfo(food.source).cls}`}>
+                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded border ${sourceInfo(food.source).cls}`}>
                           {sourceInfo(food.source).label}
                         </span>
                         <span className="text-[10px] text-slate-400 font-mono truncate">#{food.foodCode}</span>
                       </div>
                       <h3 className="text-sm font-bold text-slate-900 truncate mt-0.5">{food.displayName}</h3>
-                      <p className="text-xs text-slate-600 mt-0.5 truncate">
-                        <span className="font-black text-slate-900">{food.energy} kcal</span> • P {food.protein}g • F {food.fat}g • C {food.carb}g
-                      </p>
+                      <div className="flex items-center gap-2 mt-1 text-xs tnum">
+                        <span className="font-extrabold text-slate-900">{food.energy} kcal</span>
+                        <span className="text-rose-600 font-bold">P {food.protein}</span>
+                        <span className="text-amber-600 font-bold">F {food.fat}</span>
+                        <span className="text-sky-600 font-bold">C {food.carb}</span>
+                      </div>
                     </div>
                   </div>
-                  <ChevronRight size={18} className="text-slate-400 shrink-0" />
+                  <ChevronRight size={18} className="text-slate-300 shrink-0" />
                 </div>
               ))
             )}
@@ -1306,19 +1050,17 @@
       );
     }
 
-    // --- 詳細画面（ロックされたレジストリからのデータドリブン描画） ---
+    // --- 詳細画面 (DetailScreen: 60項目ロック完全展開) ---
     function DetailScreen({
       food, currentGrams, onChangeGrams, activeUnit, onChangeUnit,
       isPurchasedWeight, onChangePurchasedWeight, currentDri, isFavorite,
-      onToggleFavorite, onBack, onAddToRecipe, onAddToCompare, onCopySummary
+      onToggleFavorite, onBack, onAddToRecipe, onAddToCompare, onRecordToHealth, onCopySummary
     }) {
-      const [justAdded, setJustAdded] = useState(false);
       const [activeNutrientCategory, setActiveNutrientCategory] = useState('all');
       const [nutrientFilterKeyword, setNutrientFilterKeyword] = useState('');
 
       const n = useMemo(() => calculateScaledNutrients(food, currentGrams, isPurchasedWeight), [food, currentGrams, isPurchasedWeight]);
 
-      // 1食分の摂取基準（1日の1/3）
       const mealDri = useMemo(() => {
         const res = {};
         Object.keys(currentDri).forEach((k) => {
@@ -1327,17 +1069,7 @@
         return res;
       }, [currentDri]);
 
-      const handleAddClick = () => {
-        onAddToRecipe(food.id, currentGrams, activeUnit, isPurchasedWeight);
-        setJustAdded(true);
-        setTimeout(() => setJustAdded(false), 2000);
-      };
-
-      /* ========================================================================
-       * 【データドリブン展開（ロック保証）】
-       * LOCKED_NUTRIENT_REGISTRY の全項目を元に、現在の換算値 n と 1食DRI を結合。
-       * 項目を手動で削る余地を完全に排除。
-       * ======================================================================== */
+      // ロックされた全60項目のデータドリブン展開
       const displayedNutrients = useMemo(() => {
         if (!n) return [];
         return LOCKED_NUTRIENT_REGISTRY.map((def) => {
@@ -1369,56 +1101,74 @@
         });
       }, [displayedNutrients, activeNutrientCategory, nutrientFilterKeyword]);
 
-      const summaryText = `【NutriDex 栄養サマリー】\n食材: ${food.displayName}\n分量: ${currentGrams}g (${activeUnit}${isPurchasedWeight ? ` → 可食部${n.edibleGrams}g` : ''})\nエネルギー: ${n.energy}kcal (${n.energyKj}kJ)\nPFC: P ${n.protein}g (${n.pRatio}%) / F ${n.fat}g (${n.fRatio}%) / C ${n.carb}g (${n.cRatio}%)\n糖質: ${n.sugar}g / 食物繊維: ${n.fiber}g\nカリウム: ${n.potassium ?? '—'}mg / カルシウム: ${n.calcium ?? '—'}mg / 鉄: ${n.iron ?? '—'}mg / ビタミンC: ${n.vitaminC ?? '—'}mg / ビタミンE: ${n.vitaminE ?? '—'}mg\n出典: ${sourceInfo(food.source).label}`;
+      const summaryText = `【NutriDex 栄養サマリー】\n食材: ${food.displayName}\n分量: ${currentGrams}g (${activeUnit}${isPurchasedWeight ? ` → 可食部${n.edibleGrams}g` : ''})\nエネルギー: ${n.energy}kcal (${n.energyKj}kJ)\nPFC: P ${n.protein}g (${n.pRatio}%) / F ${n.fat}g (${n.fRatio}%) / C ${n.carb}g (${n.cRatio}%)\n糖質: ${n.sugar}g / 食物繊維: ${n.fiber}g\nカリウム: ${n.potassium ?? '—'}mg / カルシウム: ${n.calcium ?? '—'}mg / 鉄: ${n.iron ?? '—'}mg / ビタミンC: ${n.vitaminC ?? '—'}mg`;
 
       return (
-        <div className="space-y-4 max-w-6xl mx-auto">
+        <div className="space-y-4 max-w-5xl mx-auto">
           {/* 上部アクションバー */}
           <div className="flex items-center justify-between">
-            <button onClick={onBack} className="flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-800">
+            <button onClick={onBack} className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors">
               <ArrowLeft size={16} />
-              <span>検索へ戻る</span>
+              <span>さがすへ戻る</span>
             </button>
             <div className="flex items-center gap-2">
-              <button onClick={onToggleFavorite} className={`p-2 rounded-xl border ${isFavorite ? 'bg-rose-50 border-rose-200 text-rose-500' : 'bg-white border-slate-200 text-slate-600'}`}>
+              <button onClick={onToggleFavorite} className={`p-2 rounded-xl border transition-all ${isFavorite ? 'bg-rose-50 border-rose-200 text-rose-500' : 'bg-white border-slate-200 text-slate-500'}`}>
                 {isFavorite ? <BookmarkCheck size={18} /> : <Bookmark size={18} />}
               </button>
-              <button onClick={() => onAddToCompare(food.id)} className="px-3 py-2 bg-white text-emerald-700 border border-slate-200 rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm">
+              <button onClick={() => onAddToCompare(food.id)} className="px-3 py-2 bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-subtle">
                 <Scale size={14} />
                 <span>VS比較</span>
               </button>
               <button
-                onClick={handleAddClick}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow transition-all active:scale-95 ${
-                  justAdded ? 'bg-emerald-700 text-white ring-2 ring-emerald-300' : 'bg-emerald-600 hover:bg-emerald-500 text-white'
-                }`}
+                onClick={() => onAddToRecipe(food.id, currentGrams, activeUnit, isPurchasedWeight)}
+                className="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white flex items-center gap-1.5 shadow-card transition-all active:scale-95"
               >
-                {justAdded ? <Check size={14} /> : <Plus size={14} />}
-                <span>{justAdded ? '追加済み！' : 'レシピに追加'}</span>
+                <Plus size={14} />
+                <span>レシピに追加</span>
               </button>
             </div>
           </div>
 
           {/* 食品詳細カード */}
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-            <div className="flex items-start gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-4xl shrink-0">
-                {food.categoryEmoji}
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${sourceInfo(food.source).cls}`}>{sourceInfo(food.source).label}</span>
-                  <span className="text-xs text-slate-400 font-mono">コード: {food.foodCode}</span>
+          <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-card space-y-5">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center text-4xl shrink-0">
+                  {food.categoryEmoji}
                 </div>
-                <h1 className="text-lg sm:text-xl font-black text-slate-900 mt-1">{food.displayName}</h1>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded border ${sourceInfo(food.source).cls}`}>{sourceInfo(food.source).label}</span>
+                    <span className="text-xs text-slate-400 font-mono">コード: {food.foodCode}</span>
+                  </div>
+                  <h1 className="text-lg sm:text-2xl font-black text-slate-900 mt-1">{food.displayName}</h1>
+                </div>
               </div>
+
+              {/* ヘルスケアに記録アクション */}
+              <button
+                onClick={() => onRecordToHealth({
+                  energy: n.energy,
+                  protein: n.protein,
+                  fat: n.fat,
+                  carb: n.carb,
+                  fiber: n.fiber,
+                  sugar: n.sugar,
+                  sodium: n.sodium
+                }, food.shortName)}
+                className="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-2xl text-xs font-bold flex items-center gap-1.5 shadow-subtle shrink-0"
+                title="Appleヘルスケアに記録"
+              >
+                <AppleIcon size={15} />
+                <span className="hidden sm:inline">ヘルスケアに記録</span>
+              </button>
             </div>
 
-            {/* 分量スライダー & 生活単位 */}
-            <div className="bg-slate-50 p-4 rounded-2xl space-y-3">
+            {/* iOS Segmented Control風 分量セレクター */}
+            <div className="bg-slate-50 p-4 rounded-2xl space-y-3 border border-slate-200/60">
               <div className="flex justify-between items-center text-xs font-bold">
-                <span>食べる分量: {currentGrams}g ({activeUnit})</span>
-                {food.refuseRate > 0 && <span className="text-amber-700">廃棄率: {food.refuseRate}% (可食部: {n.edibleGrams}g)</span>}
+                <span className="text-slate-700">分量調整: <span className="text-slate-900 font-black tnum">{currentGrams}g</span> ({activeUnit})</span>
+                {food.refuseRate > 0 && <span className="text-amber-700">廃棄率 {food.refuseRate}% (実可食部: {n.edibleGrams}g)</span>}
               </div>
 
               <div className="flex flex-wrap gap-1.5">
@@ -1430,8 +1180,8 @@
                       onChangeUnit(u.name);
                       onChangePurchasedWeight(!!u.isPurchasedWeight);
                     }}
-                    className={`px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all ${
-                      activeUnit === u.name ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-white border-slate-200 text-slate-700'
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+                      activeUnit === u.name ? 'bg-slate-900 border-slate-900 text-white shadow-sm' : 'bg-white border-slate-200/80 text-slate-700 hover:bg-slate-100'
                     }`}
                   >
                     {u.name}
@@ -1442,87 +1192,76 @@
               <input
                 type="range"
                 min="1"
-                max={Math.max(300, currentGrams)}
+                max={Math.max(300, currentGrams * 2)}
                 step="1"
                 value={currentGrams}
                 onChange={(e) => { onChangeGrams(Number(e.target.value)); onChangeUnit('カスタム'); }}
-                className="w-full accent-emerald-600 cursor-pointer"
+                className="w-full accent-slate-900 cursor-pointer"
               />
             </div>
 
-            {/* PFCサマリー */}
-            <div className="grid grid-cols-4 gap-2 text-center">
-              <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100">
-                <div className="text-[10px] text-slate-500 font-bold">エネルギー</div>
-                <div className="text-lg font-black text-slate-900 mt-0.5">{n.energy} <span className="text-xs">kcal</span></div>
+            {/* PFC ＆ 熱量 マクロダッシュボード */}
+            <div className="grid grid-cols-4 gap-2 text-center tnum">
+              <div className="bg-slate-900 p-3.5 rounded-2xl text-white">
+                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Energy</div>
+                <div className="text-xl sm:text-2xl font-black mt-0.5">{n.energy} <span className="text-xs font-medium text-slate-300">kcal</span></div>
               </div>
-              <div className="bg-rose-50 p-3 rounded-2xl text-rose-700 border border-rose-100">
-                <div className="text-[10px] font-bold">タンパク質 ({n.pRatio}%)</div>
-                <div className="text-lg font-black mt-0.5">{n.protein}g</div>
+              <div className="bg-rose-50/80 border border-rose-200/80 p-3.5 rounded-2xl text-rose-900">
+                <div className="text-[10px] text-rose-600 font-bold">タンパク質 ({n.pRatio}%)</div>
+                <div className="text-lg sm:text-xl font-black mt-0.5">{n.protein}<span className="text-xs font-normal">g</span></div>
               </div>
-              <div className="bg-amber-50 p-3 rounded-2xl text-amber-700 border border-amber-100">
-                <div className="text-[10px] font-bold">脂質 ({n.fRatio}%)</div>
-                <div className="text-lg font-black mt-0.5">{n.fat}g</div>
+              <div className="bg-amber-50/80 border border-amber-200/80 p-3.5 rounded-2xl text-amber-900">
+                <div className="text-[10px] text-amber-600 font-bold">脂質 ({n.fRatio}%)</div>
+                <div className="text-lg sm:text-xl font-black mt-0.5">{n.fat}<span className="text-xs font-normal">g</span></div>
               </div>
-              <div className="bg-sky-50 p-3 rounded-2xl text-sky-700 border border-sky-100">
-                <div className="text-[10px] font-bold">炭水化物 ({n.cRatio}%)</div>
-                <div className="text-lg font-black mt-0.5">{n.carb}g</div>
+              <div className="bg-sky-50/80 border border-sky-200/80 p-3.5 rounded-2xl text-sky-900">
+                <div className="text-[10px] text-sky-600 font-bold">炭水化物 ({n.cRatio}%)</div>
+                <div className="text-lg sm:text-xl font-black mt-0.5">{n.carb}<span className="text-xs font-normal">g</span></div>
               </div>
-            </div>
-
-            {/* レシピ追加アクション */}
-            <div className="pt-2">
-              <button
-                onClick={handleAddClick}
-                className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 active:scale-98 text-white rounded-2xl text-xs font-bold flex items-center justify-center gap-2 shadow-md transition-all"
-              >
-                <Plus size={16} />
-                <span>この食材（{currentGrams}g）をレシピ・計算に追加</span>
-              </button>
             </div>
 
             <button
               onClick={() => onCopySummary(summaryText)}
-              className="w-full py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 border rounded-2xl text-xs font-bold flex items-center justify-center gap-1.5"
+              className="w-full py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-2xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
             >
               <Copy size={14} />
               <span>栄養サマリーをクリップボードにコピー</span>
             </button>
           </div>
 
-          {/* 全微量栄養素・ビタミン・脂肪酸・アミノ酸 ダッシュボード（スキーマロック版） */}
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          {/* 全微量栄養素・ビタミン・脂肪酸・アミノ酸 (60項目ロックダッシュボード) */}
+          <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-card space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
               <div>
                 <h3 className="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-1.5">
                   <Activity size={18} className="text-emerald-600" />
-                  <span>カロリースリム完全準拠 確定全栄養素一覧（{filteredNutrients.length}項目）</span>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                  <span>確定詳細栄養素一覧（{filteredNutrients.length}項目）</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border flex items-center gap-1">
                     <Lock size={10} />
                     <span>永久固定仕様</span>
                   </span>
                 </h3>
                 <p className="text-[11px] text-slate-400 mt-0.5">
-                  厚生労働省「日本人の食事摂取基準」1食目安（1日の1/3）に対する充足率バー付き
+                  厚生労働省「日本人の食事摂取基準」1食目安（1日の1/3）に対する充足率
                 </p>
               </div>
 
-              {/* インライン検索 */}
+              {/* インライン絞り込み */}
               <div className="relative w-full sm:w-44">
                 <input
                   type="text"
                   value={nutrientFilterKeyword}
                   onChange={(e) => setNutrientFilterKeyword(e.target.value)}
                   placeholder="栄養素名で絞込..."
-                  className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-slate-900"
                 />
                 {nutrientFilterKeyword && (
-                  <button onClick={() => setNutrientFilterKeyword('')} className="absolute right-2 top-1 text-slate-400 text-xs font-bold">×</button>
+                  <button onClick={() => setNutrientFilterKeyword('')} className="absolute right-2 top-1.5 text-slate-400 text-xs font-bold">×</button>
                 )}
               </div>
             </div>
 
-            {/* カテゴリ切り替えタブ */}
+            {/* カテゴリタブ */}
             <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none w-full">
               {NUTRIENT_TABS.map((tab) => (
                 <button
@@ -1530,7 +1269,7 @@
                   onClick={() => setActiveNutrientCategory(tab.id)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all border shrink-0 ${
                     activeNutrientCategory === tab.id
-                      ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm'
+                      ? 'bg-slate-900 border-slate-900 text-white shadow-sm'
                       : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                   }`}
                 >
@@ -1539,7 +1278,7 @@
               ))}
             </div>
 
-            {/* 全栄養素カードグリッド（ロックレジストリからの確実な描画） */}
+            {/* 60項目データドリブングリッド */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-[560px] overflow-y-auto pr-1">
               {filteredNutrients.map((item, idx) => {
                 const hasVal = item.val !== null && item.val !== undefined;
@@ -1547,40 +1286,28 @@
                 const isOver = item.isMaxLimit && ratio && ratio > 100;
 
                 return (
-                  <div
-                    key={idx}
-                    className="p-3 rounded-2xl bg-slate-50/70 border border-slate-200/90 hover:border-emerald-300 transition-colors flex flex-col justify-between"
-                  >
+                  <div key={idx} className="p-3 rounded-2xl bg-slate-50/70 border border-slate-200/80 flex flex-col justify-between">
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <div className="flex items-center gap-1.5">
                           <span className="text-xs font-bold text-slate-800">{item.name}</span>
-                          {item.highlight && (
-                            <span className="text-[9px] px-1 py-0.2 rounded font-bold bg-emerald-100 text-emerald-800">
-                              主要
-                            </span>
-                          )}
+                          {item.highlight && <span className="text-[9px] px-1 py-0.2 rounded font-bold bg-slate-200 text-slate-700">主要</span>}
                         </div>
                         {item.note && <span className="text-[10px] text-slate-400">{item.note}</span>}
                       </div>
 
-                      <div className="text-right shrink-0">
-                        <span className="text-sm font-black text-slate-900">
-                          {hasVal ? item.val : '—'}
-                        </span>
-                        {hasVal && item.unit && (
-                          <span className="text-[11px] text-slate-500 font-medium ml-0.5">{item.unit}</span>
-                        )}
+                      <div className="text-right shrink-0 tnum">
+                        <span className="text-sm font-black text-slate-900">{hasVal ? item.val : '—'}</span>
+                        {hasVal && item.unit && <span className="text-[11px] text-slate-500 font-medium ml-0.5">{item.unit}</span>}
                       </div>
                     </div>
 
-                    {/* 充足度バー / 目安表示 */}
                     {item.dri && (
                       <div className="mt-2 space-y-1">
-                        <div className="flex justify-between text-[10px] text-slate-500">
+                        <div className="flex justify-between text-[10px] text-slate-500 tnum">
                           <span>1食目安: {item.dri.toFixed(1)}{item.unit}</span>
                           {ratio !== null && (
-                            <span className={isOver ? 'text-rose-600 font-extrabold' : 'text-emerald-700 font-bold'}>
+                            <span className={isOver ? 'text-rose-600 font-extrabold' : 'text-slate-900 font-bold'}>
                               {item.isMaxLimit ? `上限比 ${ratio}%` : `${ratio}%`}
                             </span>
                           )}
@@ -1588,9 +1315,7 @@
                         <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
                           <div
                             style={{ width: `${Math.min(100, ratio ?? 0)}%` }}
-                            className={`h-full rounded-full transition-all duration-300 ${
-                              isOver ? 'bg-rose-500' : 'bg-emerald-500'
-                            }`}
+                            className={`h-full rounded-full transition-all duration-300 ${isOver ? 'bg-rose-500' : 'bg-slate-900'}`}
                           />
                         </div>
                       </div>
@@ -1604,7 +1329,7 @@
       );
     }
 
-    // --- くらべる画面 ---
+    // --- くらべる画面 (CompareScreen) ---
     function CompareScreen({ foodMaster, foodAConfig, foodBConfig, onChangeFoodA, onChangeFoodB }) {
       const fA = foodMaster.find(f => f.id === foodAConfig.id) || foodMaster[0];
       const fB = foodMaster.find(f => f.id === foodBConfig.id) || foodMaster[1] || foodMaster[0];
@@ -1621,7 +1346,7 @@
         <div className="max-w-3xl mx-auto space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-extrabold flex items-center gap-2"><Scale size={18} /> 食品くらべる (VS)</h2>
-            <button onClick={handleSwap} className="px-3 py-1.5 bg-white border border-slate-200 text-xs font-bold rounded-xl flex items-center gap-1 shadow-sm">
+            <button onClick={handleSwap} className="px-3 py-1.5 bg-white border border-slate-200 text-xs font-bold rounded-xl flex items-center gap-1 shadow-subtle">
               <RotateCcw size={14} />
               <span>左右スワップ</span>
             </button>
@@ -1629,61 +1354,60 @@
 
           <div className="grid grid-cols-2 gap-3">
             {[ { f: fA, n: nA, cfg: foodAConfig, setCfg: onChangeFoodA }, { f: fB, n: nB, cfg: foodBConfig, setCfg: onChangeFoodB } ].map((slot, i) => (
-              <div key={i} className="bg-white p-4 rounded-3xl border border-slate-200 text-center space-y-2 shadow-sm">
+              <div key={i} className="bg-white p-4 rounded-3xl border border-slate-200/80 text-center space-y-2 shadow-card">
                 <span className="text-3xl">{slot.f.categoryEmoji}</span>
                 <select
                   value={slot.f.id}
                   onChange={(e) => slot.setCfg({ ...slot.cfg, id: e.target.value })}
-                  className="w-full text-xs font-bold p-1 border rounded-lg"
+                  className="w-full text-xs font-bold p-1.5 border rounded-xl bg-slate-50"
                 >
                   {foodMaster.slice(0, 100).map(food => <option key={food.id} value={food.id}>{food.shortName}</option>)}
                 </select>
                 <div className="text-xs text-slate-500 font-bold">{slot.cfg.grams}g</div>
-                <div className="text-base font-black text-slate-900">{slot.n.energy} kcal</div>
+                <div className="text-lg font-black text-slate-900 tnum">{slot.n.energy} kcal</div>
               </div>
             ))}
           </div>
 
-          <div className="bg-white p-4 rounded-3xl border border-slate-200 space-y-2 text-xs">
-            <div className="flex justify-between border-b pb-1">
-              <span>脂質</span>
-              <span>{nA.fat}g vs {nB.fat}g</span>
+          <div className="bg-white p-5 rounded-3xl border border-slate-200/80 space-y-2.5 text-xs shadow-card tnum">
+            <div className="flex justify-between border-b pb-1.5">
+              <span className="text-slate-500 font-bold">タンパク質</span>
+              <span className="font-extrabold">{nA.protein}g vs {nB.protein}g</span>
             </div>
-            <div className="flex justify-between border-b pb-1">
-              <span>一価不飽和脂肪酸（オレイン酸等）</span>
-              <span>{nA.monounsaturatedFat ?? '—'}g vs {nB.monounsaturatedFat ?? '—'}g</span>
+            <div className="flex justify-between border-b pb-1.5">
+              <span className="text-slate-500 font-bold">脂質</span>
+              <span className="font-extrabold">{nA.fat}g vs {nB.fat}g</span>
             </div>
-            <div className="flex justify-between border-b pb-1">
-              <span>ビタミンE</span>
-              <span>{nA.vitaminE ?? '—'}mg vs {nB.vitaminE ?? '—'}mg</span>
+            <div className="flex justify-between border-b pb-1.5">
+              <span className="text-slate-500 font-bold">食物繊維総量</span>
+              <span className="font-extrabold">{nA.fiber}g vs {nB.fiber}g</span>
+            </div>
+            <div className="flex justify-between border-b pb-1.5">
+              <span className="text-slate-500 font-bold">ビタミンE</span>
+              <span className="font-extrabold">{nA.vitaminE ?? '—'}mg vs {nB.vitaminE ?? '—'}mg</span>
             </div>
             <div className="flex justify-between">
-              <span>ビタミンK</span>
-              <span>{nA.vitaminK ?? '—'}μg vs {nB.vitaminK ?? '—'}μg</span>
+              <span className="text-slate-500 font-bold">食塩相当量</span>
+              <span className="font-extrabold">{nA.salt}g vs {nB.salt}g</span>
             </div>
           </div>
         </div>
       );
     }
 
-    // --- レシピ計算画面 ---
-    function RecipeScreen({ foodMaster, title, onChangeTitle, servings, onChangeServings, items, onChangeItems, onAddMore, onSelectFood }) {
+    // --- レシピ計算画面 (RecipeScreen) ---
+    function RecipeScreen({ foodMaster, title, onChangeTitle, servings, onChangeServings, items, onChangeItems, onAddMore, onSelectFood, onRecordToHealth }) {
       const handleGramChange = (idx, delta) => {
         onChangeItems(items.map((it, i) => {
-          if (i === idx) {
-            const nextG = Math.max(1, it.grams + delta);
-            return { ...it, grams: nextG };
-          }
+          if (i === idx) return { ...it, grams: Math.max(1, it.grams + delta) };
           return it;
         }));
       };
 
-      const handleRemove = (idx) => {
-        onChangeItems(items.filter((_, i) => i !== idx));
-      };
+      const handleRemove = (idx) => onChangeItems(items.filter((_, i) => i !== idx));
 
       const totals = useMemo(() => {
-        let energy = 0, protein = 0, fat = 0, carb = 0, sugar = 0, fiber = 0, salt = 0;
+        let energy = 0, protein = 0, fat = 0, carb = 0, sugar = 0, fiber = 0, salt = 0, sodium = 0;
         items.forEach(item => {
           const f = foodMaster.find(x => x.id === item.foodId);
           if (f) {
@@ -1695,6 +1419,7 @@
             sugar += sc.sugar;
             fiber += sc.fiber;
             salt += sc.salt;
+            sodium += (sc.sodium || 0);
           }
         });
 
@@ -1706,7 +1431,8 @@
           carb: +(carb / s).toFixed(1),
           sugar: +(sugar / s).toFixed(1),
           fiber: +(fiber / s).toFixed(1),
-          salt: +(salt / s).toFixed(2)
+          salt: +(salt / s).toFixed(2),
+          sodium: Math.round(sodium / s)
         };
 
         const pKcal = perServing.protein * 4;
@@ -1720,39 +1446,25 @@
           cRatio = Math.max(0, 100 - (pRatio + fRatio));
         }
 
-        return {
-          totalEnergy: Math.round(energy),
-          perServing,
-          pRatio, fRatio, cRatio
-        };
+        return { totalEnergy: Math.round(energy), perServing, pRatio, fRatio, cRatio };
       }, [foodMaster, items, servings]);
 
-      const recipeSummaryText = `【NutriDex レシピ計算】\n料理名: ${title}\n登録食材: ${items.length}品\n出来上がり: ${servings}人前\n1人前あたり: ${totals.perServing.energy} kcal\nPFC: P ${totals.perServing.protein}g (${totals.pRatio}%) / F ${totals.perServing.fat}g (${totals.fRatio}%) / C ${totals.perServing.carb}g (${totals.cRatio}%)\n糖質: ${totals.perServing.sugar}g / 食物繊維: ${totals.perServing.fiber}g / 食塩: ${totals.perServing.salt}g`;
-
-      const copyToClipboard = () => {
-        const el = document.createElement('textarea');
-        el.value = recipeSummaryText;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
-        alert('レシピ栄養サマリーをコピーしました！');
-      };
+      const recipeSummaryText = `【NutriDex レシピ計算】\n料理名: ${title}\n出来上がり: ${servings}人前 (総量 ${totals.totalEnergy} kcal)\n1人前あたり: ${totals.perServing.energy} kcal\nPFC: P ${totals.perServing.protein}g (${totals.pRatio}%) / F ${totals.perServing.fat}g (${totals.fRatio}%) / C ${totals.perServing.carb}g (${totals.cRatio}%)\n糖質: ${totals.perServing.sugar}g / 食物繊維: ${totals.perServing.fiber}g / 食塩: ${totals.perServing.salt}g`;
 
       return (
         <div className="max-w-3xl mx-auto space-y-4">
-          <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 space-y-3 shadow-sm">
+          <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 space-y-3 shadow-card">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2">
-                <Calculator size={18} className="text-emerald-600 shrink-0" />
-                <span className="font-extrabold text-slate-800 text-sm">マイレシピ・合算栄養計算</span>
+                <Calculator size={18} className="text-slate-900" />
+                <span className="font-extrabold text-slate-900 text-sm">マイレシピ・合算栄養計算</span>
               </div>
               <div className="flex items-center gap-2 text-xs">
                 <span className="text-slate-500 font-bold">出来上がり:</span>
                 <select
                   value={servings}
                   onChange={(e) => onChangeServings(Number(e.target.value))}
-                  className="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1 text-slate-800 font-bold focus:outline-none"
+                  className="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1 text-slate-900 font-bold"
                 >
                   {[1, 2, 3, 4, 5, 6].map(num => <option key={num} value={num}>{num} 人前</option>)}
                 </select>
@@ -1763,41 +1475,27 @@
               type="text"
               value={title}
               onChange={(e) => onChangeTitle(e.target.value)}
-              placeholder="料理名を入力（例: 鶏もも肉と野菜の炒め物）"
-              className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+              placeholder="料理名を入力（例: 鶏もも肉と野菜の健康炒め）"
+              className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/10"
             />
           </div>
 
           <div className="space-y-2.5">
             <div className="flex items-center justify-between px-1 text-xs font-bold text-slate-500">
               <span>登録食材（{items.length}品）</span>
-              <button
-                onClick={onAddMore}
-                className="flex items-center gap-1 text-emerald-700 hover:text-emerald-800 font-bold"
-              >
+              <button onClick={onAddMore} className="flex items-center gap-1 text-slate-900 hover:text-slate-700 font-bold">
                 <Plus size={15} />
-                <span>食材を検索して追加</span>
+                <span>食材を追加</span>
               </button>
             </div>
 
             {items.length === 0 ? (
-              <div className="bg-white p-8 rounded-3xl border border-dashed border-slate-300 text-center space-y-3 shadow-sm">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto text-xl">
-                  🛒
-                </div>
+              <div className="bg-white p-8 rounded-3xl border border-dashed border-slate-200 text-center space-y-3 shadow-subtle">
+                <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto text-xl">🛒</div>
                 <div className="space-y-1">
-                  <h4 className="text-xs sm:text-sm font-extrabold text-slate-800">レシピに食材が入っていません</h4>
-                  <p className="text-[11px] text-slate-400">
-                    「さがす」画面や食材詳細画面の <span className="font-bold text-emerald-700">「レシピに追加」</span> ボタンを押すと、ここに食材が追加されて合計栄養が自動計算されます。
-                  </p>
+                  <h4 className="text-xs sm:text-sm font-extrabold text-slate-900">レシピに食材が入っていません</h4>
+                  <p className="text-[11px] text-slate-400">食材詳細画面から「レシピに追加」を押すと、ここに食材が追加されます。</p>
                 </div>
-                <button
-                  onClick={onAddMore}
-                  className="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-sm inline-flex items-center gap-1.5"
-                >
-                  <Search size={14} />
-                  <span>食材を探しにいく</span>
-                </button>
               </div>
             ) : (
               items.map((item, idx) => {
@@ -1806,47 +1504,28 @@
                 const sc = calculateScaledNutrients(f, item.grams, item.isPurchased);
 
                 return (
-                  <div key={idx} className="bg-white p-3.5 sm:p-4 rounded-3xl border border-slate-200 flex items-center justify-between gap-3 shadow-sm">
-                    <div
-                      className="flex items-center gap-3 min-w-0 flex-1 cursor-pointer"
-                      onClick={() => onSelectFood(f.id)}
-                      title="タップして詳細を確認"
-                    >
+                  <div key={idx} className="bg-white p-3.5 sm:p-4 rounded-3xl border border-slate-200/80 flex items-center justify-between gap-3 shadow-subtle">
+                    <div className="flex items-center gap-3 min-w-0 flex-1 cursor-pointer" onClick={() => onSelectFood(f.id)}>
                       <span className="text-2xl sm:text-3xl shrink-0">{f.categoryEmoji}</span>
                       <div className="min-w-0 flex-1">
-                        <h4 className="text-xs sm:text-sm font-bold text-slate-800 truncate hover:text-emerald-700">{f.shortName}</h4>
-                        <p className="text-[11px] text-slate-500 mt-0.5 truncate">
+                        <h4 className="text-xs sm:text-sm font-bold text-slate-900 truncate">{f.shortName}</h4>
+                        <p className="text-[11px] text-slate-500 mt-0.5 truncate tnum">
                           {item.grams}g • <span className="text-slate-900 font-black">{sc.energy} kcal</span> (P:{sc.protein}g F:{sc.fat}g C:{sc.carb}g)
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+                    <div className="flex items-center gap-1.5 shrink-0">
                       <div className="flex items-center bg-slate-50 rounded-xl border border-slate-200 p-0.5">
-                        <button
-                          onClick={() => handleGramChange(idx, -10)}
-                          className="w-7 h-7 flex items-center justify-center text-slate-600 hover:bg-slate-200 rounded-lg"
-                          title="10g減らす"
-                        >
+                        <button onClick={() => handleGramChange(idx, -10)} className="w-7 h-7 flex items-center justify-center text-slate-600 hover:bg-slate-200 rounded-lg">
                           <Minus size={13} />
                         </button>
-                        <span className="px-2 text-xs font-bold text-slate-900 min-w-[2.5rem] text-center">
-                          {item.grams}g
-                        </span>
-                        <button
-                          onClick={() => handleGramChange(idx, 10)}
-                          className="w-7 h-7 flex items-center justify-center text-slate-600 hover:bg-slate-200 rounded-lg"
-                          title="10g増やす"
-                        >
+                        <span className="px-2 text-xs font-bold text-slate-900 min-w-[2.5rem] text-center tnum">{item.grams}g</span>
+                        <button onClick={() => handleGramChange(idx, 10)} className="w-7 h-7 flex items-center justify-center text-slate-600 hover:bg-slate-200 rounded-lg">
                           <Plus size={13} />
                         </button>
                       </div>
-
-                      <button
-                        onClick={() => handleRemove(idx)}
-                        className="p-1.5 text-slate-400 hover:text-rose-500 rounded-xl"
-                        title="削除"
-                      >
+                      <button onClick={() => handleRemove(idx)} className="p-1.5 text-slate-400 hover:text-rose-500 rounded-xl">
                         <Trash2 size={16} />
                       </button>
                     </div>
@@ -1857,77 +1536,88 @@
           </div>
 
           {items.length > 0 && (
-            <div className="bg-gradient-to-br from-emerald-50 via-teal-50/40 to-white p-4 sm:p-5 rounded-3xl border border-emerald-200 space-y-4 shadow-sm">
-              <div className="flex items-baseline justify-between border-b border-emerald-100 pb-3 flex-wrap gap-2">
+            <div className="bg-white p-5 rounded-3xl border border-slate-200/80 space-y-4 shadow-card">
+              <div className="flex items-baseline justify-between border-b pb-3 flex-wrap gap-2">
                 <div>
-                  <span className="text-xs font-bold text-emerald-800">
-                    1人前あたり ({servings}人前換算 / 料理全体 {totals.totalEnergy} kcal)
-                  </span>
-                  <div className="flex items-baseline gap-1.5 mt-0.5">
+                  <span className="text-xs font-bold text-slate-500">1人前あたり ({servings}人前換算)</span>
+                  <div className="flex items-baseline gap-1.5 mt-0.5 tnum">
                     <span className="text-3xl sm:text-4xl font-black text-slate-900">{totals.perServing.energy}</span>
-                    <span className="text-sm font-bold text-emerald-700">kcal</span>
+                    <span className="text-sm font-bold text-slate-700">kcal</span>
                   </div>
                 </div>
 
-                <div className="text-right text-xs text-slate-600 space-y-0.5">
-                  <div>糖質: <span className="font-bold text-slate-800">{totals.perServing.sugar}g</span></div>
+                <div className="text-right text-xs text-slate-600 space-y-0.5 tnum">
+                  <div>糖質: <span className="font-bold text-slate-900">{totals.perServing.sugar}g</span></div>
                   <div>食物繊維: <span className="font-bold text-emerald-700">{totals.perServing.fiber}g</span></div>
-                  <div>食塩: <span className="font-bold text-slate-800">{totals.perServing.salt}g</span></div>
+                  <div>食塩: <span className="font-bold text-slate-900">{totals.perServing.salt}g</span></div>
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <div className="flex justify-between text-[11px] font-bold text-slate-600">
+                <div className="flex justify-between text-[11px] font-bold text-slate-600 tnum">
                   <span>PFC比率</span>
                   <span>P:{totals.pRatio}% / F:{totals.fRatio}% / C:{totals.cRatio}%</span>
                 </div>
-                <div className="h-3.5 w-full bg-slate-100 rounded-full overflow-hidden flex shadow-inner">
+                <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden flex shadow-inner">
                   <div style={{ width: `${totals.pRatio}%` }} className="bg-rose-500" />
                   <div style={{ width: `${totals.fRatio}%` }} className="bg-amber-400" />
                   <div style={{ width: `${totals.cRatio}%` }} className="bg-sky-400" />
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                <div className="bg-white/80 border border-rose-200 rounded-2xl p-2 min-w-0">
+              <div className="grid grid-cols-3 gap-2 text-center text-xs tnum">
+                <div className="bg-rose-50/80 border border-rose-200 rounded-2xl p-2.5">
                   <div className="text-[10px] text-rose-600 font-bold">タンパク質</div>
-                  <div className="font-black text-slate-900 text-sm">{totals.perServing.protein}g</div>
+                  <div className="font-black text-slate-900 text-sm mt-0.5">{totals.perServing.protein}g</div>
                 </div>
-                <div className="bg-white/80 border border-amber-200 rounded-2xl p-2 min-w-0">
+                <div className="bg-amber-50/80 border border-amber-200 rounded-2xl p-2.5">
                   <div className="text-[10px] text-amber-600 font-bold">脂質</div>
-                  <div className="font-black text-slate-900 text-sm">{totals.perServing.fat}g</div>
+                  <div className="font-black text-slate-900 text-sm mt-0.5">{totals.perServing.fat}g</div>
                 </div>
-                <div className="bg-white/80 border border-sky-200 rounded-2xl p-2 min-w-0">
+                <div className="bg-sky-50/80 border border-sky-200 rounded-2xl p-2.5">
                   <div className="text-[10px] text-sky-600 font-bold">炭水化物</div>
-                  <div className="font-black text-slate-900 text-sm">{totals.perServing.carb}g</div>
+                  <div className="font-black text-slate-900 text-sm mt-0.5">{totals.perServing.carb}g</div>
                 </div>
               </div>
 
-              <button
-                onClick={copyToClipboard}
-                className="w-full py-2.5 sm:py-3 bg-white hover:bg-emerald-50 text-emerald-800 text-xs font-bold rounded-2xl flex items-center justify-center gap-2 border border-emerald-200 shadow-sm transition-colors"
-              >
-                <Copy size={15} />
-                <span>レシピ栄養サマリーをコピー</span>
-              </button>
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <button
+                  onClick={() => onRecordToHealth(totals.perServing, `${title} (1人前)`)}
+                  className="py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-2xl flex items-center justify-center gap-1.5 border border-rose-200 transition-colors"
+                >
+                  <AppleIcon size={14} />
+                  <span>1人前をHealthKitへ</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    navigator.clipboard?.writeText(recipeSummaryText);
+                    alert('レシピ栄養サマリーをコピーしました！');
+                  }}
+                  className="py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-2xl flex items-center justify-center gap-1.5 border border-slate-200 transition-colors"
+                >
+                  <Copy size={14} />
+                  <span>サマリーをコピー</span>
+                </button>
+              </div>
             </div>
           )}
         </div>
       );
     }
 
-    // --- お気に入り・履歴画面 ---
+    // --- お気に入り・履歴画面 (FavoritesScreen) ---
     function FavoritesScreen({ foodMaster, favoriteIds, onSelectFood }) {
       const favs = useMemo(() => favoriteIds.map(id => foodMaster.find(f => f.id === id)).filter(Boolean), [foodMaster, favoriteIds]);
       return (
-        <div className="max-w-2xl mx-auto space-y-3">
-          <h2 className="text-base font-extrabold flex items-center gap-2"><Bookmark size={18} /> お気に入り食品 ({favs.length})</h2>
+        <div className="max-w-2xl mx-auto space-y-4">
+          <h2 className="text-base font-extrabold flex items-center gap-2"><Bookmark size={18} /> お気に入り食材 ({favs.length})</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {favs.map(f => (
-              <div key={f.id} onClick={() => onSelectFood(f.id)} className="bg-white p-4 rounded-2xl border flex items-center justify-between cursor-pointer shadow-sm">
-                <div className="flex items-center gap-2">
+              <div key={f.id} onClick={() => onSelectFood(f.id)} className="bg-white p-4 rounded-3xl border border-slate-200/80 flex items-center justify-between cursor-pointer shadow-subtle hover:shadow-card transition-all">
+                <div className="flex items-center gap-2.5">
                   <span className="text-2xl">{f.categoryEmoji}</span>
-                  <span className="text-xs font-bold">{f.displayName}</span>
+                  <span className="text-xs font-bold text-slate-900">{f.displayName}</span>
                 </div>
                 <ChevronRight size={16} className="text-slate-400" />
               </div>
@@ -1937,37 +1627,142 @@
       );
     }
 
+    // --- 体組成・Apple HealthKit モーダル (新設) ---
+    function HealthBodyModal({ metrics, stats, onChangeMetrics, onClose, onShowToast }) {
+      const [editState, setEditState] = useState({ ...metrics });
+
+      const handleSave = () => {
+        onChangeMetrics(editState);
+        onShowToast('体組成データを更新しました');
+        onClose();
+      };
+
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 w-full max-w-lg rounded-3xl p-6 space-y-5 shadow-float max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center border-b pb-3">
+              <div className="flex items-center gap-2">
+                <Heart size={20} className="fill-rose-500 text-rose-500" />
+                <h3 className="text-base font-black text-slate-900">体組成 ＆ Appleヘルスケア連動</h3>
+              </div>
+              <button onClick={onClose} className="text-slate-400 hover:text-slate-600 font-bold text-sm">✕</button>
+            </div>
+
+            {/* リアルタイム解析生体指標 */}
+            <div className="grid grid-cols-3 gap-2.5 text-center tnum">
+              <div className="bg-slate-50 border border-slate-200/80 p-3 rounded-2xl">
+                <div className="text-[10px] font-bold text-slate-500">BMI</div>
+                <div className="text-lg font-black text-slate-900 mt-0.5">{stats.bmi}</div>
+                <div className="text-[9px] text-slate-400">{stats.bmi >= 25 ? '肥満傾向' : stats.bmi < 18.5 ? '低体重' : '適正'}</div>
+              </div>
+              <div className="bg-slate-50 border border-slate-200/80 p-3 rounded-2xl">
+                <div className="text-[10px] font-bold text-slate-500">LBM (除脂肪体重)</div>
+                <div className="text-lg font-black text-slate-900 mt-0.5">{stats.lbm}<span className="text-xs">kg</span></div>
+                <div className="text-[9px] text-slate-400">筋肉量目安</div>
+              </div>
+              <div className="bg-slate-50 border border-slate-200/80 p-3 rounded-2xl">
+                <div className="text-[10px] font-bold text-slate-500">BMR (推定基礎代謝)</div>
+                <div className="text-lg font-black text-slate-900 mt-0.5">{stats.bmr}<span className="text-xs">kcal</span></div>
+                <div className="text-[9px] text-slate-400">Katch-McArdle式</div>
+              </div>
+            </div>
+
+            {/* 入力フォーム */}
+            <div className="space-y-3 text-xs font-bold text-slate-700">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label>身長 (cm)</label>
+                  <input
+                    type="number"
+                    value={editState.heightCm}
+                    onChange={(e) => setEditState({ ...editState, heightCm: Number(e.target.value) })}
+                    className="w-full bg-slate-50 border rounded-xl p-2.5 text-slate-900 font-bold"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label>体重 (kg)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={editState.weightKg}
+                    onChange={(e) => setEditState({ ...editState, weightKg: Number(e.target.value) })}
+                    className="w-full bg-slate-50 border rounded-xl p-2.5 text-slate-900 font-bold"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label>体脂肪率 (%)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={editState.bodyFatPct}
+                    onChange={(e) => setEditState({ ...editState, bodyFatPct: Number(e.target.value) })}
+                    className="w-full bg-slate-50 border rounded-xl p-2.5 text-slate-900 font-bold"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label>1日目標カロリー (kcal)</label>
+                  <input
+                    type="number"
+                    value={editState.targetCalories}
+                    onChange={(e) => setEditState({ ...editState, targetCalories: Number(e.target.value) })}
+                    className="w-full bg-slate-50 border rounded-xl p-2.5 text-slate-900 font-bold"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* HealthKit連携案内 */}
+            <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/80 text-[11px] text-slate-500 space-y-1">
+              <div className="font-bold text-slate-800 flex items-center gap-1.5">
+                <AppleIcon size={14} />
+                <span>Appleヘルスケア自動連携について</span>
+              </div>
+              <p>Capacitor iOSネイティブアプリ実行時は直接同期されます。ブラウザ・PWA実行時は「ショートカット」アプリと連携してワンタップ記録が可能です。</p>
+            </div>
+
+            <div className="flex gap-2">
+              <button onClick={onClose} className="flex-1 py-2.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">キャンセル</button>
+              <button onClick={handleSave} className="flex-1 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-card">保存する</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     // --- 設定モーダル ---
     function SettingsModal({ userGender, onChangeGender, userAgeGroup, onChangeAgeGroup, onClose }) {
       return (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 flex items-center justify-center p-4">
-          <div className="bg-white border w-full max-w-md rounded-3xl p-5 space-y-4 shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 w-full max-w-md rounded-3xl p-5 space-y-4 shadow-float">
             <div className="flex justify-between items-center border-b pb-3">
-              <h3 className="text-sm font-bold flex items-center gap-2"><Settings size={16} /> 各種設定</h3>
+              <h3 className="text-sm font-bold flex items-center gap-2"><Settings size={16} /> 各種設定 (厚生労働省基準)</h3>
               <button onClick={onClose} className="text-slate-400 font-bold">✕</button>
             </div>
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-700">性別</label>
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-700">性別</label>
               <div className="flex gap-2">
-                <button onClick={() => onChangeGender('male')} className={`flex-1 py-1.5 text-xs font-bold rounded-lg border ${userGender === 'male' ? 'bg-emerald-600 text-white' : 'bg-slate-50'}`}>男性</button>
-                <button onClick={() => onChangeGender('female')} className={`flex-1 py-1.5 text-xs font-bold rounded-lg border ${userGender === 'female' ? 'bg-emerald-600 text-white' : 'bg-slate-50'}`}>女性</button>
+                <button onClick={() => onChangeGender('male')} className={`flex-1 py-2 text-xs font-bold rounded-xl border transition-all ${userGender === 'male' ? 'bg-slate-900 text-white border-slate-900' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>男性</button>
+                <button onClick={() => onChangeGender('female')} className={`flex-1 py-2 text-xs font-bold rounded-xl border transition-all ${userGender === 'female' ? 'bg-slate-900 text-white border-slate-900' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>女性</button>
               </div>
             </div>
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-700">年齢区分</label>
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-700">年齢区分 (厚生労働省基準)</label>
               <div className="grid grid-cols-3 gap-2">
                 {['18-29', '30-49', '50-64'].map(age => (
                   <button
                     key={age}
                     onClick={() => onChangeAgeGroup(age)}
-                    className={`py-1.5 text-xs font-bold rounded-lg border ${userAgeGroup === age ? 'bg-emerald-600 text-white' : 'bg-slate-50'}`}
+                    className={`py-2 text-xs font-bold rounded-xl border transition-all ${userAgeGroup === age ? 'bg-slate-900 text-white border-slate-900' : 'bg-slate-50 border-slate-200 text-slate-700'}`}
                   >
-                    {age}
+                    {age} 歳
                   </button>
                 ))}
               </div>
             </div>
-            <button onClick={onClose} className="w-full py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold">保存して閉じる</button>
+            <button onClick={onClose} className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-card transition-all">保存して閉じる</button>
           </div>
         </div>
       );
