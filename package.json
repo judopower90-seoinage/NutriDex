@@ -1,0 +1,32 @@
+{
+  "name": "nutridex-app",
+  "version": "4.0.0",
+  "description": "NutriDex - 科学的詳細栄養解析＆体組成マネジメント (Apple HealthKit連動)",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "cap:sync": "npx cap sync",
+    "cap:add:ios": "npx cap add ios",
+    "cap:open:ios": "npx cap open ios",
+    "cap:build": "npx cap copy ios && npx cap open ios"
+  },
+  "keywords": [
+    "nutridex",
+    "nutrition",
+    "healthkit",
+    "apple-health",
+    "body-composition",
+    "pwa",
+    "ios-app"
+  ],
+  "author": "NutriDex Team",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/ios": "^6.2.0",
+    "@capgo/capacitor-healthkit": "^6.1.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.0"
+  }
+}
