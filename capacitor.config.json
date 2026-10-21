@@ -1,0 +1,21 @@
+{
+  "appId": "com.nutridex.app",
+  "appName": "NutriDex",
+  "webDir": ".",
+  "bundledWebRuntime": false,
+  "ios": {
+    "preferredContentMode": "mobile",
+    "scrollEnabled": true,
+    "allowsLinkPreview": false,
+    "backgroundColor": "#090D16"
+  },
+  "plugins": {
+    "CapacitorHealthkit": {
+      "reason": "体重・体脂肪率の同期および食事栄養素（カロリー、PFC、微量栄養素）をヘルスケアに自動記録するために利用します。"
+    }
+  },
+  "server": {
+    "androidScheme": "https",
+    "iosScheme": "nutridex"
+  }
+}
