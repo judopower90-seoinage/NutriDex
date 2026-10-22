@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
-  <title>NutriDex | 科学的栄養解析・体組成マネジメント (Apple HealthKit連動)</title>
+  <title>NutriDex v4.2 Pro | 科学的栄養解析・体組成マネジメント (Apple HealthKit連動)</title>
 
-  <!-- iOS / iPhone PWA メタタグ (ライトテーマ用最適化) -->
+  <!-- iOS / iPhone PWA メタタグ (ステータスバー文字くっきり黒表示) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="NutriDex">
-  <meta name="theme-color" content="#F8FAFC">
+  <meta name="theme-color" content="#FFFFFF">
 
-  <!-- 外部Web App Manifest (リポジトリ配置連動) -->
+  <!-- 外部Web App Manifest -->
   <link rel="manifest" href="./manifest.json">
 
   <!-- ブラウザ用ファビコン (SVG) -->
@@ -97,12 +97,15 @@
       scrollbar-width: none;
     }
 
-    /* iOS Safe Area 厳密指定 */
+    /* iOS ステータスバー（時計・ノッチ・Dynamic Island）厳密余白 */
+    .app-header-safe {
+      padding-top: max(env(safe-area-inset-top, 0px), 10px);
+      background-color: #FFFFFF !important;
+    }
+
+    /* iOS ホームバー（下部）余白 */
     .pb-safe {
       padding-bottom: max(env(safe-area-inset-bottom, 16px), 16px);
-    }
-    .pt-safe {
-      padding-top: max(env(safe-area-inset-top, 0px), 0px);
     }
 
     input[type=range] {
@@ -178,8 +181,8 @@
   <script type="text/babel">
     const { useState, useMemo, useEffect, useRef } = React;
 
-    // バージョン定数
-    const APP_VERSION = "v4.1 Pro";
+    // バージョン定数 (v4.2 Pro)
+    const APP_VERSION = "v4.2 Pro";
 
     /* ========================================================================
      * 【絶対仕様ロック宣言（IMMUTABLE CORE SPECIFICATION）】
@@ -519,6 +522,7 @@
     const Heart = (p) => <IconBase {...p}><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></IconBase>;
     const XIcon = (p) => <IconBase {...p}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></IconBase>;
 
+    // 正統派レモン断面アイコン
     const LemonSliceIcon = ({ size = 20, className = "" }) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -1003,14 +1007,6 @@
       const toastTimeoutRef = useRef(null);
       const [isManualSyncing, setIsManualSyncing] = useState(false);
 
-      const isIosSafari = useMemo(() => {
-        const ua = window.navigator.userAgent.toLowerCase();
-        const isIos = /iphone|ipad|ipod/.test(ua);
-        const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
-        return isIos && !isStandalone;
-      }, []);
-      const [showPwaBanner, setShowPwaBanner] = useState(true);
-
       const showToast = (msg, actionLabel = null, onAction = null) => {
         if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
         setToastData({ msg, actionLabel, onAction });
@@ -1132,41 +1128,27 @@
 
       return (
         <div className="min-h-screen min-h-dvh w-full max-w-full overflow-x-hidden bg-[#F8FAFC] text-slate-900 flex flex-col font-sans">
-          
-          {/* iOS Safari向け PWA案内バナー (ステータスバー余白完全考慮) */}
-          {isIosSafari && showPwaBanner && (
-            <div className="bg-slate-900 text-white px-3.5 py-2 text-xs flex items-center justify-between gap-2 border-b border-slate-800 z-50 pt-[max(env(safe-area-inset-top,0px),8px)]">
-              <div className="flex items-center gap-2 truncate">
-                <span className="text-base">🍋</span>
-                <span className="truncate">
-                  Safariの <span className="font-bold underline text-yellow-300">共有ボタン ➔「ホーム画面に追加」</span> で全画面起動＆オフライン使用可能！
-                </span>
-              </div>
-              <button onClick={() => setShowPwaBanner(false)} className="text-slate-400 hover:text-white shrink-0 p-1">
-                <XIcon size={14} />
-              </button>
-            </div>
-          )}
 
-          {/* ヘッダー: iOSノッチ・ステータスバーめり込み防止用セーフエリア (pt-[env(safe-area-inset-top)]) */}
-          <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 transition-all w-full pt-[max(env(safe-area-inset-top,0px),0px)] shadow-xs">
-            <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-3">
+          {/* ヘッダー: iOSノッチ・ステータスバー下の安全領域からくっきり純白・黒文字で描画 */}
+          <header className="sticky top-0 z-40 app-header-safe border-b border-slate-200 shadow-sm w-full transition-none">
+            <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-13 sm:h-16 flex items-center justify-between gap-1.5 sm:gap-3">
+              
               {/* ブランドロゴ */}
-              <div className="flex items-center gap-2 sm:gap-2.5 cursor-pointer group shrink-0 min-w-0" onClick={() => setActiveTab('home')}>
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-amber-400 via-yellow-400 to-amber-500 flex items-center justify-center shadow-sm shadow-amber-400/30 group-hover:scale-105 group-hover:shadow-glow transition-all shrink-0 p-1">
-                  <div className="w-full h-full rounded-lg bg-white/90 flex items-center justify-center shadow-inner">
-                    <LemonSliceIcon size={20} />
+              <div className="flex items-center gap-1.5 sm:gap-2.5 cursor-pointer shrink-0 min-w-0" onClick={() => setActiveTab('home')}>
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-amber-400 via-yellow-400 to-amber-500 flex items-center justify-center shadow-sm shrink-0 p-1">
+                  <div className="w-full h-full rounded-lg bg-white flex items-center justify-center shadow-inner">
+                    <LemonSliceIcon size={19} />
                   </div>
                 </div>
-                <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
                   <span className="font-black tracking-tight text-base sm:text-lg text-slate-950 font-sans">
                     NutriDex
                   </span>
-                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-900 text-white font-mono tracking-tight shrink-0 shadow-xs">
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-slate-900 text-white font-mono tracking-tight shrink-0">
                     {APP_VERSION}
                   </span>
                   
-                  <div className={`hidden lg:flex items-center gap-1.5 text-[11px] font-medium px-2 py-0.5 rounded-full border transition-all ${
+                  <div className={`hidden lg:flex items-center gap-1.5 text-[11px] font-medium px-2 py-0.5 rounded-full border ${
                     dbSyncStatus === 'synced' ? 'bg-amber-50 text-amber-800 border-amber-200/80' :
                     dbSyncStatus === 'syncing' ? 'bg-amber-50 text-amber-800 border-amber-200/80 animate-pulse' :
                     'bg-slate-100 text-slate-700 border-slate-200'
@@ -1179,7 +1161,8 @@
                 </div>
               </div>
 
-              <nav className="hidden md:flex items-center gap-1 bg-slate-100/80 p-1 rounded-2xl border border-slate-200/60">
+              {/* PCナビゲーション */}
+              <nav className="hidden md:flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200">
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = activeTab === item.id;
@@ -1189,7 +1172,7 @@
                       onClick={() => setActiveTab(item.id)}
                       className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 relative ${
                         isActive
-                          ? 'bg-amber-400 text-slate-950 shadow-sm shadow-amber-300/40 font-black'
+                          ? 'bg-amber-400 text-slate-950 shadow-sm font-black'
                           : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
                       }`}
                     >
@@ -1205,15 +1188,16 @@
                 })}
               </nav>
 
-              <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              {/* 右側アクション */}
+              <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                 <button
                   onClick={() => setIsHealthModalOpen(true)}
-                  className="px-2 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-50 to-pink-50 hover:from-rose-100 hover:to-pink-100 text-rose-700 border border-rose-200/70 text-xs font-bold flex items-center gap-1 sm:gap-1.5 shadow-xs transition-all active:scale-95"
+                  className="px-2 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold flex items-center gap-1 shadow-xs transition-all active:scale-95"
                   title="Apple HealthKit連動・体組成マネジメント"
                 >
-                  <Heart size={14} className="fill-rose-500 text-rose-500 shrink-0 animate-pulse-subtle" />
-                  <span className="hidden sm:inline">ヘルスケア連動</span>
-                  <span className="text-[10px] bg-rose-200/70 text-rose-900 px-1 rounded font-mono font-bold">
+                  <Heart size={14} className="fill-rose-500 text-rose-500 shrink-0" />
+                  <span className="hidden sm:inline">体組成</span>
+                  <span className="text-[11px] bg-rose-200/70 text-rose-900 px-1 py-0.2 rounded font-mono font-black">
                     {bodyStats.weight}kg
                   </span>
                 </button>
@@ -1221,18 +1205,18 @@
                 <button
                   onClick={() => syncDatabase(true)}
                   disabled={isManualSyncing}
-                  className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-white hover:bg-yellow-50 text-slate-700 border border-slate-200/80 shadow-xs flex items-center gap-1.5 transition-all active:scale-95"
+                  className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-slate-50 hover:bg-yellow-50 text-slate-700 border border-slate-200 shadow-xs flex items-center gap-1.5 transition-all active:scale-95"
                   title="食品データベースを再同期"
                 >
-                  <RotateCcw size={14} className={`text-slate-500 ${isManualSyncing ? 'animate-spin text-amber-600' : ''}`} />
+                  <RotateCcw size={15} className={`text-slate-600 ${isManualSyncing ? 'animate-spin text-amber-600' : ''}`} />
                   <span className="text-xs font-bold hidden lg:inline">再同期</span>
                 </button>
 
                 <button
                   onClick={() => setIsSettingsOpen(true)}
-                  className="p-1.5 sm:px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 border border-slate-200/80 transition-all flex items-center gap-1.5 shadow-xs"
+                  className="p-1.5 sm:px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-xs font-semibold text-slate-800 border border-slate-200 transition-all flex items-center gap-1 shadow-xs"
                 >
-                  <Settings size={14} className="text-slate-500" />
+                  <Settings size={15} className="text-slate-600" />
                   <span className="font-bold text-[11px] sm:text-xs hidden sm:inline">
                     {userGender === 'male' ? '男性' : '女性'} {userAgeGroup}
                   </span>
@@ -1315,7 +1299,7 @@
             )}
           </main>
 
-          <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-2xl border-t border-slate-200/80 px-2 py-1.5 flex items-center justify-around shadow-float pb-safe">
+          <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200 px-2 py-1.5 flex items-center justify-around shadow-float pb-safe">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -1342,7 +1326,7 @@
           </nav>
 
           {toastData && (
-            <div className="fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 text-white px-4 py-2.5 rounded-2xl shadow-float flex items-center gap-3 text-xs font-bold backdrop-blur-md max-w-[92%] sm:max-w-md border border-slate-800">
+            <div className="fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white px-4 py-2.5 rounded-2xl shadow-float flex items-center gap-3 text-xs font-bold max-w-[92%] sm:max-w-md border border-slate-800">
               <div className="w-5 h-5 rounded-full bg-amber-400/20 text-amber-300 flex items-center justify-center shrink-0">
                 <Check size={13} />
               </div>
@@ -1575,7 +1559,7 @@
       );
     }
 
-    // --- 詳細画面 (DetailScreen: 全63項目ロック完全展開) ---
+    // --- 詳細画面 (DetailScreen) ---
     function DetailScreen({
       food, currentGrams, onChangeGrams, activeUnit, onChangeUnit,
       isPurchasedWeight, onChangePurchasedWeight, currentDri, isFavorite,
