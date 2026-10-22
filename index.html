@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
-  <title>NutriDex v4.2 Pro | 科学的栄養解析・体組成マネジメント (Apple HealthKit連動)</title>
+  <title>NutriDex v4.3 Pro | 科学的栄養解析・体組成マネジメント (Apple HealthKit連動)</title>
 
   <!-- iOS / iPhone PWA メタタグ (ステータスバー文字くっきり黒表示) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -181,8 +181,8 @@
   <script type="text/babel">
     const { useState, useMemo, useEffect, useRef } = React;
 
-    // バージョン定数 (v4.2 Pro)
-    const APP_VERSION = "v4.2 Pro";
+    // バージョン定数 (v4.3 Pro)
+    const APP_VERSION = "v4.3 Pro";
 
     /* ========================================================================
      * 【絶対仕様ロック宣言（IMMUTABLE CORE SPECIFICATION）】
@@ -394,6 +394,7 @@
       { kanji: ['昆布', 'コンブ'], kana: ['こんぶ'] },
       { kanji: ['海苔', 'ノリ'], kana: ['のり'] },
       { kanji: ['羊栖菜', 'ヒジキ'], kana: ['ひじき'] },
+      { kanji: ['あかもく', 'アカモク', '赤藻屑'], kana: ['あかもく', 'ぎばさ', 'ギバサ', 'ながも', 'ナガモ', '海藻'] },
       { kanji: ['鮭', 'サケ', 'シャケ', 'サーモン'], kana: ['さけ', 'しゃけ', 'しろさけ'] },
       { kanji: ['鮪', 'マグロ', 'ツナ'], kana: ['まぐろ', 'くろまぐろ', 'きはだまぐろ'] },
       { kanji: ['鯖', 'サバ'], kana: ['さば', 'まさば', 'ごまさば'] },
@@ -804,6 +805,21 @@
           { name: '1丁 (300g)', grams: 300, isPurchasedWeight: false, isDefault: false },
           { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
         ]
+      },
+      {
+        id: '09101', foodCode: '09101', source: 'analysis_standard',
+        name: 'あかもく/［ぎばさ］/生・ゆで', displayName: 'あかもく（アカモク／ぎばさ 生・ゆで）', shortName: 'あかもく(ぎばさ)',
+        kana: 'あかもく アカモク ぎばさ ギバサ ながも ナガモ 海藻 かいそう フコイダン ねばねば', categoryCode: '09', categoryName: '藻類', categoryEmoji: '🌿',
+        refuseRate: 0.0, energy: 19, energyKj: 79, water: 92.5, protein: 1.6, fat: 0.5, carb: 3.5, sugar: 0.2, fiber: 3.3, fiberSoluble: 2.3, fiberInsoluble: 1.0, salt: 0.2, ash: 1.9,
+        sodium: 78, potassium: 120, calcium: 140, magnesium: 85, phosphorus: 28, iron: 1.2, zinc: 0.4, copper: 0.05, manganese: 0.18, iodine: 180,
+        vitaminA: 45, retinol: 0, betaCarotene: 270, vitaminD: 0.0, vitaminE: 0.8, vitaminK: 80,
+        vitaminB1: 0.03, vitaminB2: 0.06, niacin: 0.8, vitaminB6: 0.05, vitaminB12: 0.3, folate: 35, pantothenicAcid: 0.22, vitaminC: 3.0,
+        saturatedFat: 0.11, monounsaturatedFat: 0.08, polyunsaturatedFat: 0.24, n3Fat: 0.15, n6Fat: 0.09, cholesterol: 0,
+        portionUnits: [
+          { name: '市販1パック (40g)', grams: 40, isPurchasedWeight: false, isDefault: true },
+          { name: '小鉢1杯 (70g)', grams: 70, isPurchasedWeight: false, isDefault: false },
+          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: false }
+        ]
       }
     ];
 
@@ -850,6 +866,7 @@
       if (name.includes('けいらん') || name.includes('たまご')) extraKeywords.push('卵 玉子 鶏卵 たまご エッグ');
       if (name.includes('こめ') || name.includes('めし')) extraKeywords.push('米 白米 ご飯 ごはん ライス おこめ');
       if (name.includes('大麦') || name.includes('麦')) extraKeywords.push('大麦 麦 押麦 もち麦 麦ごはん');
+      if (name.includes('あかもく') || name.includes('ぎばさ')) extraKeywords.push('あかもく アカモク ぎばさ ギバサ ながも ナガモ 海藻 フコイダン');
 
       let kana = `${String(raw.kana || name)} ${extraKeywords.join(' ')}`;
 
