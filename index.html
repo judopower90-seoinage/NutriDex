@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
   <title>NutriDex | 科学的栄養解析・体組成マネジメント (Apple HealthKit連動)</title>
 
-  <!-- iOS / iPhone PWA メタタグ -->
+  <!-- iOS / iPhone PWA メタタグ (ライトテーマ用最適化) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="NutriDex">
-  <meta name="theme-color" content="#090D16">
+  <meta name="theme-color" content="#F8FAFC">
 
   <!-- 外部Web App Manifest (リポジトリ配置連動) -->
   <link rel="manifest" href="./manifest.json">
@@ -69,7 +69,7 @@
   <!-- Babel Standalone -->
   <script src="https://unpkg.com/@babel/standalone@7.26.0/babel.min.js"></script>
 
-  <!-- Apple HealthKit 連携ブリッジスクリプト (存在時は直結、不在時は安全に内部フォールバック) -->
+  <!-- Apple HealthKit 連携ブリッジスクリプト -->
   <script src="./healthkit.js" onerror="console.warn('[NutriDex] healthkit.js not found. Fallback to inline shortcuts bridge.')"></script>
 
   <style>
@@ -97,11 +97,12 @@
       scrollbar-width: none;
     }
 
+    /* iOS Safe Area 厳密指定 */
     .pb-safe {
-      padding-bottom: max(env(safe-area-inset-bottom, 14px), 14px);
+      padding-bottom: max(env(safe-area-inset-bottom, 16px), 16px);
     }
     .pt-safe {
-      padding-top: max(env(safe-area-inset-top, 12px), 12px);
+      padding-top: max(env(safe-area-inset-top, 0px), 0px);
     }
 
     input[type=range] {
@@ -177,7 +178,7 @@
   <script type="text/babel">
     const { useState, useMemo, useEffect, useRef } = React;
 
-    // バージョン定数 (v4.1 Pro - Audit Resolved & Zero-Loss Engine)
+    // バージョン定数
     const APP_VERSION = "v4.1 Pro";
 
     /* ========================================================================
@@ -262,7 +263,7 @@
       { id: 'asparticAcid', key: 'asparticAcid', category: 'amino', name: 'アスパラギン酸', unit: 'mg', driKey: null }
     ]);
 
-    // カテゴリ定義タブ（合計63項目の正確な表記）
+    // カテゴリ定義タブ
     const NUTRIENT_TABS = Object.freeze([
       { id: 'all', label: 'すべて (全63項目)' },
       { id: 'basic', label: '基本・熱量 (8)' },
@@ -309,7 +310,6 @@
     };
     const numOrZero = (v) => numOrNull(v) ?? 0;
 
-    // 食品正式名称から調理法（生・ゆで等）だけの単語化を防ぎ、的確な短縮名を抽出する関数
     function extractFoodShortName(fullName) {
       if (!fullName) return '食品';
       const parts = fullName.split('/').map(s => s.trim().replace(/^[［\[]+|[］\]]+$/g, '')).filter(Boolean);
@@ -330,7 +330,6 @@
       return meaningful || parts[0] || fullName;
     }
 
-    // カタカナ・ひらがな相互変換ヘルパー
     function katakanaToHiragana(str) {
       return String(str ?? '').replace(/[\u30a1-\u30f6]/g, (m) => String.fromCharCode(m.charCodeAt(0) - 0x60));
     }
@@ -339,7 +338,6 @@
     }
     const normalizeSearch = (s) => katakanaToHiragana(String(s ?? '').normalize('NFKC').toLowerCase());
 
-    // 漢字・ひらがな・カタカナ・日常語 双方向シノニム辞書（80群超）
     const SYNONYM_DICTIONARY = [
       { kanji: ['鶏', '鶏肉', '若鶏', '鳥', '鳥肉', 'チキン'], kana: ['にわとり', 'とり', 'とりにく', 'わかどり'] },
       { kanji: ['豚', '豚肉', 'ポーク'], kana: ['ぶた', 'ぶたにく'] },
@@ -530,9 +528,7 @@
         fill="none"
         className={className}
       >
-        {/* 外枠ピールリング（完全な円環） */}
         <circle cx="12" cy="12" r="9.3" stroke="#F97316" strokeWidth="2.2" />
-        {/* 8房の幾何学レモン果肉セグメント */}
         <g transform="translate(12, 12)" fill="#EAB308">
           {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
             <path
@@ -595,7 +591,6 @@
       }
     };
 
-    // グラム数および廃棄率に応じた全栄養素の完全スケーリング計算
     function calculateScaledNutrients(food, grams, isPurchasedWeight = false) {
       if (!food) return null;
       const rawGrams = Math.max(0, Number(grams) || 0);
@@ -699,7 +694,6 @@
       };
     }
 
-    // 内蔵公的シードマスター（ID体系を食品コードに完全統一・主要食材を復元）
     const INTRINSIC_OFFICIAL_FOODS = [
       {
         id: '14003', foodCode: '14003', source: 'mext_official',
@@ -869,12 +863,12 @@
       }
 
       return {
-        id: code, // ID体系を食品コード（5桁）で完全統一
+        id: code,
         foodCode: code,
         source: 'mext_official',
         name,
         displayName: name,
-        shortName: extractFoodShortName(name), // 調理法単独化を防ぐ短縮名
+        shortName: extractFoodShortName(name),
         kana,
         categoryCode: grp,
         categoryName: cat.name,
@@ -928,7 +922,6 @@
         n3Fat: numOrNull(raw.fapun3 ?? raw.n3Fat),
         n6Fat: numOrNull(raw.fapun6 ?? raw.n6Fat),
         cholesterol: numOrNull(raw.chole ?? raw.cholesterol),
-        // アミノ酸・タンパク質評価項目のマッピング完全網羅
         isoleucine: numOrNull(raw.isoleucine ?? raw.ile),
         leucine: numOrNull(raw.leucine ?? raw.leu),
         valine: numOrNull(raw.valine ?? raw.val),
@@ -948,7 +941,6 @@
       };
     }
 
-    // 既存データの精緻な値（アミノ酸等）を消さないディープマージ関数
     function mergeFoodLists(base, incoming) {
       const codeMap = new Map();
       base.forEach(f => codeMap.set(f.foodCode, f));
@@ -978,14 +970,12 @@
       const [foodMaster, setFoodMaster] = useState(INTRINSIC_OFFICIAL_FOODS);
       const [dbSyncStatus, setDbSyncStatus] = useState('syncing');
 
-      // ユーザー設定の永続化
       const savedProfile = useMemo(() => safeStorage.getJSON(STORAGE_KEYS.profile, { gender: 'male', ageGroup: '30-49' }), []);
       const [userGender, setUserGender] = useState(savedProfile.gender || 'male');
       const [userAgeGroup, setUserAgeGroup] = useState(savedProfile.ageGroup || '30-49');
       const [isSettingsOpen, setIsSettingsOpen] = useState(false);
       const [isHealthModalOpen, setIsHealthModalOpen] = useState(false);
 
-      // 体組成ステート（Apple HealthKit連動）
       const [bodyStats, setBodyStats] = useState(() => safeStorage.getJSON(STORAGE_KEYS.bodyStats, {
         weight: 68.5,
         bodyFat: 16.2,
@@ -998,7 +988,6 @@
       const [activePortionUnit, setActivePortionUnit] = useState('大さじ1 (12g)');
       const [isPurchasedWeight, setIsPurchasedWeight] = useState(false);
 
-      // ID体系統一に伴う初期お気に入り・履歴
       const [favorites, setFavorites] = useState(() => loadIdList(STORAGE_KEYS.favorites, ['14003', '14001', '11221', '01088']));
       const [history, setHistory] = useState(() => loadIdList(STORAGE_KEYS.history, ['14003', '01088']));
 
@@ -1032,7 +1021,6 @@
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       }, [activeTab]);
 
-      // 3段階フォールバック同期
       const syncDatabase = async (isManual = false) => {
         if (isManual) setIsManualSyncing(true);
         const endpoints = [
@@ -1104,7 +1092,6 @@
         );
       };
 
-      // Apple HealthKit 食事記録ハンドラー（全重要栄養項目を完全網羅送信）
       const handleRecordToHealthKit = async (mealPayload) => {
         if (window.NutriDexHealthKit && typeof window.NutriDexHealthKit.saveMealNutrition === 'function') {
           try {
@@ -1124,7 +1111,6 @@
           }
         }
 
-        // 安全フォールバック
         const dataJson = JSON.stringify({ source: 'NutriDex', timestamp: new Date().toISOString(), ...mealPayload });
         if (navigator.clipboard) {
           navigator.clipboard.writeText(dataJson).catch(() => {});
@@ -1147,8 +1133,9 @@
       return (
         <div className="min-h-screen min-h-dvh w-full max-w-full overflow-x-hidden bg-[#F8FAFC] text-slate-900 flex flex-col font-sans">
           
+          {/* iOS Safari向け PWA案内バナー (ステータスバー余白完全考慮) */}
           {isIosSafari && showPwaBanner && (
-            <div className="bg-slate-900 text-white px-3.5 py-2 text-xs flex items-center justify-between gap-2 border-b border-slate-800 z-50">
+            <div className="bg-slate-900 text-white px-3.5 py-2 text-xs flex items-center justify-between gap-2 border-b border-slate-800 z-50 pt-[max(env(safe-area-inset-top,0px),8px)]">
               <div className="flex items-center gap-2 truncate">
                 <span className="text-base">🍋</span>
                 <span className="truncate">
@@ -1161,12 +1148,11 @@
             </div>
           )}
 
-          {}
-          {/* ヘッダー */}
-          <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-yellow-200/70 transition-all w-full">
-            <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-3">
+          {/* ヘッダー: iOSノッチ・ステータスバーめり込み防止用セーフエリア (pt-[env(safe-area-inset-top)]) */}
+          <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 transition-all w-full pt-[max(env(safe-area-inset-top,0px),0px)] shadow-xs">
+            <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-3">
               {/* ブランドロゴ */}
-              <div className="flex items-center gap-2.5 cursor-pointer group shrink-0 min-w-0" onClick={() => setActiveTab('home')}>
+              <div className="flex items-center gap-2 sm:gap-2.5 cursor-pointer group shrink-0 min-w-0" onClick={() => setActiveTab('home')}>
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-amber-400 via-yellow-400 to-amber-500 flex items-center justify-center shadow-sm shadow-amber-400/30 group-hover:scale-105 group-hover:shadow-glow transition-all shrink-0 p-1">
                   <div className="w-full h-full rounded-lg bg-white/90 flex items-center justify-center shadow-inner">
                     <LemonSliceIcon size={20} />
@@ -1180,7 +1166,7 @@
                     {APP_VERSION}
                   </span>
                   
-                  <div className={`hidden xs:flex items-center gap-1.5 text-[11px] font-medium px-2 py-0.5 rounded-full border transition-all ${
+                  <div className={`hidden lg:flex items-center gap-1.5 text-[11px] font-medium px-2 py-0.5 rounded-full border transition-all ${
                     dbSyncStatus === 'synced' ? 'bg-amber-50 text-amber-800 border-amber-200/80' :
                     dbSyncStatus === 'syncing' ? 'bg-amber-50 text-amber-800 border-amber-200/80 animate-pulse' :
                     'bg-slate-100 text-slate-700 border-slate-200'
@@ -1222,10 +1208,10 @@
               <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 <button
                   onClick={() => setIsHealthModalOpen(true)}
-                  className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-50 to-pink-50 hover:from-rose-100 hover:to-pink-100 text-rose-700 border border-rose-200/70 text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all active:scale-95"
+                  className="px-2 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-50 to-pink-50 hover:from-rose-100 hover:to-pink-100 text-rose-700 border border-rose-200/70 text-xs font-bold flex items-center gap-1 sm:gap-1.5 shadow-xs transition-all active:scale-95"
                   title="Apple HealthKit連動・体組成マネジメント"
                 >
-                  <Heart size={14} className="fill-rose-500 text-rose-500 animate-pulse-subtle" />
+                  <Heart size={14} className="fill-rose-500 text-rose-500 shrink-0 animate-pulse-subtle" />
                   <span className="hidden sm:inline">ヘルスケア連動</span>
                   <span className="text-[10px] bg-rose-200/70 text-rose-900 px-1 rounded font-mono font-bold">
                     {bodyStats.weight}kg
@@ -1235,7 +1221,7 @@
                 <button
                   onClick={() => syncDatabase(true)}
                   disabled={isManualSyncing}
-                  className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl bg-white hover:bg-yellow-50 text-slate-700 border border-slate-200/80 shadow-xs flex items-center gap-1.5 transition-all active:scale-95"
+                  className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-white hover:bg-yellow-50 text-slate-700 border border-slate-200/80 shadow-xs flex items-center gap-1.5 transition-all active:scale-95"
                   title="食品データベースを再同期"
                 >
                   <RotateCcw size={14} className={`text-slate-500 ${isManualSyncing ? 'animate-spin text-amber-600' : ''}`} />
@@ -1244,7 +1230,7 @@
 
                 <button
                   onClick={() => setIsSettingsOpen(true)}
-                  className="p-2 sm:px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 border border-slate-200/80 transition-all flex items-center gap-1.5 shadow-xs"
+                  className="p-1.5 sm:px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 border border-slate-200/80 transition-all flex items-center gap-1.5 shadow-xs"
                 >
                   <Settings size={14} className="text-slate-500" />
                   <span className="font-bold text-[11px] sm:text-xs hidden sm:inline">
@@ -1329,7 +1315,7 @@
             )}
           </main>
 
-          <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-2xl border-t border-yellow-200/60 px-2 py-1.5 flex items-center justify-around shadow-float pb-safe">
+          <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-2xl border-t border-slate-200/80 px-2 py-1.5 flex items-center justify-around shadow-float pb-safe">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -1425,7 +1411,6 @@
 
       return (
         <div className="space-y-5 w-full">
-          {}
           <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-amber-950 p-4 sm:p-5 rounded-3xl text-white shadow-card relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1 z-10">
               <div className="flex items-center gap-2">
@@ -1508,7 +1493,7 @@
                 { id: '01', name: '穀類', emoji: '🍚' },
                 { id: '04', name: '豆類', emoji: '🫘' },
                 { id: '12', name: '卵類', emoji: '🥚' },
-                { id: '13', name: '乳類', emoji: '🧈' },
+                { id: '13', name: '乳類', emoji: '🥛' },
                 { id: '07', name: '果実類', emoji: '🍋' },
                 { id: '08', name: 'きのこ類', emoji: '🍄' },
                 { id: '09', name: '藻類', emoji: '🌿' }
@@ -1618,7 +1603,6 @@
       };
 
       const handleHealthKitClick = () => {
-        // オメガ3、ビタミンA, D, E、マグネシウムを含む完全ペイロード送信
         onRecordToHealthKit({
           title: `${food.displayName} (${currentGrams}g)`,
           energy: n.energy,
@@ -1719,7 +1703,6 @@
                 <span>{justHealthLogged ? 'ヘルスケア記録済！' : 'ヘルスケアに記録'}</span>
               </button>
 
-              {}
               <button
                 onClick={handleAddClick}
                 className={`px-3.5 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 shadow-sm transition-all active:scale-95 ${
@@ -1996,14 +1979,13 @@
       );
     }
 
-    // --- くらべる画面 (CompareScreen: セレクトボックス外食品の表示落ちを完全防止) ---
+    // --- くらべる画面 (CompareScreen) ---
     function CompareScreen({ foodMaster, foodAConfig, foodBConfig, onChangeFoodA, onChangeFoodB, onSelectFood }) {
       const fA = foodMaster.find(f => f.id === foodAConfig.id || f.foodCode === foodAConfig.id) || foodMaster[0];
       const fB = foodMaster.find(f => f.id === foodBConfig.id || f.foodCode === foodBConfig.id) || foodMaster[1] || foodMaster[0];
       const nA = calculateScaledNutrients(fA, foodAConfig.grams);
       const nB = calculateScaledNutrients(fB, foodBConfig.grams);
 
-      // スロットA/Bで選択された食品が常に <select> の候補に含まれるように合成
       const compareOptions = useMemo(() => {
         const set = new Map();
         if (fA) set.set(fA.id, fA);
@@ -2361,7 +2343,6 @@
             )}
           </div>
 
-          {}
           {items.length > 0 && (
             <div className="bg-gradient-to-br from-yellow-50/80 via-white to-amber-50/50 p-4 sm:p-5 rounded-3xl border border-amber-300/80 space-y-4 shadow-card">
               <div className="flex items-baseline justify-between border-b border-amber-200 pb-3 flex-wrap gap-2">
