@@ -97,9 +97,10 @@
       scrollbar-width: none;
     }
 
-    /* iOS ステータスバー（時計・ノッチ・Dynamic Island）厳密余白 */
+    /* iOS ステータスバー（時計・Dynamic Island）＋ iPhone17 上部端ぼやけ対策（セーフエリア + 5mm 余白） */
     .app-header-safe {
-      padding-top: max(env(safe-area-inset-top, 0px), 10px);
+      padding-top: calc(max(env(safe-area-inset-top, 0px), 24px) + 5mm) !important;
+      padding-bottom: 10px !important;
       background-color: #FFFFFF !important;
     }
 
@@ -998,9 +999,9 @@
       const [isHealthModalOpen, setIsHealthModalOpen] = useState(false);
 
       const [bodyStats, setBodyStats] = useState(() => safeStorage.getJSON(STORAGE_KEYS.bodyStats, {
-        weight: 68.5,
-        bodyFat: 16.2,
-        height: 174,
+        weight: 104,
+        bodyFat: 24,
+        height: 175,
         targetCalories: 2350,
         lastHealthKitSync: null
       }));
@@ -1146,9 +1147,9 @@
       return (
         <div className="min-h-screen min-h-dvh w-full max-w-full overflow-x-hidden bg-[#F8FAFC] text-slate-900 flex flex-col font-sans">
 
-          {/* ヘッダー: iOSノッチ・ステータスバー下の安全領域からくっきり純白・黒文字で描画 */}
+          {/* ヘッダー: iPhone 17 ディスプレイ端部ぼやけ回避（セーフエリア + 5mm 余白） */}
           <header className="sticky top-0 z-40 app-header-safe border-b border-slate-200 shadow-sm w-full transition-none">
-            <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-13 sm:h-16 flex items-center justify-between gap-1.5 sm:gap-3">
+            <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 min-h-[46px] sm:min-h-[56px] flex items-center justify-between gap-1.5 sm:gap-3">
               
               {/* ブランドロゴ */}
               <div className="flex items-center gap-1.5 sm:gap-2.5 cursor-pointer shrink-0 min-w-0" onClick={() => setActiveTab('home')}>
