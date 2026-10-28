@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
-  <title>NutriDex v4.5 Pro | 科学的栄養解析・体組成マネジメント (AIニュアンス検索＆10件履歴統合版)</title>
+  <title>NutriDex v4.5.1 Pro | 科学的栄養解析・体組成マネジメント (AI通信安定化版)</title>
 
   <!-- iOS / iPhone PWA メタタグ (ステータスバー文字くっきり黒表示) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -182,8 +182,8 @@
   <script type="text/babel">
     const { useState, useMemo, useEffect, useRef } = React;
 
-    // バージョン定数 (v4.5 Pro - AIニュアンス検索＆10件履歴画面新設版)
-    const APP_VERSION = "v4.5 Pro";
+    // バージョン定数 (v4.5.1 Pro - AI通信404解消＆自動フォールバック版)
+    const APP_VERSION = "v4.5.1 Pro";
 
     /* ========================================================================
      * 【絶対仕様ロック宣言（IMMUTABLE CORE SPECIFICATION）】
@@ -281,11 +281,11 @@
     // ローカル保存管理キー
     const STORAGE_KEYS = {
       favorites: 'nutridex_favorites',
-      historyTen: 'nutridex_history_ten', // 過去10件の履歴
+      historyTen: 'nutridex_history_ten',
       profile: 'nutridex_profile',
       recipe: 'nutridex_recipe',
       bodyStats: 'nutridex_body_stats',
-      geminiApiKey: 'nutridex_gemini_api_key' // Gemini APIキー
+      geminiApiKey: 'nutridex_gemini_api_key'
     };
 
     const safeStorage = {
@@ -351,6 +351,7 @@
     const normalizeSearch = (s) => katakanaToHiragana(String(s ?? '').normalize('NFKC').toLowerCase());
 
     const SYNONYM_DICTIONARY = [
+      { kanji: ['輸入牛バラ', '輸入牛バラ肉', '輸入牛ばら', '輸入牛ばら肉', 'ショートプレート'], kana: ['ゆにゅうぎゅうばら', 'ゆにゅううしばら'], tags: ['うし', 'ばら', 'ゆにゅう'] },
       { kanji: ['牛バラ', '牛バラ肉', '牛ばら', '牛ばら肉', 'カルビ', '牛カルビ'], kana: ['うしばら', 'ぎゅうばら', 'ぎゅうばらにく', 'かるび'], tags: ['うし', 'ばら'] },
       { kanji: ['牛ロース', '牛ロース肉', '牛かたロース', 'リブロース', 'サーロイン'], kana: ['うしろーす', 'ぎゅうろーす', 'さーろいん'], tags: ['うし', 'ろーす'] },
       { kanji: ['牛ヒレ', '牛ひれ', '牛フィレ'], kana: ['うしひれ', 'ぎゅうひれ', 'ふぃれ'], tags: ['うし', 'ひれ'] },
@@ -372,6 +373,8 @@
 
       { kanji: ['鶏', '鶏肉', '若鶏', '鳥', '鳥肉', 'チキン'], kana: ['にわとり', 'とり', 'とりにく', 'わかどり'] },
       { kanji: ['豚', '豚肉', 'ポーク'], kana: ['ぶた', 'ぶたにく'] },
+      { kanji: ['輸入牛', '輸入牛肉'], kana: ['ゆにゅうぎゅう', 'ゆにゅううし'] },
+      { kanji: ['和牛', '国産牛'], kana: ['わぎゅう', 'こくさんぎゅう'] },
       { kanji: ['牛', '牛肉', 'ビーフ'], kana: ['うし', 'ぎゅう', 'ぎゅうにく'] },
       { kanji: ['卵', '鶏卵', '玉子'], kana: ['たまご', 'けいらん'] },
 
@@ -547,6 +550,9 @@
         else if (foodNormDisplay.startsWith(qNorm) || foodNormShort.startsWith(qNorm)) score += 500;
         else if (foodNormDisplay.includes(qNorm) || foodNormShort.includes(qNorm)) score += 300;
 
+        if (qNorm.includes('輸入') && (foodNormName.includes('輸入') || foodNormDisplay.includes('輸入'))) score += 600;
+        if (qNorm.includes('和牛') && (foodNormName.includes('和牛') || foodNormDisplay.includes('和牛'))) score += 600;
+
         if (foodNormName.endsWith('/生') || foodNormName.includes('/生')) score += 40;
         if (foodNormName.includes('水稲めし')) score += 30;
         if (f.foodCode === qNorm) score += 2000;
@@ -595,8 +601,6 @@
     const Minus = (p) => <IconBase {...p}><path d="M5 12h14"/></IconBase>;
     const Trash2 = (p) => <IconBase {...p}><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></IconBase>;
     const RotateCcw = (p) => <IconBase {...p}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></IconBase>;
-    const Bookmark = (p) => <IconBase {...p}><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></IconBase>;
-    const BookmarkCheck = (p) => <IconBase {...p}><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/><path d="m9 10 2 2 4-4"/></IconBase>;
     const Settings = (p) => <IconBase {...p}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></IconBase>;
     const Copy = (p) => <IconBase {...p}><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></IconBase>;
     const ArrowLeft = (p) => <IconBase {...p}><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></IconBase>;
@@ -771,9 +775,20 @@
         ]
       },
       {
+        id: '11074', foodCode: '11074', source: 'mext_official',
+        name: 'うし/［輸入牛肉］/ばら/脂身つき/生', displayName: '輸入牛バラ（牛丼・ショートプレート 脂身つき 生）', shortName: '輸入牛バラ肉',
+        kana: 'ゆにゅううしばら ゆにゅうぎゅうばら 牛バラ 牛バラ肉 輸入牛 輸入牛肉 ショートプレート カルビ うし ばら', categoryCode: '11', categoryName: '肉類', categoryEmoji: '🥩',
+        refuseRate: 0.0, energy: 371, energyKj: 1552, water: 52.3, protein: 14.4, fat: 32.9, carb: 0.2, sugar: 0.2, fiber: 0.0, salt: 0.1,
+        sodium: 48, potassium: 230, calcium: 4, magnesium: 14, phosphorus: 120, iron: 1.5, zinc: 3.6,
+        portionUnits: [
+          { name: '100g', grams: 100, isPurchasedWeight: false, isDefault: true },
+          { name: '牛丼用1人前 (約80g)', grams: 80, isPurchasedWeight: false, isDefault: false }
+        ]
+      },
+      {
         id: '11018', foodCode: '11018', source: 'mext_official',
         name: 'うし/［和牛肉］/ばら/脂身つき/生', displayName: '和牛バラ（カルビ 脂身つき 生）', shortName: '和牛バラ(カルビ)',
-        kana: 'うしばら わぎゅうばら 牛バラ 牛バラ肉 カルビ 牛カルビ うし ばら 和牛', categoryCode: '11', categoryName: '肉類', categoryEmoji: '🥩',
+        kana: 'うしばら わぎゅうばら 牛バラ 牛バラ肉 カルビ 牛カルビ うし ばら 和牛 国産牛', categoryCode: '11', categoryName: '肉類', categoryEmoji: '🥩',
         refuseRate: 0.0, energy: 472, energyKj: 1975, water: 41.2, protein: 11.0, fat: 47.5, carb: 0.2, sugar: 0.2, fiber: 0.0, salt: 0.1,
         sodium: 40, potassium: 180, calcium: 4, magnesium: 11, phosphorus: 95, iron: 1.3, zinc: 2.5,
         portionUnits: [
@@ -850,7 +865,10 @@
       let extraKeywords = [];
       if (name.includes('にわとり')) extraKeywords.push('鶏 鶏肉 鳥 鳥肉 チキン とりにく 鶏もも 鶏むね ささみ');
       if (name.includes('ぶた')) extraKeywords.push('豚 豚肉 ぶた ポーク ぶたにく 豚バラ 豚ロース');
-      if (name.includes('うし')) extraKeywords.push('牛 牛肉 うし ビーフ ぎゅうにく 牛モモ 牛バラ カルビ 和牛');
+      if (name.includes('うし')) {
+        extraKeywords.push('牛 牛肉 うし ビーフ ぎゅうにく 牛モモ 牛バラ カルビ 和牛');
+        if (name.includes('輸入')) extraKeywords.push('輸入牛 輸入牛肉 ショートプレート 輸入牛バラ');
+      }
       if (name.includes('けいらん') || name.includes('たまご')) extraKeywords.push('卵 玉子 鶏卵 たまご エッグ');
       if (name.includes('こめ') || name.includes('めし')) extraKeywords.push('米 白米 ご飯 ごはん ライス おこめ');
       if (name.includes('大麦') || name.includes('麦')) extraKeywords.push('大麦 麦 押麦 もち麦 麦ごはん');
@@ -1000,7 +1018,6 @@
       const [activePortionUnit, setActivePortionUnit] = useState('大さじ1 (12g)');
       const [isPurchasedWeight, setIsPurchasedWeight] = useState(false);
 
-      // 過去10件の閲覧履歴（配列先頭が最新、最大10件）
       const [historyTen, setHistoryTen] = useState(() => safeStorage.getJSON(STORAGE_KEYS.historyTen, []));
 
       const [compareFoodA, setCompareFoodA] = useState({ id: '14003', grams: 12, isPurchased: false });
@@ -1066,7 +1083,6 @@
       useEffect(() => { safeStorage.setJSON(STORAGE_KEYS.profile, { gender: userGender, ageGroup: userAgeGroup }); }, [userGender, userAgeGroup]);
       useEffect(() => { safeStorage.setText(STORAGE_KEYS.geminiApiKey, geminiApiKey); }, [geminiApiKey]);
 
-      // 食品選択時の処理（過去10件の履歴を先頭に更新）
       const handleSelectFood = (foodId, directFood = null) => {
         const food = directFood ?? foodMaster.find((f) => f.id === foodId || f.foodCode === foodId);
         if (!food) return;
@@ -1076,7 +1092,6 @@
         setActivePortionUnit(defaultUnit.name);
         setIsPurchasedWeight(!!defaultUnit.isPurchasedWeight);
 
-        // 過去10件の履歴レコード生成
         setHistoryTen((prev) => {
           const now = new Date();
           const timeStr = `${now.getMonth() + 1}/${now.getDate()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -1147,7 +1162,6 @@
 
       const currentDri = useMemo(() => DETAILED_DRI_TABLE[userGender]?.[userAgeGroup] || DETAILED_DRI_TABLE.male['30-49'], [userGender, userAgeGroup]);
 
-      // ナビゲーション定義（過去10件の独立した「りれき」画面を新設）
       const navItems = [
         { id: 'home', label: 'さがす', icon: Search },
         { id: 'history', label: 'りれき (10件)', icon: HistoryIcon, badgeCount: historyTen.length },
@@ -1159,11 +1173,10 @@
       return (
         <div className="min-h-screen min-h-dvh w-full max-w-full overflow-x-hidden bg-[#F8FAFC] text-slate-900 flex flex-col font-sans">
 
-          {/* ヘッダー: iPhone 17 ディスプレイ端部ぼやけ回避（セーフエリア + 5mm 余白） */}
+          {/* ヘッダー */}
           <header className="sticky top-0 z-40 app-header-safe border-b border-slate-200 shadow-sm w-full transition-none">
             <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 min-h-[46px] sm:min-h-[56px] flex items-center justify-between gap-1.5 sm:gap-3">
               
-              {/* ブランドロゴ */}
               <div className="flex items-center gap-1.5 sm:gap-2.5 cursor-pointer shrink-0 min-w-0" onClick={() => setActiveTab('home')}>
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-amber-400 via-yellow-400 to-amber-500 flex items-center justify-center shadow-sm shrink-0 p-1">
                   <div className="w-full h-full rounded-lg bg-white flex items-center justify-center shadow-inner">
@@ -1405,23 +1418,20 @@
     }
 
     // --- 検索画面 (HomeScreen) ---
-    // ★要件反映：スタート時は下部に食品リストを表示せず、クリーンで上品な案内UIを表示
     function HomeScreen({ foods, totalCount, onSelectFood, onOpenHealth, bodyStats, geminiApiKey, onOpenSettings, onGoToHistory, historyTen, showToast }) {
       const [searchQuery, setSearchQuery] = useState('');
       const [selectedCategory, setSelectedCategory] = useState('all');
 
-      // AIニュアンス解析の実行ステート
       const [isAiSearching, setIsAiSearching] = useState(false);
       const [aiInterpretation, setAiInterpretation] = useState(null);
 
       const isSearchActive = !!searchQuery.trim() || selectedCategory !== 'all';
 
-      // スマート検索エンジンの実行（検索中またはカテゴリ選択時のみ動く）
       const filteredFoods = useMemo(() => {
         return performSmartFoodSearch(foods, searchQuery, selectedCategory);
       }, [foods, searchQuery, selectedCategory]);
 
-      // Gemini APIを用いた「ニュアンス・曖昧表現解析」
+      // Gemini APIを用いた「ニュアンス・曖昧表現解析」（★多重モデル自動フォールバック通信エンジン）
       const handleGeminiAiSearch = async () => {
         if (!searchQuery.trim()) {
           showToast('検索欄に食品名や気になる料理を入力してください');
@@ -1435,46 +1445,72 @@
         setIsAiSearching(true);
         setAiInterpretation(null);
 
-        try {
-          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`;
-          const prompt = `あなたは文部科学省「日本食品標準成分表（八訂）」に精通した管理栄養士AIです。
+        // 404エラーを防止するため、利用可能なモデル候補を順次自動試行する
+        const CANDIDATE_MODELS = [
+          'gemini-2.5-flash',
+          'gemini-2.0-flash',
+          'gemini-1.5-flash',
+          'gemini-1.5-flash-latest'
+        ];
+
+        const prompt = `あなたは文部科学省「日本食品標準成分表（八訂）」に精通した管理栄養士AIです。
 ユーザーの入力: "${searchQuery}"
-上記入力のニュアンス、料理名、曖昧な表現（例: "ダイエット向け鶏肉", "脂っこい豚肉", "コンビニのサラダチキン", "ねばねば海藻"など）を正確に解釈し、日本の成分表に収載されている最も適切な標準食材（最大3候補）をJSONで返してください。
+上記入力のニュアンス、料理名、曖昧な表現（例: "ダイエット向け鶏肉", "脂っこい豚肉", "輸入牛バラ肉", "コンビニのサラダチキン", "ねばねば海藻"など）を正確に解釈し、日本の成分表に収載されている最も適切な標準食材（最大3候補）をJSONで返してください。
 
 レスポンス形式（必ず有効なJSONのみ出力）:
 {
   "matchedKeywords": ["候補1", "候補2"],
-  "explanation": "ユーザーへの一言解説（例: 牛バラ肉をお探しの場合、八訂では和牛肉または輸入牛肉の『うし/ばら/生』に該当します）"
+  "explanation": "ユーザーへの一言解説（例: 輸入牛バラ肉をお探しの場合、八訂では『うし/［輸入牛肉］/ばら/生』に該当し、和牛バラより赤身寄りでヘルシーです）"
 }`;
 
-          const res = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt }] }],
-              generationConfig: { responseMimeType: 'application/json' }
-            })
-          });
+        let successData = null;
+        let lastError = null;
 
-          if (!res.ok) {
-            throw new Error(`API通信エラー (${res.status})`);
+        for (const modelName of CANDIDATE_MODELS) {
+          try {
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiApiKey}`;
+            
+            const res = await fetch(endpoint, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-goog-api-key': geminiApiKey
+              },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { responseMimeType: 'application/json' }
+              })
+            });
+
+            if (res.ok) {
+              const data = await res.json();
+              const jsonText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+              if (jsonText) {
+                successData = JSON.parse(jsonText);
+                console.log(`[NutriDex AI] 成功モデル: ${modelName}`);
+                break; // 成功したのでループを抜ける
+              }
+            } else {
+              console.warn(`[NutriDex AI] ${modelName} 応答ステータス: ${res.status}。次の候補モデルを試行します...`);
+              lastError = new Error(`HTTP ${res.status}`);
+            }
+          } catch (err) {
+            console.warn(`[NutriDex AI] ${modelName} 通信エラー:`, err);
+            lastError = err;
           }
+        }
 
-          const data = await res.json();
-          const jsonText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-          const parsed = JSON.parse(jsonText);
-
-          setAiInterpretation(parsed);
-          if (Array.isArray(parsed.matchedKeywords) && parsed.matchedKeywords[0]) {
-            setSearchQuery(parsed.matchedKeywords[0]);
+        if (successData) {
+          setAiInterpretation(successData);
+          if (Array.isArray(successData.matchedKeywords) && successData.matchedKeywords[0]) {
+            setSearchQuery(successData.matchedKeywords[0]);
           }
           showToast('✨ Gemini AIによるニュアンス解釈を完了しました！');
-        } catch (err) {
-          console.error('Gemini error:', err);
-          showToast(`AI解析に失敗しました: ${err.message || 'APIキーをご確認ください'}`);
-        } finally {
-          setIsAiSearching(false);
+        } else {
+          showToast(`AI解析に失敗しました: ${lastError?.message || 'APIキーをご確認ください'}`);
         }
+
+        setIsAiSearching(false);
       };
 
       return (
@@ -1547,7 +1583,7 @@
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="食材名で検索（例: 牛バラ肉, 豚ロース, 鶏もも肉, 蕎麦粉, サツマイモ, あかもく...）"
+                placeholder="食材名で検索（例: 輸入牛バラ肉, 和牛カルビ, 豚ロース, 鶏もも肉, 蕎麦粉, あかもく...）"
                 className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl pl-11 pr-20 py-3 text-slate-900 placeholder-slate-400 font-medium focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 transition-all shadow-inner"
               />
               <div className="absolute inset-y-0 right-2 flex items-center gap-1">
@@ -1629,7 +1665,6 @@
             </div>
           </div>
 
-          {/* ★要件反映：未検索時（スタート時）は食品リストを出さず、クリーンで上品なスタートビューを表示 */}
           {!isSearchActive ? (
             <div className="space-y-4">
               <div className="bg-white p-8 sm:p-12 rounded-3xl border border-slate-200/80 shadow-subtle text-center space-y-4">
@@ -1639,13 +1674,13 @@
                 <div className="space-y-1.5 max-w-md mx-auto">
                   <h3 className="text-base sm:text-lg font-black text-slate-900">食材を検索してください</h3>
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    上の検索バーに「牛バラ肉」「豚ロース」「鶏もも」「蕎麦粉」「あかもく」などを入力するか、気になるカテゴリを選択すると、該当する食品データが瞬時に表示されます。
+                    上の検索バーに「輸入牛バラ」「豚ロース」「鶏もも」「蕎麦粉」「あかもく」などを入力するか、気になるカテゴリを選択すると、該当する食品データが瞬時に表示されます。
                   </p>
                 </div>
 
                 <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
                   <span className="text-xs font-bold text-slate-400">クイック検索例:</span>
-                  {['牛バラ肉', '鶏もも肉', '豚バラ', '蕎麦粉', 'あかもく', 'もち麦'].map((kw) => (
+                  {['輸入牛バラ肉', '和牛カルビ', '鶏もも肉', '豚バラ', '蕎麦粉', 'あかもく'].map((kw) => (
                     <button
                       key={kw}
                       onClick={() => setSearchQuery(kw)}
@@ -1657,7 +1692,6 @@
                 </div>
               </div>
 
-              {/* 直近の閲覧履歴（10件中、最新3件をショートカット表示） */}
               {historyTen.length > 0 && (
                 <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 space-y-3">
                   <div className="flex items-center justify-between text-xs font-bold text-slate-600">
@@ -1696,7 +1730,6 @@
               )}
             </div>
           ) : (
-            /* 検索中またはカテゴリ選択時のみ食品一覧グリッドを表示 */
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-3.5">
               {filteredFoods.length === 0 ? (
                 <div className="col-span-full bg-white p-10 rounded-3xl border border-dashed border-slate-300 text-center space-y-2 shadow-subtle">
@@ -1756,7 +1789,7 @@
       );
     }
 
-    // --- ★新設：過去10件専用 閲覧履歴画面 (HistoryScreen) ---
+    // --- 過去10件専用 閲覧履歴画面 (HistoryScreen) ---
     function HistoryScreen({ historyList, onSelectFood, onClearHistory, onBackToSearch }) {
       return (
         <div className="max-w-3xl mx-auto space-y-4">
@@ -2932,7 +2965,7 @@
                 </div>
               </div>
 
-              {/* ★要件反映：Gemini APIキー登録フォーム */}
+              {/* Gemini APIキー登録フォーム */}
               <div className="space-y-1.5 pt-2 border-t border-slate-100">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-purple-900 flex items-center gap-1.5">
@@ -2949,7 +2982,7 @@
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-400"
                 />
                 <p className="text-[10px] text-slate-400 leading-relaxed">
-                  ※Google AI Studioで無料発行できるAPIキーを登録すると、曖昧な表現や料理名（「ダイエット向けの肉」「ねばねば海藻」等）をAIが自動解釈して八訂食材を検索できます。端末内にのみ安全に保存されます。
+                  ※Google AI Studioで無料発行できるAPIキーを登録すると、曖昧な表現や料理名（「輸入牛バラ肉」「ダイエット向けの肉」等）をAIが自動解釈して八訂食材を検索できます。端末内にのみ安全に保存されます。
                 </p>
               </div>
             </div>
