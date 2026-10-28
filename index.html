@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
-  <title>NutriDex v4.5.1 Pro | 科学的栄養解析・体組成マネジメント (AI通信安定化版)</title>
+  <title>NutriDex v4.5.4 Pro | 科学的栄養解析・体組成マネジメント (Gemini 3.8 Flash対応)</title>
 
   <!-- iOS / iPhone PWA メタタグ (ステータスバー文字くっきり黒表示) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -69,8 +69,8 @@
   <!-- Babel Standalone -->
   <script src="https://unpkg.com/@babel/standalone@7.26.0/babel.min.js"></script>
 
-  <!-- Apple HealthKit 連携ブリッジスクリプト -->
-  <script src="./healthkit.js" onerror="console.warn('[NutriDex] healthkit.js not found. Fallback to inline shortcuts bridge.')"></script>
+  <!-- Apple HealthKit 連携ブリッジスクリプト（非同期安全読み込み） -->
+  <script src="./healthkit.js" onerror="console.warn('[NutriDex] healthkit.js fallback mode')"></script>
 
   <style>
     * {
@@ -146,7 +146,7 @@
     .glass-card {
       background: #FFFFFF;
       border: 1px solid rgba(226, 232, 240, 0.8);
-      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .glass-card:hover {
@@ -164,26 +164,32 @@
   </style>
 </head>
 <body class="bg-[#F8FAFC] text-slate-800 antialiased selection:bg-amber-400 selection:text-slate-950 touch-manipulation font-sans min-h-screen">
-  <div id="root"></div>
+  <div id="root">
+    <!-- プレビュー読み込み時のフォールバック表示 -->
+    <div class="min-h-screen flex items-center justify-center p-6 text-center">
+      <div class="space-y-3">
+        <div class="w-10 h-10 border-4 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <p class="text-xs font-bold text-slate-500">NutriDex を初期化中...</p>
+      </div>
+    </div>
+  </div>
 
-  <!-- PWA Service Worker 登録 -->
+  <!-- PWA Service Worker 安全登録（Canvasサンドボックス例外防御） -->
   <script>
-    if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').then((reg) => {
-          console.log('[NutriDex PWA] ServiceWorker registered with scope:', reg.scope);
-        }).catch((err) => {
-          console.warn('[NutriDex PWA] ServiceWorker registration warning:', err);
+    try {
+      if ('serviceWorker' in navigator && window.location.protocol.startsWith('http') && window.location.hostname !== 'localhost') {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').catch(() => {});
         });
-      });
-    }
+      }
+    } catch (_) {}
   </script>
 
   <script type="text/babel">
     const { useState, useMemo, useEffect, useRef } = React;
 
-    // バージョン定数 (v4.5.1 Pro - AI通信404解消＆自動フォールバック版)
-    const APP_VERSION = "v4.5.1 Pro";
+    // バージョン定数
+    const APP_VERSION = "v4.5.4 Pro";
 
     /* ========================================================================
      * 【絶対仕様ロック宣言（IMMUTABLE CORE SPECIFICATION）】
@@ -288,27 +294,32 @@
       geminiApiKey: 'nutridex_gemini_api_key'
     };
 
+    // サンドボックス・制限環境対応 safeStorage
     const safeStorage = {
       getJSON(k, fb) {
         try {
+          if (typeof localStorage === 'undefined') return fb;
           const r = localStorage.getItem(k);
           return r === null ? fb : JSON.parse(r);
         } catch (_) { return fb; }
       },
       setJSON(k, v) {
         try {
+          if (typeof localStorage === 'undefined') return false;
           localStorage.setItem(k, JSON.stringify(v));
           return true;
         } catch (_) { return false; }
       },
       getText(k, fb = '') {
         try {
+          if (typeof localStorage === 'undefined') return fb;
           const r = localStorage.getItem(k);
           return r === null ? fb : r;
         } catch (_) { return fb; }
       },
       setText(k, v) {
         try {
+          if (typeof localStorage === 'undefined') return false;
           localStorage.setItem(k, String(v ?? ''));
           return true;
         } catch (_) { return false; }
@@ -676,10 +687,10 @@
       const zinc = scaleNum(food.zinc, 2);
       const copper = scaleNum(food.copper, 2);
       const manganese = scaleNum(food.manganese, 2);
-      const iodine = scaleNum(food.iodine, 1);
-      const selenium = scaleNum(food.selenium, 1);
-      const chromium = scaleNum(food.chromium, 1);
-      const molybdenum = scaleNum(food.molybdenum, 1);
+      const iodine = scaleInt(food.iodine);
+      const selenium = scaleInt(food.selenium);
+      const chromium = scaleInt(food.chromium);
+      const molybdenum = scaleInt(food.molybdenum);
 
       const vitaminA = scaleInt(food.vitaminA);
       const retinol = scaleInt(food.retinol);
@@ -837,7 +848,7 @@
       '08': { name: 'きのこ類', emoji: '🍄' },
       '09': { name: '藻類', emoji: '🌿' },
       '10': { name: '魚介類', emoji: '🐟' },
-      '11': { name: '肉類', emoji: '🍗' },
+      '11': { name: '肉類', emoji: '🥩' },
       '12': { name: '卵類', emoji: '🥚' },
       '13': { name: '乳類', emoji: '🥛' },
       '14': { name: '油脂類', emoji: '🫒' },
@@ -922,7 +933,7 @@
         magnesium: numOrNull(raw.mg ?? raw.magnesium),
         phosphorus: numOrNull(raw.p ?? raw.phosphorus),
         iron: numOrNull(raw.fe ?? raw.iron),
-        zinc: numOrNull(raw.zn ?? raw.zinc),
+        zinc: numOrNull(raw.zinc),
         copper: numOrNull(raw.cu ?? raw.copper),
         manganese: numOrNull(raw.mn ?? raw.manganese),
         iodine: numOrNull(raw.id ?? raw.iodine),
@@ -1030,7 +1041,6 @@
 
       const [toastData, setToastData] = useState(null);
       const toastTimeoutRef = useRef(null);
-      const [isManualSyncing, setIsManualSyncing] = useState(false);
 
       const showToast = (msg, actionLabel = null, onAction = null) => {
         if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
@@ -1039,11 +1049,12 @@
       };
 
       useEffect(() => {
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        try {
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        } catch (_) {}
       }, [activeTab]);
 
-      const syncDatabase = async (isManual = false) => {
-        if (isManual) setIsManualSyncing(true);
+      const syncDatabase = async () => {
         const endpoints = [
           './mext_foods.json',
           'https://raw.githubusercontent.com/katoharu432/standards-tables-of-food-composition-in-japan/master/data.json',
@@ -1053,14 +1064,13 @@
         let success = false;
         for (const url of endpoints) {
           try {
-            const res = await fetch(url, { cache: isManual ? 'reload' : 'default' });
+            const res = await fetch(url);
             if (res.ok) {
               const rawData = await res.json();
               if (Array.isArray(rawData) && rawData.length > 500) {
                 const formatted = rawData.map(transformExternalMextItem).filter(Boolean);
                 setFoodMaster(prev => mergeFoodLists(prev, formatted));
                 setDbSyncStatus('synced');
-                showToast(isManual ? `八訂公式データを更新しました（${formatted.length}品目）` : `八訂公式 ${formatted.length}品目を同期完了！`);
                 success = true;
                 break;
               }
@@ -1070,12 +1080,10 @@
 
         if (!success) {
           setDbSyncStatus('builtin_ready');
-          if (isManual) showToast('内蔵マスターデータを再読み込みしました');
         }
-        if (isManual) setIsManualSyncing(false);
       };
 
-      useEffect(() => { syncDatabase(false); }, []);
+      useEffect(() => { syncDatabase(); }, []);
 
       useEffect(() => { safeStorage.setJSON(STORAGE_KEYS.historyTen, historyTen); }, [historyTen]);
       useEffect(() => { safeStorage.setJSON(STORAGE_KEYS.recipe, { title: recipeTitle, servings, items: recipeItems }); }, [recipeTitle, servings, recipeItems]);
@@ -1235,7 +1243,7 @@
               <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                 <button
                   onClick={() => setIsHealthModalOpen(true)}
-                  className="px-2 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold flex items-center gap-1 shadow-xs transition-all active:scale-95"
+                  className="px-2 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold flex items-center gap-1 shadow-sm transition-all active:scale-95"
                   title="Apple HealthKit連動・体組成マネジメント"
                 >
                   <Heart size={14} className="fill-rose-500 text-rose-500 shrink-0" />
@@ -1247,7 +1255,7 @@
 
                 <button
                   onClick={() => setIsSettingsOpen(true)}
-                  className={`p-1.5 sm:px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1 shadow-xs ${
+                  className={`p-1.5 sm:px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1 shadow-sm ${
                     geminiApiKey ? 'bg-amber-50 border-amber-300 text-amber-900' : 'bg-slate-50 hover:bg-slate-100 text-slate-800 border-slate-200'
                   }`}
                   title="設定 & Gemini AI連携"
@@ -1355,12 +1363,12 @@
                     isActive ? 'text-amber-950 font-black' : 'text-slate-400 hover:text-slate-600'
                   }`}
                 >
-                  <div className={`p-1 rounded-xl transition-all ${isActive ? 'bg-amber-400 text-slate-950 scale-105 shadow-xs' : ''}`}>
+                  <div className={`p-1 rounded-xl transition-all ${isActive ? 'bg-amber-400 text-slate-950 scale-105 shadow-sm' : ''}`}>
                     <Icon size={20} />
                   </div>
                   <span className="text-[10px] mt-0.5 tracking-tight">{item.label}</span>
                   {item.badgeCount > 0 && (
-                    <span className="absolute top-1 right-2 min-w-[17px] h-4 px-1 bg-amber-500 text-slate-950 rounded-full text-[9px] flex items-center justify-center font-mono font-black shadow-xs">
+                    <span className="absolute top-1 right-2 min-w-[17px] h-4 px-1 bg-amber-500 text-slate-950 rounded-full text-[9px] flex items-center justify-center font-mono font-black shadow-sm">
                       {item.badgeCount}
                     </span>
                   )}
@@ -1382,7 +1390,7 @@
                     if (toastData.onAction) toastData.onAction();
                     setToastData(null);
                   }}
-                  className="px-2.5 py-1 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-lg font-black shrink-0 shadow-xs transition-all text-[11px]"
+                  className="px-2.5 py-1 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-lg font-black shrink-0 shadow-sm transition-all text-[11px]"
                 >
                   {toastData.actionLabel}
                 </button>
@@ -1431,7 +1439,6 @@
         return performSmartFoodSearch(foods, searchQuery, selectedCategory);
       }, [foods, searchQuery, selectedCategory]);
 
-      // Gemini APIを用いた「ニュアンス・曖昧表現解析」（★多重モデル自動フォールバック通信エンジン）
       const handleGeminiAiSearch = async () => {
         if (!searchQuery.trim()) {
           showToast('検索欄に食品名や気になる料理を入力してください');
@@ -1445,59 +1452,85 @@
         setIsAiSearching(true);
         setAiInterpretation(null);
 
-        // 404エラーを防止するため、利用可能なモデル候補を順次自動試行する
-        const CANDIDATE_MODELS = [
-          'gemini-2.5-flash',
-          'gemini-2.0-flash',
-          'gemini-1.5-flash',
-          'gemini-1.5-flash-latest'
-        ];
-
         const prompt = `あなたは文部科学省「日本食品標準成分表（八訂）」に精通した管理栄養士AIです。
 ユーザーの入力: "${searchQuery}"
 上記入力のニュアンス、料理名、曖昧な表現（例: "ダイエット向け鶏肉", "脂っこい豚肉", "輸入牛バラ肉", "コンビニのサラダチキン", "ねばねば海藻"など）を正確に解釈し、日本の成分表に収載されている最も適切な標準食材（最大3候補）をJSONで返してください。
 
-レスポンス形式（必ず有効なJSONのみ出力）:
+必ず有効なJSONオブジェクトのみを出力してください:
 {
   "matchedKeywords": ["候補1", "候補2"],
   "explanation": "ユーザーへの一言解説（例: 輸入牛バラ肉をお探しの場合、八訂では『うし/［輸入牛肉］/ばら/生』に該当し、和牛バラより赤身寄りでヘルシーです）"
 }`;
 
         let successData = null;
-        let lastError = null;
+        let lastErrorMsg = '';
 
-        for (const modelName of CANDIDATE_MODELS) {
+        try {
+          let liveModels = [];
           try {
-            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiApiKey}`;
-            
-            const res = await fetch(endpoint, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'x-goog-api-key': geminiApiKey
-              },
-              body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: { responseMimeType: 'application/json' }
-              })
-            });
-
-            if (res.ok) {
-              const data = await res.json();
-              const jsonText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-              if (jsonText) {
-                successData = JSON.parse(jsonText);
-                console.log(`[NutriDex AI] 成功モデル: ${modelName}`);
-                break; // 成功したのでループを抜ける
+            const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${geminiApiKey}`);
+            if (listRes.ok) {
+              const listJson = await listRes.json();
+              if (Array.isArray(listJson.models)) {
+                liveModels = listJson.models
+                  .filter(m => Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes('generateContent'))
+                  .map(m => m.name.replace(/^models\//, ''));
               }
-            } else {
-              console.warn(`[NutriDex AI] ${modelName} 応答ステータス: ${res.status}。次の候補モデルを試行します...`);
-              lastError = new Error(`HTTP ${res.status}`);
             }
-          } catch (err) {
-            console.warn(`[NutriDex AI] ${modelName} 通信エラー:`, err);
-            lastError = err;
+          } catch (_) {}
+
+          const candidateModels = Array.from(new Set([
+            'gemini-3.8-flash',
+            'gemini-3.8-flash-latest',
+            'gemini-3.5-flash-lite',
+            'gemini-flash-latest',
+            ...liveModels.filter(m => m.includes('3.8') || m.includes('flash')),
+            ...liveModels,
+            'gemini-2.0-flash',
+            'gemini-1.5-flash'
+          ])).filter(Boolean);
+
+          for (const model of candidateModels) {
+            const cleanModel = model.replace(/^models\//, '');
+            for (const apiVer of ['v1beta', 'v1']) {
+              try {
+                const endpoint = `https://generativelanguage.googleapis.com/${apiVer}/models/${cleanModel}:generateContent?key=${geminiApiKey}`;
+                const res = await fetch(endpoint, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'x-goog-api-key': geminiApiKey
+                  },
+                  body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: { temperature: 0.2 }
+                  })
+                });
+
+                if (res.ok) {
+                  const data = await res.json();
+                  const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                  if (rawText) {
+                    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) {
+                      successData = JSON.parse(jsonMatch[0]);
+                      break;
+                    }
+                  }
+                } else {
+                  const errJson = await res.json().catch(() => ({}));
+                  if (errJson?.error?.message) {
+                    lastErrorMsg = errJson.error.message;
+                  }
+                }
+              } catch (err) {
+                lastErrorMsg = err.message;
+              }
+            }
+            if (successData) break;
           }
+        } catch (globalErr) {
+          lastErrorMsg = globalErr.message;
         }
 
         if (successData) {
@@ -1507,7 +1540,7 @@
           }
           showToast('✨ Gemini AIによるニュアンス解釈を完了しました！');
         } else {
-          showToast(`AI解析に失敗しました: ${lastError?.message || 'APIキーをご確認ください'}`);
+          showToast(`AI解析に失敗しました: ${lastErrorMsg || 'APIキーまたは利用権限をご確認ください'}`);
         }
 
         setIsAiSearching(false);
@@ -1567,7 +1600,7 @@
               <button
                 onClick={handleGeminiAiSearch}
                 disabled={isAiSearching}
-                className="text-[11px] font-bold px-2.5 py-1 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 flex items-center gap-1 transition-all active:scale-95 shadow-2xs"
+                className="text-[11px] font-bold px-2.5 py-1 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 flex items-center gap-1 transition-all active:scale-95 shadow-sm"
                 title="曖昧な表現や料理名をGemini AIが八訂食材に自動変換します"
               >
                 <Sparkles size={12} className={isAiSearching ? 'animate-spin text-purple-600' : 'text-purple-600'} />
@@ -1607,7 +1640,7 @@
 
             {/* AI解釈結果の表示カード */}
             {aiInterpretation && (
-              <div className="bg-purple-50/80 border border-purple-200 rounded-2xl p-3.5 text-xs text-purple-900 space-y-2 animate-in fade-in duration-200">
+              <div className="bg-purple-50/80 border border-purple-200 rounded-2xl p-3.5 text-xs text-purple-900 space-y-2">
                 <div className="flex items-center gap-1.5 font-bold text-purple-950">
                   <Sparkles size={14} className="text-purple-600 shrink-0" />
                   <span>Gemini AI による食材解釈:</span>
@@ -1668,7 +1701,7 @@
           {!isSearchActive ? (
             <div className="space-y-4">
               <div className="bg-white p-8 sm:p-12 rounded-3xl border border-slate-200/80 shadow-subtle text-center space-y-4">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-amber-50 border border-amber-200/80 mx-auto flex items-center justify-center text-3xl sm:text-4xl shadow-xs">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-amber-50 border border-amber-200/80 mx-auto flex items-center justify-center text-3xl sm:text-4xl shadow-sm">
                   <LemonSliceIcon size={36} />
                 </div>
                 <div className="space-y-1.5 max-w-md mx-auto">
@@ -1745,7 +1778,7 @@
                     className="glass-card p-4 rounded-3xl cursor-pointer flex items-center justify-between gap-3 group active:scale-[0.985]"
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
-                      <div className="w-12 h-12 rounded-2xl bg-amber-50/60 border border-amber-100 flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform shadow-xs">
+                      <div className="w-12 h-12 rounded-2xl bg-amber-50/60 border border-amber-100 flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform shadow-sm">
                         {food.categoryEmoji}
                       </div>
                       <div className="min-w-0">
@@ -1822,7 +1855,7 @@
               </p>
               <button
                 onClick={onBackToSearch}
-                className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-black shadow-xs inline-flex items-center gap-1.5 mt-2"
+                className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-black shadow-sm inline-flex items-center gap-1.5 mt-2"
               >
                 <Search size={14} />
                 <span>食材を探しにいく</span>
@@ -1834,7 +1867,7 @@
                 <div
                   key={`${item.id}-${idx}`}
                   onClick={() => onSelectFood(item.id)}
-                  className="bg-white p-3.5 sm:p-4 rounded-3xl border border-slate-200/80 hover:border-amber-300 flex items-center justify-between gap-3 cursor-pointer group active:scale-[0.985] shadow-xs transition-all"
+                  className="bg-white p-3.5 sm:p-4 rounded-3xl border border-slate-200/80 hover:border-amber-300 flex items-center justify-between gap-3 cursor-pointer group active:scale-[0.985] shadow-sm transition-all"
                 >
                   <div className="flex items-center gap-3.5 min-w-0">
                     <div className="w-11 h-11 rounded-2xl bg-amber-50/70 border border-amber-100 flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
@@ -1963,7 +1996,7 @@
             <div className="flex items-center gap-2">
               <button
                 onClick={() => onAddToCompare(food.id)}
-                className="px-3 py-2 bg-white hover:bg-yellow-50 text-slate-700 border border-slate-200/80 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all active:scale-95"
+                className="px-3 py-2 bg-white hover:bg-yellow-50 text-slate-700 border border-slate-200/80 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
               >
                 <Scale size={15} className="text-amber-600" />
                 <span>VS比較</span>
@@ -1971,7 +2004,7 @@
 
               <button
                 onClick={handleHealthKitClick}
-                className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all active:scale-95 border ${
+                className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all active:scale-95 border ${
                   justHealthLogged
                     ? 'bg-rose-600 text-white border-rose-600'
                     : 'bg-rose-50 hover:bg-rose-100 text-rose-800 border-rose-200'
@@ -1998,7 +2031,7 @@
 
           <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-card space-y-5">
             <div className="flex items-start gap-4">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-gradient-to-tr from-amber-50 to-yellow-100/60 border border-yellow-200/80 flex items-center justify-center text-4xl sm:text-5xl shrink-0 shadow-xs">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-gradient-to-tr from-amber-50 to-yellow-100/60 border border-yellow-200/80 flex items-center justify-center text-4xl sm:text-5xl shrink-0 shadow-sm">
                 {food.categoryEmoji}
               </div>
               <div className="min-w-0 flex-1">
@@ -2047,7 +2080,7 @@
                       }}
                       className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
                         isUnitActive
-                          ? 'bg-slate-900 text-yellow-300 border-slate-900 shadow-xs font-black'
+                          ? 'bg-slate-900 text-yellow-300 border-slate-900 shadow-sm font-black'
                           : 'bg-white hover:bg-yellow-50/60 border-slate-200 text-slate-700'
                       }`}
                     >
@@ -2187,7 +2220,7 @@
                   onClick={() => setActiveNutrientCategory(tab.id)}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all border shrink-0 ${
                     activeNutrientCategory === tab.id
-                      ? 'bg-slate-900 border-slate-900 text-yellow-300 shadow-xs font-black'
+                      ? 'bg-slate-900 border-slate-900 text-yellow-300 shadow-sm font-black'
                       : 'bg-slate-50 border-slate-200/80 text-slate-600 hover:bg-yellow-50/50'
                   }`}
                 >
@@ -2260,7 +2293,7 @@
     }
 
     // --- くらべる画面 (CompareScreen) ---
-    function CompareScreen({ foodMaster, foodAConfig, foodBConfig, onChangeFoodA, onChangeFoodB, onSelectFood }) {
+    function CompareScreen({ foodMaster, foodAConfig, foodBConfig, onChangeFoodA, onChangeFoodB }) {
       const fA = foodMaster.find(f => f.id === foodAConfig.id || f.foodCode === foodAConfig.id) || foodMaster[0];
       const fB = foodMaster.find(f => f.id === foodBConfig.id || f.foodCode === foodBConfig.id) || foodMaster[1] || foodMaster[0];
       const nA = calculateScaledNutrients(fA, foodAConfig.grams);
@@ -2307,7 +2340,7 @@
             </div>
             <button
               onClick={handleSwap}
-              className="px-3 py-1.5 bg-white border border-slate-200 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-xs hover:bg-slate-50 active:scale-95 transition-all"
+              className="px-3 py-1.5 bg-white border border-slate-200 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-sm hover:bg-slate-50 active:scale-95 transition-all"
             >
               <RotateCcw size={14} className="text-slate-500" />
               <span>左右スワップ</span>
@@ -2320,7 +2353,7 @@
               { f: fB, n: nB, cfg: foodBConfig, setCfg: onChangeFoodB }
             ].map((slot, i) => (
               <div key={i} className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-card text-center space-y-3">
-                <div className="w-14 h-14 rounded-2xl bg-amber-50/60 mx-auto flex items-center justify-center text-3xl border border-amber-100 shadow-xs">
+                <div className="w-14 h-14 rounded-2xl bg-amber-50/60 mx-auto flex items-center justify-center text-3xl border border-amber-100 shadow-sm">
                   {slot.f.categoryEmoji}
                 </div>
 
@@ -2390,7 +2423,7 @@
     }
 
     // --- レシピ計算画面 (RecipeScreen) ---
-    function RecipeScreen({ foodMaster, title, onChangeTitle, servings, onChangeServings, items, onChangeItems, onAddMore, onSelectFood, onOpenHealth, onRecordToHealthKit }) {
+    function RecipeScreen({ foodMaster, title, onChangeTitle, servings, onChangeServings, items, onChangeItems, onAddMore, onSelectFood, onRecordToHealthKit }) {
       const [justHealthLogged, setJustHealthLogged] = useState(false);
 
       const handleGramChange = (idx, delta) => {
@@ -2563,7 +2596,7 @@
                 </div>
                 <button
                   onClick={onAddMore}
-                  className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-black shadow-xs inline-flex items-center gap-1.5"
+                  className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-black shadow-sm inline-flex items-center gap-1.5"
                 >
                   <Search size={14} />
                   <span>食材を探しにいく</span>
@@ -2673,7 +2706,7 @@
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
                 <button
                   onClick={handleHealthKitRecord}
-                  className={`py-3 rounded-2xl text-xs font-bold flex items-center justify-center gap-2 shadow-xs transition-all active:scale-95 border ${
+                  className={`py-3 rounded-2xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 border ${
                     justHealthLogged
                       ? 'bg-rose-600 text-white border-rose-600'
                       : 'bg-rose-50 hover:bg-rose-100 text-rose-800 border-rose-200'
@@ -2685,7 +2718,7 @@
 
                 <button
                   onClick={copyToClipboard}
-                  className="py-3 bg-white hover:bg-yellow-50 text-amber-950 text-xs font-black rounded-2xl flex items-center justify-center gap-2 border border-amber-300 shadow-xs transition-colors"
+                  className="py-3 bg-white hover:bg-yellow-50 text-amber-950 text-xs font-black rounded-2xl flex items-center justify-center gap-2 border border-amber-300 shadow-sm transition-colors"
                 >
                   <Copy size={15} />
                   <span>レシピ栄養サマリーをコピー</span>
@@ -2761,13 +2794,13 @@
             <div className="flex gap-1.5 p-1 bg-slate-100 rounded-xl text-xs font-bold">
               <button
                 onClick={() => setActiveSubTab('overview')}
-                className={`flex-1 py-1.5 rounded-lg transition-all ${activeSubTab === 'overview' ? 'bg-white shadow-xs text-slate-900' : 'text-slate-500'}`}
+                className={`flex-1 py-1.5 rounded-lg transition-all ${activeSubTab === 'overview' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500'}`}
               >
                 体組成データ & 同期
               </button>
               <button
                 onClick={() => setActiveSubTab('healthkit')}
-                className={`flex-1 py-1.5 rounded-lg transition-all ${activeSubTab === 'healthkit' ? 'bg-white shadow-xs text-slate-900' : 'text-slate-500'}`}
+                className={`flex-1 py-1.5 rounded-lg transition-all ${activeSubTab === 'healthkit' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500'}`}
               >
                 ヘルスケア連携仕様
               </button>
@@ -2891,7 +2924,7 @@
               <button onClick={onClose} className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">
                 キャンセル
               </button>
-              <button onClick={handleSave} className="flex-1 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-black shadow-xs transition-all">
+              <button onClick={handleSave} className="flex-1 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-black shadow-sm transition-all">
                 設定を保存
               </button>
             </div>
@@ -2903,6 +2936,42 @@
     // --- 設定＆Gemini API登録モーダル (SettingsModal) ---
     function SettingsModal({ userGender, onChangeGender, userAgeGroup, onChangeAgeGroup, geminiApiKey, onChangeGeminiApiKey, onClose, showToast }) {
       const [localKey, setLocalKey] = useState(geminiApiKey || '');
+      const [isTesting, setIsTesting] = useState(false);
+      const [testResult, setTestResult] = useState(null);
+
+      const handleTestConnection = async () => {
+        const k = localKey.trim();
+        if (!k) {
+          setTestResult({ success: false, msg: 'APIキーを入力してください' });
+          return;
+        }
+
+        setIsTesting(true);
+        setTestResult(null);
+
+        try {
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${k}`);
+          if (res.ok) {
+            const data = await res.json();
+            const models = Array.isArray(data.models) ? data.models.map(m => m.name.replace(/^models\//, '')) : [];
+            const flashModels = models.filter(m => m.includes('3.8') || m.includes('flash'));
+            setTestResult({
+              success: true,
+              msg: `✓ 接続成功！ 検出モデル: ${flashModels.slice(0, 3).join(', ') || 'gemini-3.8-flash'}`
+            });
+          } else {
+            const errData = await res.json().catch(() => ({}));
+            setTestResult({
+              success: false,
+              msg: `✕ 接続失敗 (${res.status}): ${errData?.error?.message || 'キーが無効です'}`
+            });
+          }
+        } catch (err) {
+          setTestResult({ success: false, msg: `✕ 通信エラー: ${err.message}` });
+        }
+
+        setIsTesting(false);
+      };
 
       const handleSave = () => {
         onChangeGeminiApiKey(localKey.trim());
@@ -2931,7 +3000,7 @@
                   <button
                     onClick={() => onChangeGender('male')}
                     className={`flex-1 py-2 text-xs font-bold rounded-xl border transition-all ${
-                      userGender === 'male' ? 'bg-slate-900 text-yellow-300 border-slate-900 shadow-xs font-black' : 'bg-slate-50 border-slate-200 text-slate-700'
+                      userGender === 'male' ? 'bg-slate-900 text-yellow-300 border-slate-900 shadow-sm font-black' : 'bg-slate-50 border-slate-200 text-slate-700'
                     }`}
                   >
                     男性
@@ -2939,7 +3008,7 @@
                   <button
                     onClick={() => onChangeGender('female')}
                     className={`flex-1 py-2 text-xs font-bold rounded-xl border transition-all ${
-                      userGender === 'female' ? 'bg-slate-900 text-yellow-300 border-slate-900 shadow-xs font-black' : 'bg-slate-50 border-slate-200 text-slate-700'
+                      userGender === 'female' ? 'bg-slate-900 text-yellow-300 border-slate-900 shadow-sm font-black' : 'bg-slate-50 border-slate-200 text-slate-700'
                     }`}
                   >
                     女性
@@ -2956,7 +3025,7 @@
                       key={age}
                       onClick={() => onChangeAgeGroup(age)}
                       className={`py-2 text-xs font-bold rounded-xl border transition-all ${
-                        userAgeGroup === age ? 'bg-slate-900 text-yellow-300 border-slate-900 shadow-xs font-black' : 'bg-slate-50 border-slate-200 text-slate-700'
+                        userAgeGroup === age ? 'bg-slate-900 text-yellow-300 border-slate-900 shadow-sm font-black' : 'bg-slate-50 border-slate-200 text-slate-700'
                       }`}
                     >
                       {age} 歳
@@ -2966,23 +3035,41 @@
               </div>
 
               {/* Gemini APIキー登録フォーム */}
-              <div className="space-y-1.5 pt-2 border-t border-slate-100">
+              <div className="space-y-2 pt-2 border-t border-slate-100">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-purple-900 flex items-center gap-1.5">
                     <Sparkles size={13} className="text-purple-600" />
                     <span>Google Gemini APIキー (無料枠対応)</span>
                   </label>
-                  <span className="text-[10px] text-purple-600 font-mono">ニュアンス検索用</span>
+                  <span className="text-[10px] text-purple-600 font-mono font-bold">Gemini 3.8 Flash</span>
                 </div>
-                <input
-                  type="password"
-                  value={localKey}
-                  onChange={(e) => setLocalKey(e.target.value)}
-                  placeholder="AIzaSy... または AQ..."
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-400"
-                />
+                
+                <div className="flex gap-2">
+                  <input
+                    type="password"
+                    value={localKey}
+                    onChange={(e) => { setLocalKey(e.target.value); setTestResult(null); }}
+                    placeholder="AIzaSy... または AQ..."
+                    className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                  />
+                  <button
+                    onClick={handleTestConnection}
+                    disabled={isTesting}
+                    className="px-3 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 rounded-xl text-xs font-bold transition-all shrink-0 active:scale-95"
+                  >
+                    {isTesting ? 'テスト中...' : '接続テスト'}
+                  </button>
+                </div>
+
+                {/* 接続テスト結果表示 */}
+                {testResult && (
+                  <div className={`p-2.5 rounded-xl text-xs font-bold ${testResult.success ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}`}>
+                    {testResult.msg}
+                  </div>
+                )}
+
                 <p className="text-[10px] text-slate-400 leading-relaxed">
-                  ※Google AI Studioで無料発行できるAPIキーを登録すると、曖昧な表現や料理名（「輸入牛バラ肉」「ダイエット向けの肉」等）をAIが自動解釈して八訂食材を検索できます。端末内にのみ安全に保存されます。
+                  ※Google AI Studioで無料発行できる最新の <strong>Gemini 3.8 Flash</strong> キーに対応しています。登録されたキーは端末内（localStorage）にのみ安全に保存されます。
                 </p>
               </div>
             </div>
@@ -2993,7 +3080,7 @@
               </button>
               <button
                 onClick={handleSave}
-                className="flex-1 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-black shadow-xs transition-all"
+                className="flex-1 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-black shadow-sm transition-all"
               >
                 保存して閉じる
               </button>
@@ -3003,7 +3090,19 @@
       );
     }
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    // React マウント実行（ロード保証付き）
+    const mountNutriDex = () => {
+      const rootEl = document.getElementById('root');
+      if (rootEl && ReactDOM && ReactDOM.createRoot) {
+        ReactDOM.createRoot(rootEl).render(<App />);
+      }
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', mountNutriDex);
+    } else {
+      mountNutriDex();
+    }
   </script>
 </body>
 </html>
